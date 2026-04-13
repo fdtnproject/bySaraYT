@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>TOSSE – I Consigli del Farmacista | 15 Minuti</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lato:wght@300;400;700;900&display=swap');
+
+  :root {
+    --green: #1B5E20;
+    --green-light: #2E7D32;
+    --green-mid: #4CAF50;
+    --red: #B71C1C;
+    --red-light: #EF5350;
+    --blue: #1565C0;
+    --blue-light: #42A5F5;
+    --white: #FAFAFA;
+    --dark: #080f08;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--dark);
+    font-family: 'Lato', sans-serif;
+    height: 100vh;
+    height: 100svh;
+    height: 100dvh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+    overscroll-behavior: none;
+  }
+
+  #progress-bar {
+    height: 5px;
+    background: linear-gradient(90deg, var(--green-mid), var(--blue-light));
+    width: 0%;
+    transition: width 0.35s ease;
+    position: fixed;
+    top: 0; left: 0; z-index: 100;
+  }
+
+  #counter {
+    position: fixed;
+    top: 14px; right: 24px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: rgba(255,255,255,0.28);
+    letter-spacing: 2px;
+    z-index: 100;
+  }
+
+  #slide-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 90px 20px;
+    overflow: hidden;
+  }
+
+  .slide {
+    display: none;
+    width: 100%;
+    max-width: 1500px;
+    animation: fadeIn 0.4s ease;
+  }
+  .slide.active { display: flex; flex-direction: column; align-items: center; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* TITLE */
+  .s-title { text-align: center; gap: 14px; }
+  .s-title .tag {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px; letter-spacing: 7px; color: var(--green-mid); margin-bottom: 6px;
+  }
+  .s-title h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(80px, 13vw, 160px);
+    color: var(--white); letter-spacing: 8px; line-height: 1;
+    text-shadow: 0 0 80px rgba(76,175,80,0.3);
+  }
+  .s-title h1 span { color: var(--green-mid); }
+  .s-title .sub {
+    font-size: clamp(18px, 2.2vw, 30px);
+    color: rgba(255,255,255,0.45); font-weight: 300; margin-top: 12px; letter-spacing: 1px;
+  }
+
+  /* SECTION */
+  .s-section { text-align: center; gap: 12px; }
+  .s-section .sec-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px; letter-spacing: 8px; color: var(--red-light); margin-bottom: 4px;
+  }
+  .s-section h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(50px, 8vw, 110px);
+    color: var(--white); letter-spacing: 4px; line-height: 1.05;
+  }
+
+  /* SUBSECTION (tosse acuta/cronica/secca/grassa) */
+  .s-subsection { text-align: center; gap: 12px; }
+  .s-subsection .sub-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px; letter-spacing: 8px; color: var(--blue-light); margin-bottom: 4px;
+  }
+  .s-subsection h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(44px, 7vw, 90px);
+    color: var(--white); letter-spacing: 4px; line-height: 1.05;
+  }
+
+  /* TEXT */
+  .s-text { gap: 20px; width: 100%; }
+  .s-text .heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(14px, 1.8vw, 26px);
+    color: var(--green-mid); letter-spacing: 3px;
+    border-left: 5px solid var(--red); padding-left: 16px;
+    margin-bottom: 4px;
+  }
+  .s-text .heading.blue {
+    color: var(--blue-light);
+    border-left-color: var(--blue);
+  }
+  .s-text p {
+    font-size: clamp(26px, 3.4vw, 52px);
+    color: var(--white); line-height: 1.55;
+    font-weight: 400; max-width: 1450px;
+  }
+
+  /* LIST */
+  .s-list { gap: 14px; width: 100%; }
+  .s-list .heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(14px, 1.8vw, 24px);
+    color: var(--green-mid); letter-spacing: 3px; margin-bottom: 8px;
+  }
+  .s-list ul { list-style: none; display: flex; flex-direction: column; gap: 10px; width: 100%; }
+  .s-list ul li {
+    display: flex; align-items: flex-start; gap: 16px;
+    font-size: clamp(20px, 2.6vw, 40px);
+    color: var(--white); line-height: 1.4;
+  }
+  .s-list ul li .num {
+    background: var(--red); color: white;
+    font-family: 'Bebas Neue', sans-serif; font-size: 18px;
+    width: 38px; height: 38px; min-width: 38px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    margin-top: 4px;
+  }
+
+  /* NAV */
+  #nav {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 36px 20px;
+    background: rgba(0,0,0,0.55);
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  #nav button {
+    background: none; border: 2px solid rgba(255,255,255,0.18);
+    color: white; font-family: 'Bebas Neue', sans-serif;
+    font-size: 19px; letter-spacing: 3px;
+    padding: 12px 36px; cursor: pointer; border-radius: 4px; transition: all 0.2s;
+  }
+  #nav button:hover { background: rgba(255,255,255,0.07); border-color: var(--green-mid); }
+  #nav button:disabled { opacity: 0.15; cursor: default; }
+  #nav button.primary {
+    background: var(--green-light); border-color: var(--green-light);
+    padding: 12px 56px; font-size: 21px;
+  }
+  #nav button.primary:hover { background: var(--green-mid); border-color: var(--green-mid); }
+
+  #nav-center { display: flex; flex-direction: column; align-items: center; gap: 5px; flex: 1; }
+  #slide-label {
+    font-family: 'Bebas Neue', sans-serif; font-size: 14px;
+    letter-spacing: 3px; color: rgba(255,255,255,0.22);
+  }
+  #dots { display: flex; gap: 5px; flex-wrap: wrap; justify-content: center; max-width: 700px; }
+  .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: rgba(255,255,255,0.12); transition: background 0.3s; cursor: pointer;
+  }
+  .dot.active { background: var(--green-mid); }
+  .dot:hover { background: rgba(76,175,80,0.5); }
+
+  body::before {
+    content: '';
+    position: fixed; bottom: -200px; right: -200px;
+    width: 700px; height: 700px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(46,125,50,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  #hint {
+    position: fixed; bottom: 86px; left: 50%; transform: translateX(-50%);
+    font-size: 12px; color: rgba(255,255,255,0.12); letter-spacing: 2px;
+    pointer-events: none; white-space: nowrap;
+  }
+
+  .s-text p,
+  .s-list ul li {
+    text-wrap: pretty;
+  }
+
+  @media (max-width: 900px) {
+    #counter, #hint { display: none; }
+
+    #slide-container {
+      justify-content: flex-start;
+      padding:
+        max(18px, env(safe-area-inset-top))
+        16px
+        calc(10px + env(safe-area-inset-bottom));
+    }
+
+    .slide {
+      max-width: 100%;
+      min-height: calc(100dvh - 86px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      justify-content: center;
+    }
+
+    .slide.active {
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding-right: 4px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.18) transparent;
+    }
+
+    .slide.active::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .slide.active::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.18);
+      border-radius: 999px;
+    }
+
+    .s-title { gap: 10px; }
+    .s-title .tag {
+      font-size: 11px;
+      letter-spacing: 3px;
+      margin-bottom: 2px;
+    }
+    .s-title h1 {
+      font-size: clamp(44px, 12vw, 72px);
+      letter-spacing: 2px;
+      text-shadow: 0 0 36px rgba(76,175,80,0.25);
+    }
+    .s-title .sub {
+      font-size: clamp(14px, 3.8vw, 19px);
+      margin-top: 8px;
+    }
+
+    .s-section,
+    .s-subsection { gap: 10px; }
+    .s-section .sec-label,
+    .s-subsection .sub-label {
+      font-size: 10px;
+      letter-spacing: 4px;
+    }
+    .s-section h2 {
+      font-size: clamp(30px, 9vw, 54px);
+      letter-spacing: 1px;
+      line-height: 1.02;
+    }
+    .s-subsection h3 {
+      font-size: clamp(26px, 7vw, 46px);
+      letter-spacing: 1px;
+      line-height: 1.02;
+    }
+
+    .s-text { gap: 12px; }
+    .s-text .heading {
+      font-size: 14px;
+      letter-spacing: 2px;
+      border-left-width: 3px;
+      padding-left: 10px;
+      width: 100%;
+    }
+    .s-text p {
+      font-size: clamp(18px, 4.9vw, 28px);
+      line-height: 1.34;
+      max-width: 100%;
+    }
+    .slide.is-dense.s-text p {
+      font-size: clamp(16px, 4.3vw, 24px);
+      line-height: 1.26;
+    }
+    .slide.is-very-dense.s-text p {
+      font-size: clamp(15px, 3.9vw, 22px);
+      line-height: 1.2;
+    }
+
+    .s-list { gap: 10px; }
+    .s-list .heading {
+      font-size: 14px;
+      letter-spacing: 2px;
+    }
+    .s-list ul { gap: 8px; }
+    .s-list ul li {
+      gap: 10px;
+      font-size: clamp(16px, 4.2vw, 24px);
+      line-height: 1.28;
+    }
+    .slide.is-dense-list.s-list ul li {
+      font-size: clamp(15px, 3.9vw, 22px);
+      line-height: 1.22;
+    }
+    .slide.is-very-dense-list.s-list ul li {
+      font-size: clamp(14px, 3.6vw, 20px);
+      line-height: 1.18;
+    }
+    .s-list ul li .num {
+      width: 28px;
+      height: 28px;
+      min-width: 28px;
+      font-size: 14px;
+      margin-top: 2px;
+    }
+
+    #nav {
+      gap: 10px;
+      padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+    }
+    #nav button {
+      font-size: 14px;
+      letter-spacing: 1px;
+      padding: 10px 14px;
+    }
+    #nav button.primary {
+      padding: 10px 18px;
+      font-size: 15px;
+    }
+
+    #nav-center {
+      min-width: 0;
+    }
+    #slide-label {
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-align: center;
+    }
+    #dots {
+      display: none;
+    }
+
+    body::before {
+      width: 360px;
+      height: 360px;
+      bottom: -120px;
+      right: -120px;
+    }
+  }
+
+  @media (max-width: 932px) and (orientation: landscape) {
+    #counter {
+      display: block;
+      top: 10px;
+      right: 14px;
+      font-size: 15px;
+    }
+
+    #slide-container {
+      padding:
+        max(16px, env(safe-area-inset-top))
+        24px
+        calc(8px + env(safe-area-inset-bottom));
+    }
+
+    .slide {
+      min-height: calc(100dvh - 72px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    }
+
+    .s-title h1 {
+      font-size: clamp(54px, 9vw, 92px);
+    }
+    .s-section h2 {
+      font-size: clamp(34px, 6vw, 60px);
+    }
+    .s-subsection h3 {
+      font-size: clamp(28px, 5.5vw, 48px);
+    }
+    .s-text p {
+      font-size: clamp(17px, 3.3vw, 24px);
+      line-height: 1.28;
+    }
+    .slide.is-dense.s-text p {
+      font-size: clamp(15px, 3vw, 21px);
+      line-height: 1.2;
+    }
+    .slide.is-very-dense.s-text p {
+      font-size: clamp(14px, 2.7vw, 19px);
+      line-height: 1.14;
+    }
+    .s-list ul li {
+      font-size: clamp(15px, 3vw, 21px);
+    }
+    .slide.is-dense-list.s-list ul li {
+      font-size: clamp(14px, 2.7vw, 19px);
+      line-height: 1.14;
+    }
+    .slide.is-very-dense-list.s-list ul li {
+      font-size: clamp(13px, 2.45vw, 18px);
+      line-height: 1.1;
+    }
+
+    #nav {
+      padding: 8px 14px calc(8px + env(safe-area-inset-bottom));
+    }
+    #nav button {
+      padding: 8px 16px;
+      font-size: 13px;
+    }
+    #nav button.primary {
+      padding: 8px 20px;
+      font-size: 14px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div id="counter"></div>
+
+<div id="slide-container">
+
+  <!-- 1 TITOLO -->
+  <div class="slide s-title active" data-label="Titolo">
+    <div class="tag">I Consigli del Farmacista</div>
+    <h1>LA <span>TOSSE</span></h1>
+    <div class="sub">Versione estesa da circa 15 minuti</div>
+  </div>
+
+  <!-- ══ INTRODUZIONE ══ -->
+  <div class="slide s-section" data-label="Introduzione">
+    <div class="sec-label">Apertura</div>
+    <h2>PERCHÉ PARLARE<br>DI TOSSE?</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Introduzione — 1">
+    <div class="heading">INTRODUZIONE</div>
+    <p>Quando compare la tosse, la prima reazione è spesso cercare subito uno sciroppo o un rimedio che la faccia sparire. In realtà, la tosse non è una malattia in sé, ma un sintomo. È un segnale che l'organismo produce per difendere le vie respiratorie, liberarle da secrezioni o sostanze irritanti e attirare l'attenzione su qualcosa che sta succedendo.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Introduzione — 2">
+    <div class="heading">INTRODUZIONE</div>
+    <p>Per questo motivo non tutta la tosse va interpretata allo stesso modo. Conta da quanto tempo è presente, se è secca o con catarro, se compare soprattutto di notte, se è associata a febbre o affanno e conta anche chi è la persona che tossisce. La stessa tosse ha un peso diverso in un adulto sano, in un anziano fragile, in un bambino piccolo o in una persona con asma, reflusso o abitudine al fumo.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Introduzione — 3">
+    <div class="heading">INTRODUZIONE</div>
+    <p>In questo episodio vedremo che cos'è la tosse, perché compare, come distinguere le forme più comuni, quali elementi osservare a casa, quali comportamenti possono aiutare davvero, quando i farmaci hanno senso e in quali situazioni è opportuno chiedere consiglio al farmacista o rivolgersi al medico.</p>
+  </div>
+
+  <!-- ══ COS'È LA TOSSE ══ -->
+  <div class="slide s-section" data-label="Cos'è la Tosse?">
+    <div class="sec-label">Sezione 1</div>
+    <h2>COS'È LA TOSSE?</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'è la Tosse? — 1">
+    <div class="heading">COS'È LA TOSSE?</div>
+    <p>Di per sé la tosse non è una malattia ma un semplice sintomo che insorge ogniqualvolta le mucose delle vie respiratorie vengono irritate.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'è la Tosse? — 2">
+    <div class="heading">COS'È LA TOSSE?</div>
+    <p>La tosse è quindi un meccanismo di difesa che il nostro corpo adotta per neutralizzare e rimuovere una sostanza irritante presente nelle vie aeree.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'è la Tosse? — 3">
+    <div class="heading">COS'È LA TOSSE?</div>
+    <p>Tale sintomo è talmente diffuso da rappresentare il disturbo più frequente per cui ci si rivolge al medico. La tosse può insorgere anche come causa secondaria di specifiche malattie o derivare dall'utilizzo di alcuni farmaci.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'è la Tosse? — 4">
+    <div class="heading">COS'È LA TOSSE?</div>
+    <p>Normalmente il tossire è un meccanismo involontario stimolato dall'eccitazione di specifici recettori presenti lungo le pareti delle vie respiratorie.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'è la Tosse? — 5">
+    <div class="heading">COS'È LA TOSSE?</div>
+    <p>In presenza di muco eccessivo o di altri agenti causali al cervello viene inviato un segnale che porta alla loro espulsione insieme all'aria contenuta nei polmoni e nelle vie aeree.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'è la Tosse? — 6">
+    <div class="heading">COS'È LA TOSSE?</div>
+    <p>Questo ci aiuta a capire un punto importante: la tosse può essere fastidiosa, stancante e disturbare il sonno, ma in molti casi ha una funzione utile. Serve a tenere più pulite le vie respiratorie. Per questo non bisogna pensare in automatico che vada sempre bloccata subito e a tutti i costi.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'è la Tosse? — 7">
+    <div class="heading">COS'È LA TOSSE?</div>
+    <p>Anche il modo in cui compare può dare qualche indizio. Una tosse che peggiora di notte, una tosse dopo i pasti o una tosse che inizia all'improvviso dopo un episodio di soffocamento sono situazioni diverse tra loro. Non bastano da sole a fare una diagnosi, ma aiutano a orientarsi meglio.</p>
+  </div>
+
+  <!-- ══ CAUSE ══ -->
+  <div class="slide s-section" data-label="Cause">
+    <div class="sec-label">Sezione 2</div>
+    <h2>CAUSE</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — intro">
+    <div class="heading">CAUSE</div>
+    <p>La tosse è una manovra espiratoria esplosiva, riflessa o volontaria, tesa a liberare le vie aeree. Costituisce infatti uno dei principali meccanismi di difesa dell'albero respiratorio; tuttavia contribuisce anche alla diffusione delle malattie per via aerea e può risultare fastidiosa per il paziente. Non a caso, la tosse rappresenta una delle ragioni principali per cui viene richiesto l'intervento del medico. La tosse può essere conseguenza di infezioni, infiammazioni o irritazioni di natura meccanica o chimica.</p>
+  </div>
+
+  <!-- TOSSE ACUTA -->
+  <div class="slide s-subsection" data-label="Tosse acuta">
+    <div class="sub-label">Cause — Forma acuta</div>
+    <h3>TOSSE ACUTA</h3>
+  </div>
+
+  <div class="slide s-text" data-label="Tosse acuta — 1">
+    <div class="heading blue">TOSSE ACUTA</div>
+    <p>Le cause più frequenti che inducono il sintomo in forma acuta, ossia quando la tosse persiste per meno di 3 settimane, sono le infiammazioni e le infezioni delle alte vie respiratorie, come raffreddore comune, laringite, faringite e bronchite acuta, lo sgocciolamento retronasale di origine allergica, virale o batterica e la polmonite.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Tosse acuta — 2">
+    <div class="heading blue">TOSSE ACUTA</div>
+    <p>A scatenare il riflesso della tosse può essere anche l'ingresso nell'albero respiratorio di sostanze estranee, come particolato atmosferico, frammenti di cibo o materiale inerte, gas irritanti come fumo ed esalazioni chimiche o liquidi inalati. Altre possibili cause comprendono l'embolia polmonare e l'insufficienza cardiaca.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Tosse acuta — 3">
+    <div class="heading blue">TOSSE ACUTA</div>
+    <p>Nei bambini, le cause che inducono la tosse sono simili a quelle degli adulti, ma l'asma e l'inalazione di corpi estranei possono essere più frequenti. Per questo, una tosse che inizia all'improvviso dopo un boccone o un gioco non va banalizzata.</p>
+  </div>
+
+  <!-- TOSSE CRONICA -->
+  <div class="slide s-subsection" data-label="Tosse cronica">
+    <div class="sub-label">Cause — Forma cronica</div>
+    <h3>TOSSE CRONICA</h3>
+  </div>
+
+  <div class="slide s-text" data-label="Tosse cronica — 1">
+    <div class="heading blue">TOSSE CRONICA</div>
+    <p>La tosse cronica, invece, si manifesta in caso di bronchite, asma, broncopneumopatia cronica ostruttiva, reflusso gastroesofageo, tabagismo, iperreattività delle vie aeree dopo un'infezione, pertosse, tubercolosi, infezioni micotiche, fibrosi cistica, sarcoidosi, esposizione ad allergeni o a irritanti respiratori, assunzione di ACE inibitori e neoplasie del polmone o del mediastino.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Tosse cronica — 2">
+    <div class="heading blue">TOSSE CRONICA</div>
+    <p>Nella pratica, quando una tosse dura a lungo, le cause più comuni da prendere in considerazione sono spesso il fumo, l'asma, il reflusso e il gocciolamento retronasale. Anche alcuni farmaci per la pressione, come gli ACE inibitori, possono provocare una tosse persistente e secca. In questi casi cambiare terapia è una decisione che spetta al medico, ma riconoscere il possibile collegamento è già molto utile.</p>
+  </div>
+
+  <!-- TOSSE SECCA -->
+  <div class="slide s-subsection" data-label="Tosse secca">
+    <div class="sub-label">Cause — Tipologia</div>
+    <h3>TOSSE SECCA</h3>
+  </div>
+
+  <div class="slide s-text" data-label="Tosse secca — 1">
+    <div class="heading blue">TOSSE SECCA</div>
+    <p>Con tosse secca si intende l'espulsione forzata e rumorosa di aria dai polmoni, associata all'irritazione della gola, ma priva di secrezioni fluide o mucose. Insorge tipicamente dopo l'inalazione di sostanze irritanti e l'aspirazione di un corpo estraneo. Altre cause comuni di tosse secca sono le infezioni respiratorie, l'enfisema, la pleurite, il reflusso gastroesofageo e l'asma.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Tosse secca — 2">
+    <div class="heading blue">TOSSE SECCA</div>
+    <p>La tosse secca è spesso quella che più facilmente disturba il sonno, irrita la gola e lascia la sensazione di non riuscire a liberare nulla. Proprio per questo è la forma in cui più spesso si cerca un sedativo della tosse. Ma anche qui bisogna capire da cosa dipende, perché calmare il sintomo senza inquadrare la causa può non essere sempre la scelta più adatta.</p>
+  </div>
+
+  <!-- TOSSE GRASSA -->
+  <div class="slide s-subsection" data-label="Tosse grassa">
+    <div class="sub-label">Cause — Tipologia</div>
+    <h3>TOSSE GRASSA</h3>
+  </div>
+
+  <div class="slide s-text" data-label="Tosse grassa — 1">
+    <div class="heading blue">TOSSE GRASSA</div>
+    <p>La tosse grassa, invece, è accompagnata da catarro, prodotto principalmente a livello dei bronchi. Spesso, è associata alla presenza di bronchite acuta e cronica, broncopolmonite, polmonite ab ingestis, carcinoma polmonare e bronchiectasie.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Tosse grassa — 2">
+    <div class="heading blue">TOSSE GRASSA</div>
+    <p>Quando c'è catarro, la tosse svolge una funzione ancora più evidente di pulizia. Per questo non sempre è opportuno spegnerla del tutto. In molti casi il problema non è la presenza del muco in sé, ma la sua quantità, la sua densità e la difficoltà a espellerlo. Un altro aspetto utile da ricordare è che il solo colore dell'espettorato non basta da solo a stabilire se serva o meno un antibiotico.</p>
+  </div>
+
+  <!-- ══ COME VALUTARE ══ -->
+  <div class="slide s-section" data-label="Valutazione">
+    <div class="sec-label">Sezione 3</div>
+    <h2>COME VALUTARE<br>LA TOSSE?</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Valutazione — 1">
+    <div class="heading">COME VALUTARE LA TOSSE</div>
+    <p>Prima ancora di pensare a un prodotto specifico, conviene osservare bene la tosse. Da quanto tempo è presente? È secca o produttiva? Compare soprattutto di giorno o di notte? È associata a raffreddore, febbre, mal di gola, bruciore di stomaco, naso chiuso, fiato corto o respiro sibilante? Si scatena con il movimento, con l'aria fredda, quando ci si sdraia o dopo aver mangiato?</p>
+  </div>
+
+  <div class="slide s-text" data-label="Valutazione — 2">
+    <div class="heading">COME VALUTARE LA TOSSE</div>
+    <p>Sono domande semplici, ma molto utili. Una tosse notturna, per esempio, può far pensare ad asma, gocciolamento retronasale o reflusso. Una tosse dopo i pasti o quando ci si sdraia può essere compatibile con reflusso.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Valutazione — 3">
+    <div class="heading">COME VALUTARE LA TOSSE</div>
+    <p>Conta anche l'impatto sulla persona. Una tosse continua che impedisce di dormire bene per più notti può diventare molto pesante da sostenere. Allo stesso modo, una tosse associata a respiro corto o dolore toracico richiede un'attenzione diversa rispetto a una tosse occasionale.</p>
+  </div>
+
+  <!-- ══ COME COMPORTARSI A CASA ══ -->
+  <div class="slide s-section" data-label="Gestione a casa">
+    <div class="sec-label">Sezione 4</div>
+    <h2>COME COMPORTARSI<br>A CASA?</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Gestione a casa — 1">
+    <div class="heading">COME COMPORTARSI A CASA</div>
+    <p>Nella maggior parte dei casi, soprattutto se la tosse accompagna un'infezione virale delle prime vie respiratorie, aiutano misure semplici. Bere a sufficienza può favorire il comfort e rendere meno dense le secrezioni. Anche l'aria troppo secca può peggiorare la sensazione di irritazione, per cui un ambiente non surriscaldato e ben aerato è spesso una scelta utile.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Gestione a casa — 2">
+    <div class="heading">COME COMPORTARSI A CASA</div>
+    <p>È importante evitare il fumo attivo e passivo. Il fumo irrita ulteriormente le vie respiratorie, prolunga il sintomo e rende meno efficace il recupero. Questo vale non solo per chi fuma abitualmente, ma anche per chi in quel momento si trova in ambienti chiusi o esposti ad aerosol irritanti, profumi intensi o vapori chimici.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Gestione a casa — 3">
+    <div class="heading">COME COMPORTARSI A CASA</div>
+    <p>Negli adulti e nei bambini più grandi, bevande tiepide o semplicemente piccoli sorsi d'acqua possono dare sollievo alla gola. Nei bambini con più di un anno, il miele può aiutare a ridurre la tosse, soprattutto serale o notturna. Sotto l'anno di vita, invece, il miele non va dato.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Gestione a casa — 4">
+    <div class="heading">COME COMPORTARSI A CASA</div>
+    <p>Un altro punto pratico è non sovraccaricare il corpo con rimedi inutili o troppo aggressivi. Non sempre servono aerosol, combinazioni di prodotti o sciroppi multipli. Spesso è più utile scegliere pochi interventi sensati e osservare l'andamento.</p>
+  </div>
+
+  <!-- ══ FARMACI ══ -->
+  <div class="slide s-section" data-label="Farmaci">
+    <div class="sec-label">Sezione 5</div>
+    <h2>FARMACI</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Farmaci — 1">
+    <div class="heading">FARMACI</div>
+    <p>In linea generale, prima di seguire una terapia farmacologica per trattare la tosse è indispensabile risalire alla causa scatenante.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Farmaci — 2">
+    <div class="heading">FARMACI</div>
+    <p>Considerato che l'abitudine tabagica rientra tra le più frequenti cause di tosse cronica, è evidente che smettere di fumare costituisce una delle soluzioni più utili e intelligenti.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Farmaci — 3">
+    <div class="heading">FARMACI</div>
+    <p>Quando la tosse dipende, invece, da un'insorgenza batterica documentata o fortemente sospetta, il paziente può essere curato con antibiotici mirati. Ma questo è un punto essenziale: molte tossi acute sono di origine virale, e in questi casi l'antibiotico non aiuta a guarire prima.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Farmaci — 4">
+    <div class="heading">FARMACI</div>
+    <p>Ad ogni modo, è fondamentale ricordare che per curare il sintomo tosse si deve curare anzitutto la malattia che ne sta alla base: la guarigione di quest'ultima comporta, di riflesso, l'allontanamento della tosse. L'emissione dell'espettorato, che contraddistingue la tosse grassa, costituisce di per sé una forma di difesa naturale.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Farmaci — 5">
+    <div class="heading">FARMACI</div>
+    <p>Nella tosse secca e irritativa, soprattutto se interferisce con il riposo, il farmacista può aiutare a capire se un sedativo della tosse possa avere senso. Nella tosse con secrezioni dense, invece, il ragionamento può essere diverso e orientarsi verso strategie che favoriscano la fluidificazione o l'espulsione del muco. La scelta non è automatica e va adattata alla persona.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Farmaci — 6">
+    <div class="heading">FARMACI</div>
+    <p>Particolare prudenza serve con i prodotti combinati da banco. Alcuni contengono più principi attivi insieme e il rischio è sommare sostanze simili senza accorgersene, soprattutto se si stanno già assumendo altri farmaci per febbre, raffreddore o allergia. Nei bambini piccoli, in gravidanza, negli anziani e in chi soffre di patologie croniche il consiglio professionale è ancora più importante.</p>
+  </div>
+
+  <!-- ══ QUANDO CHIEDERE CONSIGLIO ══ -->
+  <div class="slide s-section" data-label="Quando chiedere aiuto">
+    <div class="sec-label">Sezione 6</div>
+    <h2>QUANDO CHIEDERE<br>CONSIGLIO AL MEDICO?</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Consiglio medico — 1">
+    <div class="heading">QUANDO CHIEDERE CONSIGLIO AL MEDICO</div>
+    <p>Ci sono situazioni in cui la tosse merita una valutazione medica senza aspettare troppo. Per esempio, se compare difficoltà respiratoria, se il respiro è rumoroso, se le labbra appaiono bluastre, se c'è dolore toracico importante, se compare sangue con la tosse oppure se la persona appare molto sofferente o confusa.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Consiglio medico — 2">
+    <div class="heading">QUANDO CHIEDERE CONSIGLIO AL MEDICO</div>
+    <p>Anche la presenza di febbre alta persistente, peggioramento rapido, disidratazione, forte debolezza o impossibilità a dormire e mangiare in modo accettabile sono elementi che meritano attenzione. Nei bambini molto piccoli la prudenza deve essere ancora maggiore, soprattutto se sono presenti crisi di tosse intense, vomito dopo gli accessi o il sospetto di aver inalato qualcosa.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Consiglio medico — 3">
+    <div class="heading">QUANDO CHIEDERE CONSIGLIO AL MEDICO</div>
+    <p>Un altro criterio molto utile è la durata. Se la tosse non migliora, dura oltre poche settimane, tende a ripresentarsi o cambia caratteristiche, è il momento di approfondire. Questo vale ancora di più se si accompagna a dimagrimento, raucedine persistente, respiro sibilante, affanno o ricorrenti risvegli notturni.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Consiglio medico — 4">
+    <div class="heading">QUANDO CHIEDERE CONSIGLIO AL MEDICO</div>
+    <p>Le persone fragili meritano una soglia di attenzione più bassa: anziani, soggetti con BPCO, asma, scompenso cardiaco, immunodepressione o terapia oncologica non dovrebbero gestire da soli una tosse nuova o in peggioramento.</p>
+  </div>
+
+  <!-- ══ DECALOGO ══ -->
+  <div class="slide s-section" data-label="Il Decalogo">
+    <div class="sec-label">Sezione 7</div>
+    <h2>IL DECALOGO<br>PER UN CORRETTO<br>USO DEI FARMACI</h2>
+  </div>
+
+  <div class="slide s-list" data-label="Decalogo — Regole 1–5">
+    <div class="heading">IL DECALOGO PER UN CORRETTO USO DEI FARMACI</div>
+    <ul>
+      <li><span class="num">1</span>Nell'usare il farmaco rispetta la posologia, la dose, il tempo e la modalità di somministrazione indicata dal medico o riportata correttamente sul prodotto.</li>
+      <li><span class="num">2</span>Non assumere più farmaci contemporaneamente senza il consiglio del medico o del farmacista, soprattutto se si tratta di prodotti per tosse, raffreddore, febbre o allergia che possono sovrapporsi.</li>
+      <li><span class="num">3</span>Non interrompere arbitrariamente una terapia. Se un trattamento è stato impostato per una causa precisa, modificarlo da soli può rendere più difficile il controllo del problema.</li>
+      <li><span class="num">4</span>Controlla sempre la data di scadenza prima di utilizzare il farmaco.</li>
+      <li><span class="num">5</span>Ricorda che alcuni farmaci, come sciroppi, gocce, spray e altri prodotti liquidi, una volta aperti possono avere tempi d'uso più brevi rispetto alla data indicata sulla confezione.</li>
+    </ul>
+  </div>
+
+  <div class="slide s-list" data-label="Decalogo — Regole 6–10">
+    <div class="heading">IL DECALOGO PER UN CORRETTO USO DEI FARMACI</div>
+    <ul>
+      <li><span class="num">6</span>Per dubbi chiedi consiglio al medico o al farmacista.</li>
+      <li><span class="num">7</span>Conserva integra la confezione senza gettare l'astuccio e il foglietto illustrativo.</li>
+      <li><span class="num">8</span>Riponi i farmaci in luogo fresco e asciutto; non in bagno e non in cucina, ma nel luogo espressamente specificato.</li>
+      <li><span class="num">9</span>Tieni lontano i farmaci dalla portata dei bambini.</li>
+      <li><span class="num">10</span>Non gettare i farmaci nella spazzatura, ma negli appositi contenitori collocati all'interno o in prossimità delle farmacie.</li>
+    </ul>
+  </div>
+
+  <!-- ══ CONCLUSIONE ══ -->
+  <div class="slide s-section" data-label="Conclusione">
+    <div class="sec-label">Chiusura</div>
+    <h2>IN SINTESI</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Conclusione — 1">
+    <div class="heading">CONCLUSIONE</div>
+    <p>In sintesi, la tosse è un sintomo molto comune ma non banale. Può essere un semplice fastidio passeggero, ma può anche essere il segnale di un problema che va capito meglio. La chiave non è inseguire la tosse in modo automatico, ma leggerla nel suo contesto: durata, tipo, sintomi associati e condizioni della persona.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Conclusione — 2">
+    <div class="heading">CONCLUSIONE</div>
+    <p>Le misure semplici fatte bene, come idratazione, ambiente adeguato e attenzione al fumo, spesso aiutano molto. I farmaci possono essere utili, ma solo se scelti con criterio e senza confondere il sollievo del sintomo con la cura della causa.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Conclusione — 3">
+    <div class="heading">CONCLUSIONE</div>
+    <p>Il farmacista può aiutare a distinguere le situazioni comuni da quelle che richiedono un approfondimento. Quando però compaiono segnali d'allarme, quando la tosse persiste o quando riguarda persone fragili, il medico resta il riferimento da contattare.</p>
+  </div>
+
+  <!-- FINE -->
+  <div class="slide s-title" data-label="Fine">
+    <div class="tag">I Consigli del Farmacista</div>
+    <h1>LA <span>TOSSE</span></h1>
+    <div class="sub">Fine episodio — versione estesa</div>
+  </div>
+
+</div>
+
+<div id="hint">← → frecce tastiera &nbsp;|&nbsp; SPAZIO avanza &nbsp;|&nbsp; click sui pallini per saltare</div>
+
+<div id="nav">
+  <button id="btn-prev" disabled onclick="prevSlide()">◀ INDIETRO</button>
+  <div id="nav-center">
+    <span id="slide-label"></span>
+    <div id="dots"></div>
+  </div>
+  <button id="btn-next" class="primary" onclick="nextSlide()">AVANTI ▶</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  slides.forEach(slide => {
+    const paragraphs = [...slide.querySelectorAll('p')];
+    const totalLength = paragraphs.reduce((sum, paragraph) => sum + paragraph.textContent.trim().length, 0);
+    if (totalLength > 220) slide.classList.add('is-dense');
+    if (totalLength > 320) slide.classList.add('is-very-dense');
+
+    const items = [...slide.querySelectorAll('li')];
+    if (items.length) {
+      const longest = items.reduce((max, item) => Math.max(max, item.textContent.trim().length), 0);
+      if (items.length >= 4 || longest > 90) slide.classList.add('is-dense-list');
+      if (items.length >= 5 || longest > 120) slide.classList.add('is-very-dense-list');
+    }
+  });
+
+  const dotsEl = document.getElementById('dots');
+  for (let i = 0; i < total; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.onclick = () => showSlide(i);
+    dotsEl.appendChild(d);
+  }
+
+  function showSlide(n) {
+    slides[current].classList.remove('active');
+    document.querySelectorAll('.dot')[current].classList.remove('active');
+    current = Math.max(0, Math.min(n, total - 1));
+    slides[current].classList.add('active');
+    document.querySelectorAll('.dot')[current].classList.add('active');
+    document.getElementById('counter').textContent = `${current + 1} / ${total}`;
+    document.getElementById('progress-bar').style.width = `${((current + 1) / total) * 100}%`;
+    document.getElementById('slide-label').textContent = slides[current].dataset.label || '';
+    document.getElementById('btn-prev').disabled = current === 0;
+    document.getElementById('btn-next').disabled = current === total - 1;
+  }
+
+  function nextSlide() { if (current < total - 1) showSlide(current + 1); }
+  function prevSlide() { if (current > 0) showSlide(current - 1); }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    else if (e.key === 'Home') { e.preventDefault(); showSlide(0); }
+    else if (e.key === 'End') { e.preventDefault(); showSlide(total - 1); }
+  });
+
+  showSlide(0);
+</script>
+</body>
+</html>
