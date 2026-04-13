@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FEBBRE – I Consigli del Farmacista | Versione 15 Minuti</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lato:wght@300;400;700;900&display=swap');
+
+  :root {
+    --green: #1B5E20;
+    --green-light: #2E7D32;
+    --green-mid: #4CAF50;
+    --red: #B71C1C;
+    --red-light: #EF5350;
+    --white: #FAFAFA;
+    --dark: #080f08;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--dark);
+    font-family: 'Lato', sans-serif;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+  }
+
+  #progress-bar {
+    height: 5px;
+    background: linear-gradient(90deg, var(--green-mid), var(--red-light));
+    width: 0%;
+    transition: width 0.35s ease;
+    position: fixed;
+    top: 0; left: 0; z-index: 100;
+  }
+
+  #counter {
+    position: fixed;
+    top: 14px; right: 24px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: rgba(255,255,255,0.28);
+    letter-spacing: 2px;
+    z-index: 100;
+  }
+
+  #slide-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 90px 20px;
+    overflow: hidden;
+  }
+
+  .slide {
+    display: none;
+    width: 100%;
+    max-width: 1500px;
+    animation: fadeIn 0.4s ease;
+  }
+  .slide.active { display: flex; flex-direction: column; align-items: center; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .s-title { text-align: center; gap: 14px; }
+  .s-title .tag {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px; letter-spacing: 7px;
+    color: var(--green-mid); margin-bottom: 6px;
+  }
+  .s-title h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(80px, 13vw, 160px);
+    color: var(--white); letter-spacing: 8px; line-height: 1;
+    text-shadow: 0 0 80px rgba(76,175,80,0.3);
+  }
+  .s-title h1 span { color: var(--green-mid); }
+  .s-title .sub {
+    font-size: clamp(18px, 2.2vw, 30px);
+    color: rgba(255,255,255,0.45);
+    font-weight: 300; margin-top: 12px; letter-spacing: 1px;
+  }
+
+  .s-section { text-align: center; gap: 12px; }
+  .s-section .sec-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px; letter-spacing: 8px; color: var(--red-light); margin-bottom: 4px;
+  }
+  .s-section h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(50px, 8vw, 110px);
+    color: var(--white); letter-spacing: 4px; line-height: 1.05;
+  }
+
+  .s-text { gap: 20px; width: 100%; }
+  .s-text .heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(16px, 2vw, 28px);
+    color: var(--green-mid); letter-spacing: 3px;
+    border-left: 5px solid var(--red); padding-left: 16px;
+    margin-bottom: 4px;
+  }
+  .s-text p {
+    font-size: clamp(28px, 3.6vw, 54px);
+    color: var(--white); line-height: 1.55;
+    font-weight: 400; max-width: 1450px;
+  }
+
+  .s-list { gap: 14px; width: 100%; }
+  .s-list .heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(16px, 2vw, 26px);
+    color: var(--green-mid); letter-spacing: 3px; margin-bottom: 8px;
+  }
+  .s-list ul { list-style: none; display: flex; flex-direction: column; gap: 10px; width: 100%; }
+  .s-list ul li {
+    display: flex; align-items: flex-start; gap: 16px;
+    font-size: clamp(22px, 2.8vw, 42px);
+    color: var(--white); line-height: 1.4;
+  }
+  .s-list ul li .num {
+    background: var(--red); color: white;
+    font-family: 'Bebas Neue', sans-serif; font-size: 19px;
+    width: 40px; height: 40px; min-width: 40px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    margin-top: 4px;
+  }
+
+  .s-fact { text-align: center; gap: 16px; }
+  .s-fact .f-label {
+    font-family: 'Lato', sans-serif; font-weight: 300;
+    font-size: clamp(18px, 2vw, 28px); color: rgba(255,255,255,0.55);
+    max-width: 900px; line-height: 1.4;
+  }
+  .s-fact .f-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(90px, 16vw, 200px);
+    color: var(--green-mid); line-height: 1;
+    text-shadow: 0 0 120px rgba(76,175,80,0.5);
+  }
+  .s-fact .f-text {
+    font-size: clamp(20px, 2.5vw, 38px);
+    color: var(--white); font-weight: 300;
+    max-width: 950px; line-height: 1.45;
+  }
+
+  #nav {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 36px 20px;
+    background: rgba(0,0,0,0.55);
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  #nav button {
+    background: none; border: 2px solid rgba(255,255,255,0.18);
+    color: white; font-family: 'Bebas Neue', sans-serif;
+    font-size: 19px; letter-spacing: 3px;
+    padding: 12px 36px; cursor: pointer; border-radius: 4px;
+    transition: all 0.2s;
+  }
+  #nav button:hover { background: rgba(255,255,255,0.07); border-color: var(--green-mid); }
+  #nav button:disabled { opacity: 0.15; cursor: default; }
+  #nav button.primary {
+    background: var(--green-light); border-color: var(--green-light);
+    padding: 12px 56px; font-size: 21px;
+  }
+  #nav button.primary:hover { background: var(--green-mid); border-color: var(--green-mid); }
+
+  #nav-center { display: flex; flex-direction: column; align-items: center; gap: 5px; flex: 1; }
+  #slide-label {
+    font-family: 'Bebas Neue', sans-serif; font-size: 14px;
+    letter-spacing: 3px; color: rgba(255,255,255,0.22);
+  }
+  #dots { display: flex; gap: 5px; flex-wrap: wrap; justify-content: center; max-width: 600px; }
+  .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: rgba(255,255,255,0.12); transition: background 0.3s; cursor: pointer;
+  }
+  .dot.active { background: var(--green-mid); }
+  .dot:hover { background: rgba(76,175,80,0.5); }
+
+  body::before {
+    content: '';
+    position: fixed; bottom: -200px; right: -200px;
+    width: 700px; height: 700px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(46,125,50,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  #hint {
+    position: fixed; bottom: 86px; left: 50%; transform: translateX(-50%);
+    font-size: 12px; color: rgba(255,255,255,0.12); letter-spacing: 2px;
+    pointer-events: none; white-space: nowrap;
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div id="counter"></div>
+
+<div id="slide-container">
+
+  <div class="slide s-title active" data-label="Titolo">
+    <div class="tag">I Consigli del Farmacista</div>
+    <h1>LA <span>FEBBRE</span></h1>
+    <div class="sub">Versione estesa da circa 15 minuti</div>
+  </div>
+
+  <div class="slide s-section" data-label="Introduzione">
+    <div class="sec-label">Apertura</div>
+    <h2>PERCHÉ PARLARE<br>DI FEBBRE?</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Introduzione — 1">
+    <div class="heading">INTRODUZIONE</div>
+    <p>Quando compare la febbre, la prima reazione è spesso preoccuparsi e cercare subito il modo più rapido per farla scendere. In realtà, la febbre non è una malattia ma un segnale: il corpo ci sta dicendo che qualcosa è in corso e che il sistema immunitario si è attivato.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Introduzione — 2">
+    <div class="heading">INTRODUZIONE</div>
+    <p>Per questo motivo non va né sottovalutata né vissuta automaticamente come un nemico da eliminare a tutti i costi. Il numero sul termometro è importante, ma conta anche come sta la persona, se beve, se respira bene e se la febbre dura poco o continua per giorni.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Introduzione — 3">
+    <div class="heading">INTRODUZIONE</div>
+    <p>In questo episodio vedremo che cos'è la febbre, perché compare, come misurarla correttamente, come comportarsi a casa, quando i farmaci possono aiutare e in quali situazioni è opportuno chiedere consiglio al farmacista o rivolgersi al medico.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Cos'è la Febbre?">
+    <div class="sec-label">Sezione 1</div>
+    <h2>COS'È LA FEBBRE?</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'è la Febbre? — 1">
+    <div class="heading">COS'È LA FEBBRE?</div>
+    <p>Si parla di febbre quando la temperatura corporea aumenta al di sopra dei valori normali, cioè oltre i 37,2-37,5°C.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'è la Febbre? — 2">
+    <div class="heading">COS'È LA FEBBRE?</div>
+    <p>Quest'alterazione è causata da uno spostamento a valori patologici del sistema di regolazione dell'ipotalamo, per azione di mediatori chimici endogeni: le citochine pirogene.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'è la Febbre? — 3">
+    <div class="heading">COS'È LA FEBBRE?</div>
+    <p>Questi pirogeni endogeni sono liberati in risposta all'azione di agenti infettivi e dei loro prodotti, i pirogeni esogeni, oppure a focolai infiammatori e necrotici di natura non infettiva.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'è la Febbre? — 4">
+    <div class="heading">COS'È LA FEBBRE?</div>
+    <p>La febbre è quindi una risposta immunitaria di fase acuta a varie cause capaci di indurre infezione o malattia e rappresenta un segno clinico comune a molte condizioni mediche.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'è la Febbre? — 5">
+    <div class="heading">COS'È LA FEBBRE?</div>
+    <p>L'esempio più comune di patologia caratterizzata da febbre è l'influenza stagionale, alla quale l'organismo risponde con un incremento della temperatura per contrastare l'azione dei virus implicati nella malattia infettiva.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'è la Febbre? — 6">
+    <div class="heading">COS'È LA FEBBRE?</div>
+    <p>È utile ricordare che la temperatura corporea non è identica in ogni persona e non resta uguale in ogni momento della giornata. Può variare leggermente in base all'orario, all'attività fisica, all'ambiente e anche al punto del corpo in cui viene misurata.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'è la Febbre? — 7">
+    <div class="heading">COS'È LA FEBBRE?</div>
+    <p>Per questo motivo non bisogna farsi guidare solo da un numero isolato. La febbre, da sola, non dice sempre qual è la causa precisa del problema, ma è un campanello di allarme utile che va interpretato insieme agli altri sintomi presenti.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Cause">
+    <div class="sec-label">Sezione 2</div>
+    <h2>CAUSE</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 1">
+    <div class="heading">CAUSE</div>
+    <p>La temperatura corporea è regolata dall'equilibrio tra termogenesi e termodispersione, cioè la produzione e la cessione di calore da parte del corpo. Il nostro organismo produce continuamente calore come sottoprodotto del metabolismo che avviene in tutte le cellule.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 2">
+    <div class="heading">CAUSE</div>
+    <p>Se il calore prodotto non fosse eliminato, durante il riposo muscolare e in condizioni ambientali normali, la temperatura media del corpo umano aumenterebbe di circa 1,5°C ogni ora.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 3">
+    <div class="heading">CAUSE</div>
+    <p>L'organismo mantiene un equilibrio dinamico tra ingresso e uscita di calore, soprattutto attraverso l'evaporazione di acqua delle mucose, favorita dalla respirazione, e la sudorazione.</p>
+  </div>
+
+  <div class="slide s-fact" data-label="Cause — 37°C">
+    <div class="f-label">Per questo</div>
+    <div class="f-num">37°C</div>
+    <div class="f-text">la temperatura corporea si mantiene costantemente intorno ai 37°C</div>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 4">
+    <div class="heading">CAUSE</div>
+    <p>Il centro regolatore della temperatura corporea è localizzato a livello ipotalamico. Questo termostato fisiologico non solo riceve segnali dai recettori periferici del caldo e del freddo, ma è anche direttamente sensibile alla temperatura del sangue che lo irrora.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 5">
+    <div class="heading">CAUSE</div>
+    <p>La febbre di per sé non è uno stato patologico, ma un sintomo che insorge in risposta a una determinata malattia. Dipende da una modificazione del valore di set point regolato dall'ipotalamo, che obbliga il sistema di termoregolazione ad innalzare la temperatura corporea in maniera controllata.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 6">
+    <div class="heading">CAUSE</div>
+    <p>Molto spesso, la febbre costituisce una risposta a infezioni batteriche o virali che stimolano alcune cellule del sistema immunitario, i globuli bianchi, a proliferare e a secernere diverse sostanze chimiche, tra cui le citochine.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 7">
+    <div class="heading">CAUSE</div>
+    <p>L'ipotalamo riesce ad aumentare la temperatura corporea controllando le funzioni di molti organi e tessuti. Tra i meccanismi ricordiamo la vasocostrizione, l'aumento del tono muscolare con i brividi, l'aumento della frequenza cardiaca e delle attività metaboliche.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 8">
+    <div class="heading">CAUSE</div>
+    <p>Poiché l'aumento della temperatura indotto dai pirogeni endogeni stimola molte risposte immunitarie contro i microrganismi invasori, la febbre è considerata benefica, poiché migliora la capacità dell'organismo di difendersi.</p>
+  </div>
+
+  <div class="slide s-fact" data-label="Cause — 40°C">
+    <div class="f-label">Considerato, poi, che molti patogeni vengono ostacolati da temperature più elevate</div>
+    <div class="f-num">40°C</div>
+    <div class="f-text">la febbre rappresenta una preziosa difesa per il nostro organismo</div>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 9">
+    <div class="heading">CAUSE</div>
+    <p>Le citochine possiedono anche un'azione dolorifica e possono provocare disappetenza, nausea, debolezza e malessere generale.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 10">
+    <div class="heading">CAUSE</div>
+    <p>In parole semplici, quando il corpo decide di alzare il termostato, mette in atto un programma coordinato. All'inizio possiamo sentire freddo, avere brividi e mani più fredde, perché il corpo sta trattenendo calore e producendone di più. Quando invece il set point torna a scendere, compare più facilmente sudorazione.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 11">
+    <div class="heading">CAUSE</div>
+    <p>È utile distinguere la febbre dall'ipertermia. Nella febbre il termostato dell'organismo viene regolato verso l'alto. Nell'ipertermia la temperatura sale perché il corpo accumula troppo calore, come può accadere nel colpo di calore. Non tutte le temperature elevate hanno quindi lo stesso significato.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Come Misurare">
+    <div class="sec-label">Sezione 3</div>
+    <h2>COME MISURARE<br>LA FEBBRE</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Come Misurare — 1">
+    <div class="heading">COME MISURARE</div>
+    <p>Per gestire bene la febbre bisogna prima di tutto misurarla bene. Affidarsi solo alla sensazione della fronte calda può essere utile come primo campanello, ma non basta per valutare con precisione la situazione.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Come Misurare — 2">
+    <div class="heading">COME MISURARE</div>
+    <p>Il metodo più pratico è usare un termometro digitale e seguire con attenzione le istruzioni del dispositivo. A seconda dell'età e del tipo di strumento, la misurazione può essere orale, ascellare, auricolare o frontale.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Come Misurare — 3">
+    <div class="heading">COME MISURARE</div>
+    <p>Nei bambini molto piccoli la misurazione rettale è quella più accurata, mentre la temperatura ascellare è in genere la meno precisa e può servire soprattutto come primo orientamento.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Come Misurare — 4">
+    <div class="heading">COME MISURARE</div>
+    <p>I valori possono variare leggermente in base al punto del corpo in cui si misura la temperatura e al momento della giornata. Se si controlla l'andamento della febbre, conviene usare sempre lo stesso metodo, così il confronto tra le misurazioni è più affidabile.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Come Misurare — 5">
+    <div class="heading">COME MISURARE</div>
+    <p>Un'altra regola semplice ma utile è non usare termometri in vetro al mercurio e non improvvisare strumenti poco attendibili. Se la persona ha appena bevuto molto caldo o molto freddo, può essere utile aspettare qualche minuto e ripetere la misurazione con calma.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Farmaci">
+    <div class="sec-label">Sezione 4</div>
+    <h2>FARMACI</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Farmaci — 1">
+    <div class="heading">FARMACI</div>
+    <p>La febbre è un sintomo comune che può essere causato da diverse condizioni di salute. Può essere un segnale di un'infezione o di una malattia infiammatoria, tra cui virus, batteri, infezioni fungine o malattie autoimmuni.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Farmaci — 2">
+    <div class="heading">FARMACI</div>
+    <p>Una reazione allergica alimentare, come l'orticaria, può anche associarsi a febbre. In alcuni casi, anche alcune malattie metaboliche e i tumori possono causare febbre.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Farmaci — 3">
+    <div class="heading">FARMACI</div>
+    <p>La temperatura corporea aumenta quando il sistema immunitario rilascia citochine per combattere le infezioni. L'antipiretico è un farmaco che viene utilizzato per ridurre la temperatura corporea e alleviare il malessere associato.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Farmaci — 4">
+    <div class="heading">FARMACI</div>
+    <p>La febbre è un sintomo che si manifesta con un aumento della temperatura corporea al di sopra dei valori normali; i sintomi più comuni associati alla febbre sono brividi, mal di testa, dolore muscolare, perdita di appetito, stanchezza e debolezza.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Farmaci — 5">
+    <div class="heading">FARMACI</div>
+    <p>Va chiarito un punto importante: l'antipiretico non cura la causa della febbre. Serve soprattutto a ridurre il fastidio, a favorire il riposo e a migliorare il benessere generale della persona.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Farmaci — 6">
+    <div class="heading">FARMACI</div>
+    <p>Per questo motivo non bisogna inseguire per forza una temperatura perfettamente normale a tutti i costi. Prima di associare più farmaci o di alternarli, è sempre prudente chiedere consiglio al medico o al farmacista.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Farmaci — 7">
+    <div class="heading">FARMACI</div>
+    <p>L'errore più comune non è tanto usare un farmaco quando serve, ma usarlo male: troppo spesso, in quantità sbagliata, oppure insieme ad altri prodotti che contengono già lo stesso principio attivo. Nei bambini l'aspirina non deve essere usata salvo indicazione specifica del medico.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Come Comportarsi">
+    <div class="sec-label">Sezione 5</div>
+    <h2>COME COMPORTARSI<br>A CASA</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Come Comportarsi — 1">
+    <div class="heading">A CASA</div>
+    <p>Nella maggior parte dei casi, insieme ai farmaci quando indicati, sono utili misure semplici. Il riposo aiuta il corpo a concentrare energie nella risposta all'infezione. Bere a sufficienza è fondamentale, perché con febbre e sudorazione si perdono liquidi più facilmente.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Come Comportarsi — 2">
+    <div class="heading">A CASA</div>
+    <p>Un buon criterio pratico è controllare anche i segnali del corpo: bocca molto secca, urine scarse o molto scure, stanchezza marcata, capogiri o sonnolenza possono far pensare che i liquidi assunti non siano abbastanza.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Come Comportarsi — 3">
+    <div class="heading">A CASA</div>
+    <p>Nei bambini bisogna osservare attenzione, vivacità, presenza di lacrime quando piangono e pannolini bagnati se sono molto piccoli. In presenza di vomito o diarrea, il rischio di perdere liquidi aumenta ancora di più.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Come Comportarsi — 4">
+    <div class="heading">A CASA</div>
+    <p>È meglio non coprirsi eccessivamente nel tentativo di far sudare la febbre. Vestiti leggeri, stanza non troppo calda e ambiente ben aerato aiutano il comfort. Rimedi aggressivi come bagni freddi, ghiaccio o frizioni alcoliche non sono la scelta giusta.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Come Comportarsi — 5">
+    <div class="heading">A CASA</div>
+    <p>Anche l'alimentazione va gestita con semplicità: se l'appetito è ridotto non bisogna forzare troppo, ma è importante favorire idratazione e pasti leggeri quando la persona se la sente. In molti casi il farmacista può essere un riferimento utile proprio in questa fase.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Quando Chiedere Aiuto">
+    <div class="sec-label">Sezione 6</div>
+    <h2>QUANDO CHIEDERE<br>AIUTO</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Quando Chiedere Aiuto — 1">
+    <div class="heading">QUANDO CHIEDERE AIUTO</div>
+    <p>Ci sono però situazioni in cui la febbre merita una valutazione medica senza aspettare troppo. Un neonato o un lattante molto piccolo con febbre, per esempio, deve essere valutato rapidamente.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Quando Chiedere Aiuto — 2">
+    <div class="heading">QUANDO CHIEDERE AIUTO</div>
+    <p>Lo stesso vale se la febbre si accompagna a difficoltà respiratoria, rigidità del collo, forte mal di testa, stato confusionale, rash insolito, convulsioni, vomito ripetuto o segni evidenti di disidratazione.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Quando Chiedere Aiuto — 3">
+    <div class="heading">QUANDO CHIEDERE AIUTO</div>
+    <p>Una particolare attenzione è necessaria anche nelle persone fragili: anziani, soggetti con patologie croniche importanti, persone immunodepresse, pazienti in terapia oncologica o con farmaci che riducono le difese immunitarie.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Quando Chiedere Aiuto — 4">
+    <div class="heading">QUANDO CHIEDERE AIUTO</div>
+    <p>Anche la durata conta. In assenza di sintomi allarmanti, è ragionevole contattare il medico se la febbre dura più di due o tre giorni, se tende a peggiorare invece di migliorare, oppure se la persona continua a sentirsi molto sofferente nonostante le misure adottate.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Quando Chiedere Aiuto — 5">
+    <div class="heading">QUANDO CHIEDERE AIUTO</div>
+    <p>Non bisogna dimenticare che ciò che guida la decisione non è soltanto il numero sul termometro. Una persona con febbre moderata ma molto abbattuta, confusa o disidratata può richiedere più attenzione di una persona con temperatura più alta ma in condizioni generali discrete.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Il Decalogo">
+    <div class="sec-label">Sezione 7</div>
+    <h2>IL DECALOGO<br>PER UN CORRETTO<br>USO DEI FARMACI</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Decalogo — Introduzione">
+    <div class="heading">IL DECALOGO</div>
+    <p>Il decalogo non è un elenco formale. È un modo concreto per ridurre gli errori più comuni quando si usano farmaci contro il malessere associato alla febbre. Rispettare poche regole semplici aumenta efficacia e sicurezza.</p>
+  </div>
+
+  <div class="slide s-list" data-label="Decalogo — Regole 1–3">
+    <div class="heading">REGOLE 1–3</div>
+    <ul>
+      <li><span class="num">1</span>Rispetta posologia, dose, tempi e modalità di somministrazione indicate.</li>
+      <li><span class="num">2</span>Non assumere più farmaci insieme senza il consiglio del medico o del farmacista.</li>
+      <li><span class="num">3</span>Non interrompere arbitrariamente una terapia prescritta.</li>
+    </ul>
+  </div>
+
+  <div class="slide s-list" data-label="Decalogo — Regole 4–6">
+    <div class="heading">REGOLE 4–6</div>
+    <ul>
+      <li><span class="num">4</span>Controlla sempre la data di scadenza prima di usare un farmaco.</li>
+      <li><span class="num">5</span>Ricorda che colliri, sciroppi, gocce e spray aperti possono scadere prima.</li>
+      <li><span class="num">6</span>Per dubbi chiedi consiglio al medico o al farmacista.</li>
+    </ul>
+  </div>
+
+  <div class="slide s-list" data-label="Decalogo — Regole 7–8">
+    <div class="heading">REGOLE 7–8</div>
+    <ul>
+      <li><span class="num">7</span>Conserva integra la confezione con astuccio e foglietto illustrativo.</li>
+      <li><span class="num">8</span>Riponi i farmaci in luogo fresco e asciutto, non in bagno e non in cucina.</li>
+    </ul>
+  </div>
+
+  <div class="slide s-list" data-label="Decalogo — Regole 9–10">
+    <div class="heading">REGOLE 9–10</div>
+    <ul>
+      <li><span class="num">9</span>Tieni i farmaci lontano dalla portata dei bambini.</li>
+      <li><span class="num">10</span>Non gettare i farmaci nella spazzatura, ma negli appositi contenitori delle farmacie.</li>
+    </ul>
+  </div>
+
+  <div class="slide s-section" data-label="Riepilogo Finale">
+    <div class="sec-label">Chiusura</div>
+    <h2>RIEPILOGO<br>FINALE</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Riepilogo — 1">
+    <div class="heading">RIEPILOGO</div>
+    <p>In sintesi, la febbre va osservata, misurata bene, contestualizzata e gestita con equilibrio. Non sempre va combattuta a ogni costo, ma non va nemmeno banalizzata.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Riepilogo — 2">
+    <div class="heading">RIEPILOGO</div>
+    <p>Un buon uso del termometro, dei farmaci e del consiglio professionale permette di affrontarla in modo più sereno e più sicuro. Il farmacista può aiutare a distinguere le situazioni comuni da quelle che meritano approfondimento, mentre il medico resta il riferimento quando i sintomi cambiano, persistono o preoccupano.</p>
+  </div>
+
+  <div class="slide s-title" data-label="Fine">
+    <div class="tag">I Consigli del Farmacista</div>
+    <h1>LA <span>FEBBRE</span></h1>
+    <div class="sub">Fine episodio — versione estesa</div>
+  </div>
+
+</div>
+
+<div id="hint">← → frecce tastiera &nbsp;|&nbsp; SPAZIO avanza &nbsp;|&nbsp; click sui pallini per saltare</div>
+
+<div id="nav">
+  <button id="btn-prev" disabled onclick="prevSlide()">◀ INDIETRO</button>
+  <div id="nav-center">
+    <span id="slide-label"></span>
+    <div id="dots"></div>
+  </div>
+  <button id="btn-next" class="primary" onclick="nextSlide()">AVANTI ▶</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  const dotsEl = document.getElementById('dots');
+  for (let i = 0; i < total; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.onclick = () => showSlide(i);
+    dotsEl.appendChild(d);
+  }
+
+  function showSlide(n) {
+    slides[current].classList.remove('active');
+    document.querySelectorAll('.dot')[current].classList.remove('active');
+    current = Math.max(0, Math.min(n, total - 1));
+    slides[current].classList.add('active');
+    document.querySelectorAll('.dot')[current].classList.add('active');
+    document.getElementById('counter').textContent = `${current + 1} / ${total}`;
+    document.getElementById('progress-bar').style.width = `${((current + 1) / total) * 100}%`;
+    document.getElementById('slide-label').textContent = slides[current].dataset.label || '';
+    document.getElementById('btn-prev').disabled = current === 0;
+    document.getElementById('btn-next').disabled = current === total - 1;
+  }
+
+  function nextSlide() { if (current < total - 1) showSlide(current + 1); }
+  function prevSlide() { if (current > 0) showSlide(current - 1); }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    else if (e.key === 'Home') { e.preventDefault(); showSlide(0); }
+    else if (e.key === 'End') { e.preventDefault(); showSlide(total - 1); }
+  });
+
+  showSlide(0);
+</script>
+</body>
+</html>

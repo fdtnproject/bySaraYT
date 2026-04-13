@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>bySaraYT Health</title>
+  <style>
+    :root {
+      --bg: #09120d;
+      --panel: rgba(255, 255, 255, 0.06);
+      --panel-border: rgba(255, 255, 255, 0.1);
+      --text: #f7fbf8;
+      --muted: rgba(247, 251, 248, 0.72);
+      --green: #4caf50;
+      --green-dark: #2e7d32;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top right, rgba(76, 175, 80, 0.18), transparent 30%),
+        radial-gradient(circle at bottom left, rgba(46, 125, 50, 0.14), transparent 28%),
+        var(--bg);
+    }
+
+    main {
+      width: min(1100px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 48px 0 64px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 12px;
+      padding: 8px 12px;
+      border: 1px solid rgba(76, 175, 80, 0.35);
+      border-radius: 999px;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #a5d6a7;
+    }
+
+    h1 {
+      margin: 0 0 14px;
+      font-size: clamp(40px, 8vw, 76px);
+      line-height: 0.95;
+    }
+
+    .lead {
+      max-width: 760px;
+      margin: 0 0 36px;
+      font-size: clamp(18px, 2.5vw, 24px);
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .card {
+      padding: 24px;
+      border: 1px solid var(--panel-border);
+      border-radius: 24px;
+      background: var(--panel);
+      backdrop-filter: blur(10px);
+    }
+
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 28px;
+    }
+
+    .card p {
+      margin: 0 0 18px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    .button {
+      display: inline-block;
+      padding: 12px 16px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 700;
+      color: var(--text);
+      background: var(--green-dark);
+    }
+
+    footer {
+      margin-top: 28px;
+      color: rgba(247, 251, 248, 0.58);
+      font-size: 14px;
+    }
+
+    footer a {
+      color: #c8f7cb;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <span class="eyebrow">bySaraYT / Health</span>
+    <h1>Health Playlist</h1>
+    <p class="lead">
+      Raccolta degli episodi dedicati ai temi salute. Ogni argomento ha una propria cartella con pagina episodio, versioni HTML e script scaricabili.
+    </p>
+
+    <section class="grid">
+      <article class="card">
+        <h2>Febbre</h2>
+        <p>
+          Episodio con versione originale, versione estesa da circa 15 minuti e script di supporto.
+        </p>
+        <a class="button" href="./febbre/">Apri episodio</a>
+      </article>
+    </section>
+
+    <footer>
+      <a href="../">Torna alla home bySaraYT</a>
+    </footer>
+  </main>
+</body>
+</html>
