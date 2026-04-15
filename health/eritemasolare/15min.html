@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ERITEMA SOLARE – I Consigli del Farmacista | 15 Minuti</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lato:wght@300;400;700;900&display=swap');
+
+  :root {
+    --green: #1B5E20;
+    --green-light: #2E7D32;
+    --green-mid: #4CAF50;
+    --red: #B71C1C;
+    --red-light: #EF5350;
+    --orange: #E65100;
+    --orange-light: #FF9800;
+    --white: #FAFAFA;
+    --dark: #0f0a04;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--dark);
+    font-family: 'Lato', sans-serif;
+    height: 100vh;
+    height: 100svh;
+    height: 100dvh;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    user-select: none;
+    overscroll-behavior: none;
+  }
+
+  #progress-bar {
+    height: 5px;
+    background: linear-gradient(90deg, var(--orange-light), var(--red-light));
+    width: 0%; transition: width 0.35s ease;
+    position: fixed; top: 0; left: 0; z-index: 100;
+  }
+
+  #counter {
+    position: fixed; top: 14px; right: 24px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px; color: rgba(255,255,255,0.28);
+    letter-spacing: 2px; z-index: 100;
+  }
+
+  #slide-container {
+    flex: 1; display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    padding: 50px 90px 20px; overflow: hidden;
+  }
+
+  .slide { display: none; width: 100%; max-width: 1500px; animation: fadeIn 0.4s ease; }
+  .slide.active { display: flex; flex-direction: column; align-items: center; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .s-title { text-align: center; gap: 14px; }
+  .s-title .tag { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 7px; color: var(--orange-light); margin-bottom: 6px; }
+  .s-title h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(56px, 9vw, 130px); color: var(--white); letter-spacing: 5px; line-height: 1; text-shadow: 0 0 80px rgba(255,152,0,0.35); }
+  .s-title h1 span { color: var(--orange-light); }
+  .s-title .sub { font-size: clamp(18px, 2.2vw, 30px); color: rgba(255,255,255,0.45); font-weight: 300; margin-top: 12px; }
+
+  .s-section { text-align: center; gap: 12px; }
+  .s-section .sec-label { font-family: 'Bebas Neue', sans-serif; font-size: 13px; letter-spacing: 8px; color: var(--orange-light); margin-bottom: 4px; }
+  .s-section h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(44px, 7vw, 100px); color: var(--white); letter-spacing: 4px; line-height: 1.05; text-align: center; }
+
+  .s-text { gap: 20px; width: 100%; }
+  .s-text .heading { font-family: 'Bebas Neue', sans-serif; font-size: clamp(14px, 1.8vw, 26px); color: var(--orange-light); letter-spacing: 3px; border-left: 5px solid var(--orange); padding-left: 16px; margin-bottom: 4px; }
+  .s-text .heading.green { color: var(--green-mid); border-left-color: var(--green); }
+  .s-text p { font-size: clamp(24px, 3.1vw, 48px); color: var(--white); line-height: 1.55; font-weight: 400; max-width: 1450px; }
+
+  .s-fact { text-align: center; gap: 16px; }
+  .s-fact .f-label { font-family: 'Lato', sans-serif; font-weight: 300; font-size: clamp(18px, 2vw, 28px); color: rgba(255,255,255,0.55); max-width: 900px; line-height: 1.4; }
+  .s-fact .f-num { font-family: 'Bebas Neue', sans-serif; font-size: clamp(80px, 14vw, 180px); color: var(--orange-light); line-height: 1; text-shadow: 0 0 120px rgba(255,152,0,0.5); }
+  .s-fact .f-text { font-size: clamp(20px, 2.5vw, 38px); color: var(--white); font-weight: 300; max-width: 950px; line-height: 1.45; }
+
+  .s-list { gap: 14px; width: 100%; }
+  .s-list .heading { font-family: 'Bebas Neue', sans-serif; font-size: clamp(14px, 1.8vw, 24px); color: var(--green-mid); letter-spacing: 3px; margin-bottom: 8px; }
+  .s-list ul { list-style: none; display: flex; flex-direction: column; gap: 10px; width: 100%; }
+  .s-list ul li { display: flex; align-items: flex-start; gap: 16px; font-size: clamp(20px, 2.6vw, 40px); color: var(--white); line-height: 1.4; }
+  .s-list ul li .num { background: var(--red); color: white; font-family: 'Bebas Neue', sans-serif; font-size: 18px; width: 38px; height: 38px; min-width: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-top: 4px; }
+
+  #nav { display: flex; justify-content: space-between; align-items: center; padding: 14px 36px 20px; background: rgba(0,0,0,0.55); border-top: 1px solid rgba(255,255,255,0.05); }
+  #nav button { background: none; border: 2px solid rgba(255,255,255,0.18); color: white; font-family: 'Bebas Neue', sans-serif; font-size: 19px; letter-spacing: 3px; padding: 12px 36px; cursor: pointer; border-radius: 4px; transition: all 0.2s; }
+  #nav button:hover { background: rgba(255,255,255,0.07); border-color: var(--orange-light); }
+  #nav button:disabled { opacity: 0.15; cursor: default; }
+  #nav button.primary { background: var(--orange); border-color: var(--orange); padding: 12px 56px; font-size: 21px; }
+  #nav button.primary:hover { background: var(--orange-light); border-color: var(--orange-light); }
+
+  #nav-center { display: flex; flex-direction: column; align-items: center; gap: 5px; flex: 1; }
+  #slide-label { font-family: 'Bebas Neue', sans-serif; font-size: 14px; letter-spacing: 3px; color: rgba(255,255,255,0.22); }
+  #dots { display: flex; gap: 5px; flex-wrap: wrap; justify-content: center; max-width: 700px; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.12); transition: background 0.3s; cursor: pointer; }
+  .dot.active { background: var(--orange-light); }
+  .dot:hover { background: rgba(255,152,0,0.5); }
+
+  body::before { content: ''; position: fixed; bottom: -200px; right: -200px; width: 700px; height: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(230,81,0,0.08) 0%, transparent 70%); pointer-events: none; }
+  body::after { content: ''; position: fixed; top: -150px; left: -150px; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(255,152,0,0.05) 0%, transparent 70%); pointer-events: none; }
+  #hint { position: fixed; bottom: 86px; left: 50%; transform: translateX(-50%); font-size: 12px; color: rgba(255,255,255,0.12); letter-spacing: 2px; pointer-events: none; white-space: nowrap; }
+
+  .s-text p,
+  .s-list ul li {
+    text-wrap: pretty;
+  }
+
+  @media (max-width: 900px) {
+    #counter, #hint { display: none; }
+
+    #slide-container {
+      justify-content: flex-start;
+      padding:
+        max(18px, env(safe-area-inset-top))
+        16px
+        calc(10px + env(safe-area-inset-bottom));
+    }
+
+    .slide {
+      max-width: 100%;
+      min-height: calc(100dvh - 86px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      justify-content: center;
+    }
+
+    .slide.active {
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding-right: 4px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.18) transparent;
+    }
+
+    .slide.active::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .slide.active::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.18);
+      border-radius: 999px;
+    }
+
+    .s-title { gap: 10px; }
+    .s-title .tag { font-size: 11px; letter-spacing: 3px; margin-bottom: 2px; }
+    .s-title h1 { font-size: clamp(42px, 11vw, 72px); letter-spacing: 2px; text-shadow: 0 0 36px rgba(255,152,0,0.25); }
+    .s-title .sub { font-size: clamp(14px, 3.8vw, 19px); margin-top: 8px; }
+
+    .s-section { gap: 10px; }
+    .s-section .sec-label { font-size: 10px; letter-spacing: 4px; }
+    .s-section h2 { font-size: clamp(28px, 8.6vw, 54px); letter-spacing: 1px; line-height: 1.02; }
+
+    .s-text { gap: 12px; }
+    .s-text .heading { font-size: 14px; letter-spacing: 2px; border-left-width: 3px; padding-left: 10px; width: 100%; }
+    .s-text p { font-size: clamp(18px, 4.8vw, 28px); line-height: 1.34; max-width: 100%; }
+    .slide.is-dense.s-text p { font-size: clamp(16px, 4.3vw, 24px); line-height: 1.26; }
+    .slide.is-very-dense.s-text p { font-size: clamp(15px, 3.9vw, 22px); line-height: 1.2; }
+
+    .s-list { gap: 10px; }
+    .s-list .heading { font-size: 14px; letter-spacing: 2px; }
+    .s-list ul { gap: 8px; }
+    .s-list ul li { gap: 10px; font-size: clamp(16px, 4.2vw, 24px); line-height: 1.28; }
+    .slide.is-dense-list.s-list ul li { font-size: clamp(15px, 3.9vw, 22px); line-height: 1.22; }
+    .slide.is-very-dense-list.s-list ul li { font-size: clamp(14px, 3.6vw, 20px); line-height: 1.18; }
+    .s-list ul li .num { width: 28px; height: 28px; min-width: 28px; font-size: 14px; margin-top: 2px; }
+
+    #nav { gap: 10px; padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); }
+    #nav button { font-size: 14px; letter-spacing: 1px; padding: 10px 14px; }
+    #nav button.primary { padding: 10px 18px; font-size: 15px; }
+    #nav-center { min-width: 0; }
+    #slide-label { font-size: 11px; letter-spacing: 1px; text-align: center; }
+    #dots { display: none; }
+
+    body::before { width: 360px; height: 360px; bottom: -120px; right: -120px; }
+    body::after { width: 260px; height: 260px; top: -80px; left: -80px; }
+  }
+
+  @media (max-width: 932px) and (orientation: landscape) {
+    #counter { display: block; top: 10px; right: 14px; font-size: 15px; }
+
+    #slide-container {
+      padding:
+        max(16px, env(safe-area-inset-top))
+        24px
+        calc(8px + env(safe-area-inset-bottom));
+    }
+
+    .slide { min-height: calc(100dvh - 72px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); }
+    .s-title h1 { font-size: clamp(50px, 8.5vw, 88px); }
+    .s-section h2 { font-size: clamp(32px, 5.8vw, 58px); }
+    .s-text p { font-size: clamp(17px, 3.2vw, 24px); line-height: 1.28; }
+    .slide.is-dense.s-text p { font-size: clamp(15px, 2.9vw, 21px); line-height: 1.2; }
+    .slide.is-very-dense.s-text p { font-size: clamp(14px, 2.7vw, 19px); line-height: 1.14; }
+    .s-list ul li { font-size: clamp(15px, 3vw, 21px); }
+    .slide.is-dense-list.s-list ul li { font-size: clamp(14px, 2.7vw, 19px); line-height: 1.14; }
+    .slide.is-very-dense-list.s-list ul li { font-size: clamp(13px, 2.45vw, 18px); line-height: 1.1; }
+    #nav { padding: 8px 14px calc(8px + env(safe-area-inset-bottom)); }
+    #nav button { padding: 8px 16px; font-size: 13px; }
+    #nav button.primary { padding: 8px 20px; font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div id="counter"></div>
+
+<div id="slide-container">
+
+  <div class="slide s-title active" data-label="Titolo">
+    <div class="tag">I Consigli del Farmacista</div>
+    <h1><span>ERITEMA</span> SOLARE</h1>
+    <div class="sub">Versione estesa da circa 15 minuti</div>
+  </div>
+
+  <div class="slide s-section" data-label="Introduzione">
+    <div class="sec-label">Apertura</div>
+    <h2>PARLIAMO DI<br>ERITEMA SOLARE</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Introduzione — 1">
+    <div class="heading">INTRODUZIONE</div>
+    <p>L'eritema solare viene spesso liquidato come una semplice scottatura fastidiosa da mettere in conto dopo una giornata di mare. In realtà è un segnale di danno cutaneo da raggi ultravioletti e non andrebbe trattato con leggerezza.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Introduzione — 2">
+    <div class="heading">INTRODUZIONE</div>
+    <p>Molte persone si accorgono troppo tardi di essersi esposte oltre misura. Questo succede perché i sintomi non compaiono sempre subito: spesso l'arrossamento peggiora nelle ore successive e il dolore diventa più intenso quando ormai il danno è avvenuto.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Introduzione — 3">
+    <div class="heading">INTRODUZIONE</div>
+    <p>In questo episodio vedremo che cos'è l'eritema solare, quali sono i sintomi più comuni, chi rischia di più, cosa fare nelle prime ore, quali errori evitare, quale ruolo hanno i farmaci e quando è il caso di parlare con il medico.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Che cos'è">
+    <div class="sec-label">Sezione 1</div>
+    <h2>CHE COS'È<br>L'ERITEMA SOLARE?</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'è — 1">
+    <div class="heading">CHE COS'È L'ERITEMA SOLARE?</div>
+    <p>L'eritema solare è una reazione infiammatoria della pelle dovuta a un'esposizione eccessiva ai raggi ultravioletti, soprattutto UVB ma anche UVA. In pratica la pelle subisce un danno da radiazione e risponde con arrossamento, calore, dolore e bruciore.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'è — 2">
+    <div class="heading">CHE COS'È L'ERITEMA SOLARE?</div>
+    <p>Non va quindi inteso come un'abbronzatura semplicemente “presa male”, ma come un vero segnale di sovraesposizione. Il fatto che il danno si veda dopo qualche ora non significa che sia lieve. Anzi, spesso il picco del fastidio arriva più tardi rispetto al momento dell'esposizione.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'è — 3">
+    <div class="heading">CHE COS'È L'ERITEMA SOLARE?</div>
+    <p>La gravità può variare molto. Si può andare da un arrossamento superficiale limitato fino a quadri più seri con dolore marcato, bolle, febbre, nausea e malessere generale. Quando la pelle si ustiona, anche se per causa solare, la situazione va valutata con più attenzione.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Sintomi">
+    <div class="sec-label">Sezione 2</div>
+    <h2>COME SI<br>MANIFESTA</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Sintomi — 1">
+    <div class="heading">COME SI MANIFESTA</div>
+    <p>I sintomi più tipici sono arrossamento, sensazione di pelle calda, bruciore, dolore al contatto, prurito e maggiore sensibilità della zona colpita. In alcuni casi la pelle appare tesa e dolente già nelle prime ore, mentre in altri l'intensità cresce progressivamente nelle 12-24 ore successive.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Sintomi — 2">
+    <div class="heading">COME SI MANIFESTA</div>
+    <p>Se l'esposizione è stata più intensa possono comparire edema, vescicole o bolle. Nei giorni seguenti è frequente la desquamazione, che è un segno del danno già avvenuto. Questo è anche il motivo per cui non bisogna scambiare la spellatura per un normale passaggio dell'abbronzatura.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Sintomi — 3">
+    <div class="heading">COME SI MANIFESTA</div>
+    <p>Le aree più colpite sono in genere spalle, schiena, décolleté, viso, naso, orecchie, dorso dei piedi e tutte le zone che rimangono esposte più a lungo. Anche labbra e cuoio capelluto possono essere coinvolti, soprattutto se poco protetti.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Perché succede">
+    <div class="sec-label">Sezione 3</div>
+    <h2>PERCHÉ<br>SUCCEDE</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 1">
+    <div class="heading">PERCHÉ SUCCEDE</div>
+    <p>La causa è l'esposizione eccessiva ai raggi ultravioletti. I raggi UVB sono i principali responsabili della scottatura, mentre gli UVA contribuiscono al danno cutaneo e penetrano più in profondità. Per questo non basta pensare che il problema dipenda solo dal sole “forte” delle ore centrali.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 2">
+    <div class="heading">PERCHÉ SUCCEDE</div>
+    <p>Ci si può scottare anche quando c'è vento, quando il cielo è parzialmente nuvoloso o quando si sta in acqua. Sabbia, acqua e altre superfici riflettono la radiazione e possono aumentare l'esposizione effettiva. Inoltre la permanenza all'aperto spesso viene sottostimata quando si alternano sole e bagno.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 3">
+    <div class="heading">PERCHÉ SUCCEDE</div>
+    <p>Un errore comune è credere che l'abbronzatura protegga del tutto. Una pelle già colorita può avere una tolleranza maggiore rispetto alla primissima esposizione, ma non è mai completamente al riparo dal danno solare.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Chi rischia di più">
+    <div class="sec-label">Sezione 4</div>
+    <h2>CHI RISCHIA<br>DI PIÙ</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Rischio — 1">
+    <div class="heading">CHI RISCHIA DI PIÙ</div>
+    <p>Le persone con pelle chiara, occhi chiari, capelli biondi o rossi e tendenza a scottarsi facilmente sono in genere più vulnerabili. Anche chi si espone poco durante l'anno e poi passa improvvisamente molte ore al sole corre un rischio maggiore.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Rischio — 2">
+    <div class="heading">CHI RISCHIA DI PIÙ</div>
+    <p>I bambini meritano un'attenzione particolare. La loro pelle è più delicata e si danneggia più facilmente. Nei lattanti e nei bambini molto piccoli l'esposizione diretta al sole dovrebbe essere evitata il più possibile, specialmente nelle ore più calde.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Rischio — 3">
+    <div class="heading">CHI RISCHIA DI PIÙ</div>
+    <p>Anche gli anziani, le persone con cute molto sensibile, chi ha avuto già reazioni importanti al sole e chi assume farmaci fotosensibilizzanti deve essere considerato più a rischio. In questi casi la prevenzione va curata ancora di più.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Farmaci e sole">
+    <div class="sec-label">Sezione 5</div>
+    <h2>ERITEMA SOLARE<br>E FARMACI</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Farmaci — 1">
+    <div class="heading green">ERITEMA SOLARE E FARMACI</div>
+    <p>Un punto spesso dimenticato è che alcuni farmaci possono aumentare la sensibilità della pelle al sole. Questo fenomeno si chiama fotosensibilità. In pratica l'esposizione solare, insieme al farmaco, può favorire reazioni cutanee più intense o insolite.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Farmaci — 2">
+    <div class="heading green">ERITEMA SOLARE E FARMACI</div>
+    <p>Le reazioni possono essere fototossiche oppure fotoallergiche. Nelle forme fototossiche la luce interagisce con il farmaco e danneggia direttamente i tessuti. Nelle forme fotoallergiche si attiva una risposta di tipo immunologico.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Farmaci — 3">
+    <div class="heading green">ERITEMA SOLARE E FARMACI</div>
+    <p>Per questo è sempre utile leggere il foglietto illustrativo e chiedere al farmacista se il medicinale che stai assumendo può aumentare la sensibilità al sole. Non vale solo per i farmaci per bocca: anche alcuni prodotti applicati sulla pelle possono creare problemi in combinazione con il sole.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Cosa fare subito">
+    <div class="sec-label">Sezione 6</div>
+    <h2>COSA FARE<br>SUBITO</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Subito — 1">
+    <div class="heading">COSA FARE SUBITO</div>
+    <p>La prima cosa da fare è interrompere l'esposizione. Continuare a stare al sole pensando che “tanto ormai mi sono scottato” peggiora solo il danno. Bisogna spostarsi all'ombra o in un ambiente chiuso e lasciare respirare la pelle.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Subito — 2">
+    <div class="heading">COSA FARE SUBITO</div>
+    <p>Nelle prime ore possono aiutare docce fresche o impacchi puliti e umidi, non ghiacciati. Il freddo eccessivo applicato direttamente sulla pelle irritata non è una buona idea. Meglio puntare su un raffreddamento delicato ma costante.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Subito — 3">
+    <div class="heading">COSA FARE SUBITO</div>
+    <p>Se la pelle non presenta bolle, si possono usare prodotti emollienti o idratanti adatti per lenire il fastidio. È invece meglio evitare rimedi improvvisati, sostanze molto profumate, prodotti aggressivi o preparazioni casalinghe non pensate per una cute già infiammata.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Subito — 4">
+    <div class="heading">COSA FARE SUBITO</div>
+    <p>Anche bere a sufficienza è importante, soprattutto se l'esposizione è stata lunga e se c'è stata molta sudorazione. Il sole e il calore possono favorire disidratazione e malessere generale, che si sommano al problema della pelle.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Cosa non fare">
+    <div class="sec-label">Sezione 7</div>
+    <h2>COSA<br>NON FARE</h2>
+  </div>
+
+  <div class="slide s-text" data-label="No — 1">
+    <div class="heading">COSA NON FARE</div>
+    <p>Non bisogna continuare a esporsi nei giorni immediatamente successivi sperando che l'abbronzatura “copra” il rossore. La pelle va protetta e lasciata recuperare. Re-esporla troppo presto prolunga o peggiora il problema.</p>
+  </div>
+
+  <div class="slide s-text" data-label="No — 2">
+    <div class="heading">COSA NON FARE</div>
+    <p>Non bisogna nemmeno rompere le vescicole. Le bolle sono una protezione naturale dei tessuti sottostanti e danneggiarle aumenta il rischio di infezione e di guarigione peggiore.</p>
+  </div>
+
+  <div class="slide s-text" data-label="No — 3">
+    <div class="heading">COSA NON FARE</div>
+    <p>Va evitato anche l'uso di ghiaccio diretto sulla pelle, di scrub, di esfolianti, di alcol o di prodotti potenzialmente irritanti. Se la cute è già infiammata, tutto ciò che la aggredisce ulteriormente è controproducente.</p>
+  </div>
+
+  <div class="slide s-text" data-label="No — 4">
+    <div class="heading">COSA NON FARE</div>
+    <p>Infine, non bisogna minimizzare i sintomi generali. Se oltre al rossore compaiono nausea, brividi, febbre, capogiri, sete intensa o debolezza, non si sta parlando più solo di una lieve irritazione cutanea.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Prevenzione">
+    <div class="sec-label">Sezione 8</div>
+    <h2>PREVENZIONE</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Prevenzione — 1">
+    <div class="heading">PREVENZIONE</div>
+    <p>La prevenzione resta la parte più importante. Limitare l'esposizione nelle ore più intense, cercare l'ombra, indossare cappello, occhiali e indumenti protettivi riduce in modo concreto il rischio di eritema.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Prevenzione — 2">
+    <div class="heading">PREVENZIONE</div>
+    <p>La protezione solare va usata bene, non solo “messa”. Serve una crema ad ampio spettro, con SPF adeguato, applicata in quantità sufficiente e riapplicata regolarmente, soprattutto dopo bagno, sudorazione o sfregamento con l'asciugamano. Il prodotto, se usato male, protegge molto meno di quanto prometta in etichetta.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Prevenzione — 3">
+    <div class="heading">PREVENZIONE</div>
+    <p>Ci sono anche zone che si dimenticano facilmente: orecchie, naso, collo, labbra, dorso delle mani, dorso dei piedi e attaccatura dei capelli. Spesso è proprio lì che compaiono le scottature più fastidiose.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Prevenzione — 4">
+    <div class="heading">PREVENZIONE</div>
+    <p>Per i lattanti sotto i sei mesi, la strategia principale non è la crema solare ma l'evitare l'esposizione diretta e usare ombra e protezione fisica. Per i bambini più grandi, la protezione solare va inserita dentro un comportamento generale prudente, non usata come lasciapassare per stare fuori tutto il giorno.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Giorni successivi">
+    <div class="sec-label">Sezione 9</div>
+    <h2>COME GESTIRE<br>I GIORNI DOPO</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Dopo — 1">
+    <div class="heading">COME GESTIRE I GIORNI SUCCESSIVI</div>
+    <p>Nei giorni dopo l'eritema la pelle può restare sensibile, dolente e più reattiva. Conviene indossare tessuti leggeri, evitare ulteriori esposizioni e continuare a usare prodotti lenitivi o idratanti se ben tollerati.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Dopo — 2">
+    <div class="heading">COME GESTIRE I GIORNI SUCCESSIVI</div>
+    <p>La desquamazione non va accelerata con sfregamenti o peeling. È meglio lasciare che la pelle si rinnovi spontaneamente. In questa fase è ancora più importante proteggerla dal sole, perché è particolarmente vulnerabile.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Dopo — 3">
+    <div class="heading">COME GESTIRE I GIORNI SUCCESSIVI</div>
+    <p>Se la scottatura è stata ampia o intensa, il fastidio può durare diversi giorni. In questi casi la valutazione del farmacista può aiutare a capire se è ragionevole una gestione domiciliare o se serve un passaggio medico.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Quando sentire il medico">
+    <div class="sec-label">Sezione 10</div>
+    <h2>QUANDO SENTIRE<br>IL MEDICO</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Medico — 1">
+    <div class="heading">QUANDO SENTIRE IL MEDICO</div>
+    <p>È opportuno contattare un medico se l'eritema è molto esteso, se compaiono vescicole importanti, se il dolore è intenso, se c'è febbre, nausea, brividi, malessere generale, confusione, segni di disidratazione o se sono coinvolti bambini piccoli o persone fragili.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Medico — 2">
+    <div class="heading">QUANDO SENTIRE IL MEDICO</div>
+    <p>Serve una valutazione anche se la pelle appare molto gonfia, se ci sono segni di infezione, se il rossore peggiora invece di migliorare o se la reazione sembra insolita rispetto a una normale scottatura. In alcuni casi il problema può intrecciarsi con colpo di calore, disidratazione o reazioni da farmaci.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Medico — 3">
+    <div class="heading">QUANDO SENTIRE IL MEDICO</div>
+    <p>Va chiesto consiglio anche quando si sospetta che un farmaco assunto abitualmente abbia favorito la reazione. In quel caso non bisogna sospendere da soli una terapia importante, ma parlarne con il medico o il farmacista per capire come gestire meglio l'esposizione solare.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Il Decalogo">
+    <div class="sec-label">Sezione 11</div>
+    <h2>IL DECALOGO<br>PER UN CORRETTO<br>USO DEI FARMACI</h2>
+  </div>
+
+  <div class="slide s-list" data-label="Decalogo — Regole 1–5">
+    <div class="heading">IL DECALOGO PER UN CORRETTO USO DEI FARMACI</div>
+    <ul>
+      <li><span class="num">1</span>Nell'usare il farmaco rispetta la posologia, la dose, il tempo e la modalità di somministrazione indicata dal medico o riportata correttamente sul prodotto.</li>
+      <li><span class="num">2</span>Non assumere più farmaci contemporaneamente senza il consiglio del medico o del farmacista.</li>
+      <li><span class="num">3</span>Non interrompere arbitrariamente una terapia.</li>
+      <li><span class="num">4</span>Controlla sempre la data di scadenza prima di utilizzare il farmaco.</li>
+      <li><span class="num">5</span>Ricorda che alcuni farmaci, una volta aperti, possono avere tempi d'uso più brevi rispetto alla data indicata sulla confezione.</li>
+    </ul>
+  </div>
+
+  <div class="slide s-list" data-label="Decalogo — Regole 6–10">
+    <div class="heading">IL DECALOGO PER UN CORRETTO USO DEI FARMACI</div>
+    <ul>
+      <li><span class="num">6</span>Per dubbi chiedi consiglio al medico o al farmacista.</li>
+      <li><span class="num">7</span>Conserva integra la confezione senza gettare l'astuccio e il foglietto illustrativo.</li>
+      <li><span class="num">8</span>Riponi i farmaci in luogo fresco e asciutto; non in bagno e non in cucina, ma nel luogo espressamente specificato.</li>
+      <li><span class="num">9</span>Tieni lontano i farmaci dalla portata dei bambini.</li>
+      <li><span class="num">10</span>Non gettare i farmaci nella spazzatura, ma negli appositi contenitori collocati all'interno o in prossimità delle farmacie.</li>
+    </ul>
+  </div>
+
+  <div class="slide s-section" data-label="Conclusione">
+    <div class="sec-label">Chiusura</div>
+    <h2>IN SINTESI</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Conclusione — 1">
+    <div class="heading">CONCLUSIONE</div>
+    <p>In sintesi, l'eritema solare non è un semplice passaggio inevitabile dell'estate, ma un segno di danno cutaneo da raggi UV. Va trattato con attenzione e, ancora di più, va prevenuto con comportamenti corretti e protezione adeguata.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Conclusione — 2">
+    <div class="heading">CONCLUSIONE</div>
+    <p>Le prime cose da ricordare sono: interrompere subito l'esposizione, raffreddare la pelle con delicatezza, evitare rimedi irritanti, idratarsi e non sottovalutare sintomi generali o vescicole estese.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Conclusione — 3">
+    <div class="heading">CONCLUSIONE</div>
+    <p>Il farmacista può aiutare molto nel controllo dei prodotti da usare, nella valutazione dei farmaci che aumentano la sensibilità al sole e nel capire quando l'autogestione non basta più. E quando il quadro è importante, chiedere una valutazione medica è la scelta più prudente.</p>
+  </div>
+
+  <div class="slide s-title" data-label="Fine">
+    <div class="tag">I Consigli del Farmacista</div>
+    <h1><span>ERITEMA</span> SOLARE</h1>
+    <div class="sub">Fine episodio — versione estesa</div>
+  </div>
+
+</div>
+
+<div id="hint">← → frecce tastiera &nbsp;|&nbsp; SPAZIO avanza &nbsp;|&nbsp; click sui pallini per saltare</div>
+
+<div id="nav">
+  <button id="btn-prev" disabled onclick="prevSlide()">◀ INDIETRO</button>
+  <div id="nav-center">
+    <span id="slide-label"></span>
+    <div id="dots"></div>
+  </div>
+  <button id="btn-next" class="primary" onclick="nextSlide()">AVANTI ▶</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  slides.forEach(slide => {
+    const paragraphs = [...slide.querySelectorAll('p')];
+    const totalLength = paragraphs.reduce((sum, paragraph) => sum + paragraph.textContent.trim().length, 0);
+    if (totalLength > 220) slide.classList.add('is-dense');
+    if (totalLength > 320) slide.classList.add('is-very-dense');
+
+    const items = [...slide.querySelectorAll('li')];
+    if (items.length) {
+      const longest = items.reduce((max, item) => Math.max(max, item.textContent.trim().length), 0);
+      if (items.length >= 4 || longest > 90) slide.classList.add('is-dense-list');
+      if (items.length >= 5 || longest > 120) slide.classList.add('is-very-dense-list');
+    }
+  });
+
+  const dotsEl = document.getElementById('dots');
+  for (let i = 0; i < total; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.onclick = () => showSlide(i);
+    dotsEl.appendChild(d);
+  }
+
+  function showSlide(n) {
+    slides[current].classList.remove('active');
+    document.querySelectorAll('.dot')[current].classList.remove('active');
+    current = Math.max(0, Math.min(n, total - 1));
+    slides[current].classList.add('active');
+    document.querySelectorAll('.dot')[current].classList.add('active');
+    document.getElementById('counter').textContent = `${current + 1} / ${total}`;
+    document.getElementById('progress-bar').style.width = `${((current + 1) / total) * 100}%`;
+    document.getElementById('slide-label').textContent = slides[current].dataset.label || '';
+    document.getElementById('btn-prev').disabled = current === 0;
+    document.getElementById('btn-next').disabled = current === total - 1;
+  }
+
+  function nextSlide() { if (current < total - 1) showSlide(current + 1); }
+  function prevSlide() { if (current > 0) showSlide(current - 1); }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    else if (e.key === 'Home') { e.preventDefault(); showSlide(0); }
+    else if (e.key === 'End') { e.preventDefault(); showSlide(total - 1); }
+  });
+
+  showSlide(0);
+</script>
+</body>
+</html>

@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ERITEMA SOLARE – I Consigli del Farmacista</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lato:wght@300;400;700;900&display=swap');
+
+  :root {
+    --green: #1B5E20;
+    --green-light: #2E7D32;
+    --green-mid: #4CAF50;
+    --red: #B71C1C;
+    --red-light: #EF5350;
+    --orange: #E65100;
+    --orange-light: #FF9800;
+    --white: #FAFAFA;
+    --dark: #0f0a04;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--dark);
+    font-family: 'Lato', sans-serif;
+    height: 100vh;
+    height: 100svh;
+    height: 100dvh;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    user-select: none;
+    overscroll-behavior: none;
+  }
+
+  #progress-bar {
+    height: 5px;
+    background: linear-gradient(90deg, var(--orange-light), var(--red-light));
+    width: 0%; transition: width 0.35s ease;
+    position: fixed; top: 0; left: 0; z-index: 100;
+  }
+
+  #counter {
+    position: fixed; top: 14px; right: 24px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px; color: rgba(255,255,255,0.28);
+    letter-spacing: 2px; z-index: 100;
+  }
+
+  #slide-container {
+    flex: 1; display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    padding: 50px 90px 20px; overflow: hidden;
+  }
+
+  .slide { display: none; width: 100%; max-width: 1500px; animation: fadeIn 0.4s ease; }
+  .slide.active { display: flex; flex-direction: column; align-items: center; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .s-title { text-align: center; gap: 14px; }
+  .s-title .tag { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 7px; color: var(--orange-light); margin-bottom: 6px; }
+  .s-title h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(56px, 9vw, 130px); color: var(--white); letter-spacing: 5px; line-height: 1; text-shadow: 0 0 80px rgba(255,152,0,0.35); }
+  .s-title h1 span { color: var(--orange-light); }
+  .s-title .sub { font-size: clamp(18px, 2.2vw, 30px); color: rgba(255,255,255,0.45); font-weight: 300; margin-top: 12px; }
+
+  .s-section { text-align: center; gap: 12px; }
+  .s-section .sec-label { font-family: 'Bebas Neue', sans-serif; font-size: 13px; letter-spacing: 8px; color: var(--orange-light); margin-bottom: 4px; }
+  .s-section h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(44px, 7vw, 100px); color: var(--white); letter-spacing: 4px; line-height: 1.05; text-align: center; }
+
+  .s-text { gap: 20px; width: 100%; }
+  .s-text .heading { font-family: 'Bebas Neue', sans-serif; font-size: clamp(14px, 1.8vw, 26px); color: var(--orange-light); letter-spacing: 3px; border-left: 5px solid var(--orange); padding-left: 16px; margin-bottom: 4px; }
+  .s-text .heading.green { color: var(--green-mid); border-left-color: var(--green); }
+  .s-text p { font-size: clamp(24px, 3.1vw, 48px); color: var(--white); line-height: 1.55; font-weight: 400; max-width: 1450px; }
+
+  .s-fact { text-align: center; gap: 16px; }
+  .s-fact .f-label { font-family: 'Lato', sans-serif; font-weight: 300; font-size: clamp(18px, 2vw, 28px); color: rgba(255,255,255,0.55); max-width: 900px; line-height: 1.4; }
+  .s-fact .f-num { font-family: 'Bebas Neue', sans-serif; font-size: clamp(80px, 14vw, 180px); color: var(--orange-light); line-height: 1; text-shadow: 0 0 120px rgba(255,152,0,0.5); }
+  .s-fact .f-text { font-size: clamp(20px, 2.5vw, 38px); color: var(--white); font-weight: 300; max-width: 950px; line-height: 1.45; }
+
+  .s-list { gap: 14px; width: 100%; }
+  .s-list .heading { font-family: 'Bebas Neue', sans-serif; font-size: clamp(14px, 1.8vw, 24px); color: var(--green-mid); letter-spacing: 3px; margin-bottom: 8px; }
+  .s-list ul { list-style: none; display: flex; flex-direction: column; gap: 10px; width: 100%; }
+  .s-list ul li { display: flex; align-items: flex-start; gap: 16px; font-size: clamp(20px, 2.6vw, 40px); color: var(--white); line-height: 1.4; }
+  .s-list ul li .num { background: var(--red); color: white; font-family: 'Bebas Neue', sans-serif; font-size: 18px; width: 38px; height: 38px; min-width: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-top: 4px; }
+
+  #nav { display: flex; justify-content: space-between; align-items: center; padding: 14px 36px 20px; background: rgba(0,0,0,0.55); border-top: 1px solid rgba(255,255,255,0.05); }
+  #nav button { background: none; border: 2px solid rgba(255,255,255,0.18); color: white; font-family: 'Bebas Neue', sans-serif; font-size: 19px; letter-spacing: 3px; padding: 12px 36px; cursor: pointer; border-radius: 4px; transition: all 0.2s; }
+  #nav button:hover { background: rgba(255,255,255,0.07); border-color: var(--orange-light); }
+  #nav button:disabled { opacity: 0.15; cursor: default; }
+  #nav button.primary { background: var(--orange); border-color: var(--orange); padding: 12px 56px; font-size: 21px; }
+  #nav button.primary:hover { background: var(--orange-light); border-color: var(--orange-light); }
+
+  #nav-center { display: flex; flex-direction: column; align-items: center; gap: 5px; flex: 1; }
+  #slide-label { font-family: 'Bebas Neue', sans-serif; font-size: 14px; letter-spacing: 3px; color: rgba(255,255,255,0.22); }
+  #dots { display: flex; gap: 5px; flex-wrap: wrap; justify-content: center; max-width: 700px; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.12); transition: background 0.3s; cursor: pointer; }
+  .dot.active { background: var(--orange-light); }
+  .dot:hover { background: rgba(255,152,0,0.5); }
+
+  body::before { content: ''; position: fixed; bottom: -200px; right: -200px; width: 700px; height: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(230,81,0,0.08) 0%, transparent 70%); pointer-events: none; }
+  body::after { content: ''; position: fixed; top: -150px; left: -150px; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(255,152,0,0.05) 0%, transparent 70%); pointer-events: none; }
+  #hint { position: fixed; bottom: 86px; left: 50%; transform: translateX(-50%); font-size: 12px; color: rgba(255,255,255,0.12); letter-spacing: 2px; pointer-events: none; white-space: nowrap; }
+
+  .s-text p,
+  .s-list ul li {
+    text-wrap: pretty;
+  }
+
+  @media (max-width: 900px) {
+    #counter, #hint { display: none; }
+
+    #slide-container {
+      justify-content: flex-start;
+      padding:
+        max(18px, env(safe-area-inset-top))
+        16px
+        calc(10px + env(safe-area-inset-bottom));
+    }
+
+    .slide {
+      max-width: 100%;
+      min-height: calc(100dvh - 86px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      justify-content: center;
+    }
+
+    .slide.active {
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding-right: 4px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.18) transparent;
+    }
+
+    .slide.active::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .slide.active::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.18);
+      border-radius: 999px;
+    }
+
+    .s-title { gap: 10px; }
+    .s-title .tag { font-size: 11px; letter-spacing: 3px; margin-bottom: 2px; }
+    .s-title h1 { font-size: clamp(42px, 11vw, 72px); letter-spacing: 2px; text-shadow: 0 0 36px rgba(255,152,0,0.25); }
+    .s-title .sub { font-size: clamp(14px, 3.8vw, 19px); margin-top: 8px; }
+
+    .s-section { gap: 10px; }
+    .s-section .sec-label { font-size: 10px; letter-spacing: 4px; }
+    .s-section h2 { font-size: clamp(28px, 8.6vw, 54px); letter-spacing: 1px; line-height: 1.02; }
+
+    .s-text { gap: 12px; }
+    .s-text .heading { font-size: 14px; letter-spacing: 2px; border-left-width: 3px; padding-left: 10px; width: 100%; }
+    .s-text p { font-size: clamp(18px, 4.8vw, 28px); line-height: 1.34; max-width: 100%; }
+    .slide.is-dense.s-text p { font-size: clamp(16px, 4.3vw, 24px); line-height: 1.26; }
+    .slide.is-very-dense.s-text p { font-size: clamp(15px, 3.9vw, 22px); line-height: 1.2; }
+
+    .s-list { gap: 10px; }
+    .s-list .heading { font-size: 14px; letter-spacing: 2px; }
+    .s-list ul { gap: 8px; }
+    .s-list ul li { gap: 10px; font-size: clamp(16px, 4.2vw, 24px); line-height: 1.28; }
+    .slide.is-dense-list.s-list ul li { font-size: clamp(15px, 3.9vw, 22px); line-height: 1.22; }
+    .slide.is-very-dense-list.s-list ul li { font-size: clamp(14px, 3.6vw, 20px); line-height: 1.18; }
+    .s-list ul li .num { width: 28px; height: 28px; min-width: 28px; font-size: 14px; margin-top: 2px; }
+
+    #nav { gap: 10px; padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); }
+    #nav button { font-size: 14px; letter-spacing: 1px; padding: 10px 14px; }
+    #nav button.primary { padding: 10px 18px; font-size: 15px; }
+    #nav-center { min-width: 0; }
+    #slide-label { font-size: 11px; letter-spacing: 1px; text-align: center; }
+    #dots { display: none; }
+
+    body::before { width: 360px; height: 360px; bottom: -120px; right: -120px; }
+    body::after { width: 260px; height: 260px; top: -80px; left: -80px; }
+  }
+
+  @media (max-width: 932px) and (orientation: landscape) {
+    #counter { display: block; top: 10px; right: 14px; font-size: 15px; }
+
+    #slide-container {
+      padding:
+        max(16px, env(safe-area-inset-top))
+        24px
+        calc(8px + env(safe-area-inset-bottom));
+    }
+
+    .slide { min-height: calc(100dvh - 72px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); }
+    .s-title h1 { font-size: clamp(50px, 8.5vw, 88px); }
+    .s-section h2 { font-size: clamp(32px, 5.8vw, 58px); }
+    .s-text p { font-size: clamp(17px, 3.2vw, 24px); line-height: 1.28; }
+    .slide.is-dense.s-text p { font-size: clamp(15px, 2.9vw, 21px); line-height: 1.2; }
+    .slide.is-very-dense.s-text p { font-size: clamp(14px, 2.7vw, 19px); line-height: 1.14; }
+    .s-list ul li { font-size: clamp(15px, 3vw, 21px); }
+    .slide.is-dense-list.s-list ul li { font-size: clamp(14px, 2.7vw, 19px); line-height: 1.14; }
+    .slide.is-very-dense-list.s-list ul li { font-size: clamp(13px, 2.45vw, 18px); line-height: 1.1; }
+    #nav { padding: 8px 14px calc(8px + env(safe-area-inset-bottom)); }
+    #nav button { padding: 8px 16px; font-size: 13px; }
+    #nav button.primary { padding: 8px 20px; font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div id="counter"></div>
+
+<div id="slide-container">
+
+  <!-- 1 -->
+  <div class="slide s-title active" data-label="Titolo">
+    <div class="tag">I Consigli del Farmacista</div>
+    <h1><span>ERITEMA</span> SOLARE</h1>
+  </div>
+
+  <!-- ══ COS'È ══ -->
+  <div class="slide s-section" data-label="Che cos'è l'Eritema Solare?">
+    <div class="sec-label">Sezione 1</div>
+    <h2>CHE COS'È<br>L'ERITEMA SOLARE?</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'è — 1">
+    <div class="heading">CHE COS'È L'ERITEMA SOLARE?</div>
+    <p>L'eritema solare è un'infiammazione della pelle che può svilupparsi in seguito ad esposizioni al sole eccessive e prolungate; questa condizione rientra tra le forme di allergia cutanea e si manifesta con pruriti e arrossamenti più o meno intensi, marcati ed estesi.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'è — 2">
+    <div class="heading">CHE COS'È L'ERITEMA SOLARE?</div>
+    <p>L'eritema solare è caratterizzato da gravità variabile, poiché può andare da una scottatura limitata agli strati superficiali della cute, fino a ustioni di primo e secondo grado.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'è — 3">
+    <div class="heading">CHE COS'È L'ERITEMA SOLARE?</div>
+    <p>Nei bambini, specie se al di sotto dei 3 anni, la sovraesposizione al sole è molto più dannosa rispetto all'adulto, poiché lo strato corneo della pelle è più sottile e la produzione di melanina è invece ridotta; nello specifico i bambini nei primi mesi di vita non dovrebbero essere esposti alla luce solare diretta.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'è — 4">
+    <div class="heading">CHE COS'È L'ERITEMA SOLARE?</div>
+    <p>Gli anziani sono un'altra categoria vulnerabile in tal senso, poiché anche in questo caso la pelle è più sensibile ai raggi ultravioletti. Infine, anche le parti del corpo non sono tutte sensibili allo stesso modo, infatti occhi, naso e labbra sono più sensibili rispetto a braccia e gambe.</p>
+  </div>
+
+  <!-- ══ CAUSE ══ -->
+  <div class="slide s-section" data-label="Cause">
+    <div class="sec-label">Sezione 2</div>
+    <h2>CAUSE</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 1: UVB e UVA">
+    <div class="heading">CAUSE</div>
+    <p>La causa alla base della comparsa dell'eritema solare è da ricercare nell'esposizione alle radiazioni solari ultraviolette di tipo UVB ed UVA. Queste radiazioni possiedono diverso potere di penetrazione nella cute: i raggi UVB si limitano a penetrare l'epidermide (lo strato più superficiale della pelle), mentre gli UVA sono in grado di raggiungere il derma (lo strato immediatamente successivo all'epidermide) fino alla sua porzione media-profonda.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 2: UVB">
+    <div class="heading">CAUSE</div>
+    <p>Le radiazioni UVB sono le principali responsabili delle ustioni solari: hanno una lunghezza d'onda compresa tra 280 e 320 nm e raggiungono la superficie terrestre con la massima intensità quando il sole è alto, ovvero nelle ore centrali della giornata in cui le radiazioni sono perpendicolari alla terra; queste radiazioni sono bloccate dai vetri delle finestre, ma non dall'acqua, motivo per cui ci si può scottare durante i bagni nel mare. Anche le sorgenti di luce artificiale emettono radiazioni UVB.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 3: eritema e melanina">
+    <div class="heading">CAUSE</div>
+    <p>L'esposizione alle UVB induce arrossamento (eritema) e desquamazione per il rilascio di mediatori dell'infiammazione da parte delle cellule della cute (cheratinociti) danneggiate; inoltre l'aumento della produzione della melanina induce un colorito scuro dopo 48-72 ore (abbronzatura ritardata).</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 4: DNA e tumori">
+    <div class="heading">CAUSE</div>
+    <p>Una conseguenza più temibile delle radiazioni UVB è l'induzione di un danno del materiale genetico dei cheratinociti dell'epidermide (DNA e RNA): queste mutazioni sono responsabili della cancerogenesi, ovvero della modificazione cellulare che porta all'insorgenza dei tumori.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 5: sistema immunitario">
+    <div class="heading">CAUSE</div>
+    <p>Le radiazioni inoltre deprimono i linfociti T e le cellule di Langerhans, che fanno parte del sistema immunitario cutaneo, riducendo la capacità di difesa dalle infezioni ed anche la capacità dell'organismo di identificare e distruggere le cellule danneggiate.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 6: UVA">
+    <div class="heading">CAUSE</div>
+    <p>Le radiazioni UVA hanno una lunghezza d'onda superiore alle UVB (320-400 nm), sono anch'esse presenti nella luce solare naturale e raggiungono la superficie terrestre. Le UVA, che hanno un'intensità nella luce solare molto superiore rispetto alle UVB, causano rapidamente sia eritema che imbrunimento della cute. In condizioni di esposizione naturale, l'eritema è ascrivibile alle radiazioni UVB per l'80% e alle UVA per il 20%.</p>
+  </div>
+
+  <div class="slide s-fact" data-label="80% UVB / 20% UVA">
+    <div class="f-label">In condizioni di esposizione naturale, l'eritema è ascrivibile</div>
+    <div class="f-num">80%</div>
+    <div class="f-text">alle radiazioni UVB e per il 20% alle UVA</div>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 7: fototipo I e II">
+    <div class="heading">CAUSE</div>
+    <p>Sono a rischio di scottature solari gli individui con cute pallida o bianca e con limitata capacità di abbronzarsi, ovvero le persone con fototipo I e II che spesso hanno capelli biondi o rossi, occhi azzurri o verdi.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 8: fototipo III–VI">
+    <div class="heading">CAUSE</div>
+    <p>Il rischio è invece ridotto peri soggetti con: fototipo III e IV, che hanno colorito cutaneo di base bianco (fototipo III) e bruno chiaro (IV) e si abbronzano abbastanza facilmente, scottandosi qualche volta o mai; fototipo V e VI, che spesso hanno capelli e occhi scuri, hanno rispettivamente un colorito cutaneo che va dal bruno al nero e si abbronzano molto facilmente non ustionandosi mai.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 9: esposizioni a rischio">
+    <div class="heading">CAUSE</div>
+    <p>Le ustioni solari possono verificarsi a qualsiasi latitudine geografica. Sono frequenti in seguito ad esposizioni solari intense in persone con cute chiara che lavorano al chiuso per la maggior parte dell'anno e che si espongono al sole solo in estate, specialmente nelle ore più calde, senza adeguata protezione.</p>
+  </div>
+
+  <!-- ══ FARMACI ══ -->
+  <div class="slide s-section" data-label="Farmaci">
+    <div class="sec-label">Sezione 3</div>
+    <h2>FARMACI</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Farmaci — 1">
+    <div class="heading green">FARMACI</div>
+    <p>La voglia di tintarella con il bel sole è tanta, ma i pericoli dei raggi solari non riguardano solo le scottature o gli eritemi.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Farmaci — 2">
+    <div class="heading green">FARMACI</div>
+    <p>Molti farmaci sono dannosi se assunti in contemporanea con l'esposizione al sole; rossori, eritemi, eczemi e in alcuni casi vere e proprie ustioni di 1 e 2 grado, sono solo alcune delle possibili reazioni avverse. Per evitare questi spiacevoli inconvenienti, leggi e annota i farmaci che non possono essere assunti durante l'esposizione al sole.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Farmaci — 3">
+    <div class="heading green">FARMACI</div>
+    <p>Alcuni farmaci hanno un'elevata reattività nei confronti dei raggi solari e le reazioni possono essere essenzialmente di 2 tipi: Fototossiche - Fotoallergiche.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Farmaci — 4">
+    <div class="heading green">FARMACI</div>
+    <p>Entrambe sono dovute all'interazione dei raggi UVA con le molecole del farmaco.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Farmaci — 5">
+    <div class="heading green">FARMACI</div>
+    <p>Nel caso delle reazioni fototossiche, i raggi UVA in contatto con il farmaco, generano molecole dannose per i tessuti. Nel secondo caso invece, il sole altera il farmaco generando una vera e propria reazione allergica.</p>
+  </div>
+
+  <!-- ══ DECALOGO ══ -->
+  <div class="slide s-section" data-label="Il Decalogo">
+    <div class="sec-label">Sezione 4</div>
+    <h2>IL DECALOGO<br>PER UN CORRETTO<br>USO DEI FARMACI</h2>
+  </div>
+
+  <div class="slide s-list" data-label="Decalogo — Regole 1–5">
+    <div class="heading">IL DECALOGO PER UN CORRETTO USO DEI FARMACI</div>
+    <ul>
+      <li><span class="num">1</span>Nell'usare il farmaco rispetta la posologia dose, tempo e modalità di somministrazione indicata dal medico.</li>
+      <li><span class="num">2</span>Non assumere più farmaci contemporaneamente senza il consiglio del medico o del farmacista.</li>
+      <li><span class="num">3</span>Non interrompere arbitrariamente una terapia.</li>
+      <li><span class="num">4</span>Controlla sempre la data di scadenza prima di utilizzare il farmaco.</li>
+      <li><span class="num">5</span>Ricorda che alcuni farmaci (colliri, sciroppi, gocce, spray), una volta aperti scadono prima della data indicata sulla confezione.</li>
+    </ul>
+  </div>
+
+  <div class="slide s-list" data-label="Decalogo — Regole 6–10">
+    <div class="heading">IL DECALOGO PER UN CORRETTO USO DEI FARMACI</div>
+    <ul>
+      <li><span class="num">6</span>Per dubbi chiedi consiglio al medico o al farmacista.</li>
+      <li><span class="num">7</span>Conserva integra la confezione senza gettare l'astuccio e il foglietto illustrativo.</li>
+      <li><span class="num">8</span>Riponi i farmaci in luogo fresco e asciutto; non in bagno, non in cucina, ma in luogo espressamente specificato.</li>
+      <li><span class="num">9</span>Tieni lontano i farmaci dalla portata dei bambini.</li>
+      <li><span class="num">10</span>Non gettare i farmaci nella spazzatura, ma negli appositi contenitori per i rifiuti differenziati collocati all'interno o in prossimità delle farmacie.</li>
+    </ul>
+  </div>
+
+  <!-- FINE -->
+  <div class="slide s-title" data-label="Fine">
+    <div class="tag">I Consigli del Farmacista</div>
+    <h1><span>ERITEMA</span> SOLARE</h1>
+    <div class="sub">Fine episodio</div>
+  </div>
+
+</div>
+
+<div id="hint">← → frecce tastiera &nbsp;|&nbsp; SPAZIO avanza &nbsp;|&nbsp; click sui pallini per saltare</div>
+
+<div id="nav">
+  <button id="btn-prev" disabled onclick="prevSlide()">◀ INDIETRO</button>
+  <div id="nav-center">
+    <span id="slide-label"></span>
+    <div id="dots"></div>
+  </div>
+  <button id="btn-next" class="primary" onclick="nextSlide()">AVANTI ▶</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  slides.forEach(slide => {
+    const paragraphs = [...slide.querySelectorAll('p')];
+    const totalLength = paragraphs.reduce((sum, paragraph) => sum + paragraph.textContent.trim().length, 0);
+    if (totalLength > 220) slide.classList.add('is-dense');
+    if (totalLength > 320) slide.classList.add('is-very-dense');
+
+    const items = [...slide.querySelectorAll('li')];
+    if (items.length) {
+      const longest = items.reduce((max, item) => Math.max(max, item.textContent.trim().length), 0);
+      if (items.length >= 4 || longest > 90) slide.classList.add('is-dense-list');
+      if (items.length >= 5 || longest > 120) slide.classList.add('is-very-dense-list');
+    }
+  });
+
+  const dotsEl = document.getElementById('dots');
+  for (let i = 0; i < total; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.onclick = () => showSlide(i);
+    dotsEl.appendChild(d);
+  }
+
+  function showSlide(n) {
+    slides[current].classList.remove('active');
+    document.querySelectorAll('.dot')[current].classList.remove('active');
+    current = Math.max(0, Math.min(n, total - 1));
+    slides[current].classList.add('active');
+    document.querySelectorAll('.dot')[current].classList.add('active');
+    document.getElementById('counter').textContent = `${current + 1} / ${total}`;
+    document.getElementById('progress-bar').style.width = `${((current + 1) / total) * 100}%`;
+    document.getElementById('slide-label').textContent = slides[current].dataset.label || '';
+    document.getElementById('btn-prev').disabled = current === 0;
+    document.getElementById('btn-next').disabled = current === total - 1;
+  }
+
+  function nextSlide() { if (current < total - 1) showSlide(current + 1); }
+  function prevSlide() { if (current > 0) showSlide(current - 1); }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    else if (e.key === 'Home') { e.preventDefault(); showSlide(0); }
+    else if (e.key === 'End') { e.preventDefault(); showSlide(total - 1); }
+  });
+
+  showSlide(0);
+</script>
+</body>
+</html>
