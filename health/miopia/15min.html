@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>MIOPIA – I Consigli del Farmacista | 15 Minuti</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lato:wght@300;400;700;900&display=swap');
+
+  :root {
+    --green: #1B5E20;
+    --green-light: #2E7D32;
+    --green-mid: #4CAF50;
+    --red: #B71C1C;
+    --red-light: #EF5350;
+    --blue: #1A237E;
+    --blue-light: #7986CB;
+    --white: #FAFAFA;
+    --dark: #05040f;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--dark);
+    font-family: 'Lato', sans-serif;
+    height: 100vh;
+    height: 100svh;
+    height: 100dvh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+    overscroll-behavior: none;
+  }
+
+  #progress-bar {
+    height: 5px;
+    background: linear-gradient(90deg, var(--blue-light), var(--green-mid));
+    width: 0%;
+    transition: width 0.35s ease;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+  }
+
+  #counter {
+    position: fixed;
+    top: 14px;
+    right: 24px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: rgba(255,255,255,0.28);
+    letter-spacing: 2px;
+    z-index: 100;
+  }
+
+  #slide-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 90px 20px;
+    overflow: hidden;
+  }
+
+  .slide {
+    display: none;
+    width: 100%;
+    max-width: 1500px;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .slide.active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .s-title { text-align: center; gap: 14px; }
+  .s-title .tag {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 7px;
+    color: var(--blue-light);
+    margin-bottom: 6px;
+  }
+  .s-title h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(70px, 12vw, 160px);
+    color: var(--white);
+    letter-spacing: 8px;
+    line-height: 1;
+    text-shadow: 0 0 80px rgba(121,134,203,0.35);
+  }
+  .s-title h1 span { color: var(--blue-light); }
+  .s-title .sub {
+    font-size: clamp(18px, 2.2vw, 30px);
+    color: rgba(255,255,255,0.45);
+    font-weight: 300;
+    margin-top: 12px;
+  }
+
+  .s-section { text-align: center; gap: 12px; }
+  .s-section .sec-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 8px;
+    color: var(--red-light);
+    margin-bottom: 4px;
+  }
+  .s-section h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(44px, 7vw, 100px);
+    color: var(--white);
+    letter-spacing: 4px;
+    line-height: 1.05;
+    text-align: center;
+  }
+
+  .s-text { gap: 20px; width: 100%; }
+  .s-text .heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(14px, 1.8vw, 26px);
+    color: var(--blue-light);
+    letter-spacing: 3px;
+    border-left: 5px solid var(--blue);
+    padding-left: 16px;
+    margin-bottom: 4px;
+  }
+  .s-text .heading.green {
+    color: var(--green-mid);
+    border-left-color: var(--green);
+  }
+  .s-text p {
+    font-size: clamp(24px, 3.1vw, 48px);
+    color: var(--white);
+    line-height: 1.55;
+    font-weight: 400;
+    max-width: 1450px;
+  }
+
+  .s-list { gap: 14px; width: 100%; }
+  .s-list .heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(14px, 1.8vw, 24px);
+    color: var(--green-mid);
+    letter-spacing: 3px;
+    margin-bottom: 8px;
+  }
+  .s-list ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+  .s-list ul li {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    font-size: clamp(20px, 2.6vw, 40px);
+    color: var(--white);
+    line-height: 1.4;
+  }
+  .s-list ul li .num {
+    background: var(--red);
+    color: white;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 4px;
+  }
+
+  #nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 36px 20px;
+    background: rgba(0,0,0,0.55);
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  #nav button {
+    background: none;
+    border: 2px solid rgba(255,255,255,0.18);
+    color: white;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 19px;
+    letter-spacing: 3px;
+    padding: 12px 36px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+  }
+  #nav button:hover {
+    background: rgba(255,255,255,0.07);
+    border-color: var(--blue-light);
+  }
+  #nav button:disabled { opacity: 0.15; cursor: default; }
+  #nav button.primary {
+    background: var(--green-light);
+    border-color: var(--green-light);
+    padding: 12px 56px;
+    font-size: 21px;
+  }
+  #nav button.primary:hover {
+    background: var(--green-mid);
+    border-color: var(--green-mid);
+  }
+
+  #nav-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    flex: 1;
+  }
+  #slide-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.22);
+  }
+  #dots {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 700px;
+  }
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    transition: background 0.3s;
+    cursor: pointer;
+  }
+  .dot.active { background: var(--blue-light); }
+  .dot:hover { background: rgba(121,134,203,0.5); }
+
+  body::before {
+    content: '';
+    position: fixed;
+    bottom: -200px;
+    right: -200px;
+    width: 700px;
+    height: 700px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(26,35,126,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    top: -150px;
+    left: -150px;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(46,125,50,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  #hint {
+    position: fixed;
+    bottom: 86px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    color: rgba(255,255,255,0.12);
+    letter-spacing: 2px;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .s-text p,
+  .s-list ul li {
+    text-wrap: pretty;
+  }
+
+  @media (max-width: 900px) {
+    #counter, #hint { display: none; }
+
+    #slide-container {
+      justify-content: flex-start;
+      padding:
+        max(18px, env(safe-area-inset-top))
+        16px
+        calc(10px + env(safe-area-inset-bottom));
+    }
+
+    .slide {
+      max-width: 100%;
+      min-height: calc(100dvh - 86px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      justify-content: center;
+    }
+
+    .slide.active {
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding-right: 4px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.18) transparent;
+    }
+
+    .slide.active::-webkit-scrollbar { width: 6px; }
+    .slide.active::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.18);
+      border-radius: 999px;
+    }
+
+    .s-title { gap: 10px; }
+    .s-title .tag { font-size: 11px; letter-spacing: 3px; margin-bottom: 2px; }
+    .s-title h1 { font-size: clamp(42px, 11vw, 72px); letter-spacing: 2px; text-shadow: 0 0 36px rgba(121,134,203,0.25); }
+    .s-title .sub { font-size: clamp(14px, 3.8vw, 19px); margin-top: 8px; }
+
+    .s-section { gap: 10px; }
+    .s-section .sec-label { font-size: 10px; letter-spacing: 4px; }
+    .s-section h2 { font-size: clamp(28px, 8.6vw, 54px); letter-spacing: 1px; line-height: 1.02; }
+
+    .s-text { gap: 12px; }
+    .s-text .heading {
+      font-size: 14px;
+      letter-spacing: 2px;
+      border-left-width: 3px;
+      padding-left: 10px;
+      width: 100%;
+    }
+    .s-text p { font-size: clamp(18px, 4.8vw, 28px); line-height: 1.34; max-width: 100%; }
+    .slide.is-dense.s-text p { font-size: clamp(16px, 4.3vw, 24px); line-height: 1.26; }
+    .slide.is-very-dense.s-text p { font-size: clamp(15px, 3.9vw, 22px); line-height: 1.2; }
+
+    .s-list { gap: 10px; }
+    .s-list .heading { font-size: 14px; letter-spacing: 2px; }
+    .s-list ul { gap: 8px; }
+    .s-list ul li { gap: 10px; font-size: clamp(16px, 4.2vw, 24px); line-height: 1.28; }
+    .slide.is-dense-list.s-list ul li { font-size: clamp(15px, 3.9vw, 22px); line-height: 1.22; }
+    .slide.is-very-dense-list.s-list ul li { font-size: clamp(14px, 3.6vw, 20px); line-height: 1.18; }
+    .s-list ul li .num { width: 28px; height: 28px; min-width: 28px; font-size: 14px; margin-top: 2px; }
+
+    #nav { gap: 10px; padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); }
+    #nav button { font-size: 14px; letter-spacing: 1px; padding: 10px 14px; }
+    #nav button.primary { padding: 10px 18px; font-size: 15px; }
+    #nav-center { min-width: 0; }
+    #slide-label { font-size: 11px; letter-spacing: 1px; text-align: center; }
+    #dots { display: none; }
+
+    body::before { width: 360px; height: 360px; bottom: -120px; right: -120px; }
+    body::after { width: 260px; height: 260px; top: -80px; left: -80px; }
+  }
+
+  @media (max-width: 932px) and (orientation: landscape) {
+    #counter { display: block; top: 10px; right: 14px; font-size: 15px; }
+
+    #slide-container {
+      padding:
+        max(16px, env(safe-area-inset-top))
+        24px
+        calc(8px + env(safe-area-inset-bottom));
+    }
+
+    .slide { min-height: calc(100dvh - 72px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); }
+    .s-title h1 { font-size: clamp(50px, 8.5vw, 88px); }
+    .s-section h2 { font-size: clamp(32px, 5.8vw, 58px); }
+    .s-text p { font-size: clamp(17px, 3.2vw, 24px); line-height: 1.28; }
+    .slide.is-dense.s-text p { font-size: clamp(15px, 2.9vw, 21px); line-height: 1.2; }
+    .slide.is-very-dense.s-text p { font-size: clamp(14px, 2.7vw, 19px); line-height: 1.14; }
+    .s-list ul li { font-size: clamp(15px, 3vw, 21px); }
+    .slide.is-dense-list.s-list ul li { font-size: clamp(14px, 2.7vw, 19px); line-height: 1.14; }
+    .slide.is-very-dense-list.s-list ul li { font-size: clamp(13px, 2.45vw, 18px); line-height: 1.1; }
+    #nav { padding: 8px 14px calc(8px + env(safe-area-inset-bottom)); }
+    #nav button { padding: 8px 16px; font-size: 13px; }
+    #nav button.primary { padding: 8px 20px; font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div id="counter"></div>
+
+<div id="slide-container">
+
+  <div class="slide s-title active" data-label="Titolo">
+    <div class="tag">I Consigli del Farmacista</div>
+    <h1><span>MIOPIA</span></h1>
+    <div class="sub">Versione estesa da circa 15 minuti</div>
+  </div>
+
+  <div class="slide s-section" data-label="Introduzione">
+    <div class="sec-label">Apertura</div>
+    <h2>PARLIAMO DI<br>MIOPIA</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Introduzione — 1">
+    <div class="heading">INTRODUZIONE</div>
+    <p>Quando si parla di miopia, molte persone pensano soltanto al fatto di vedere male da lontano e di dover portare gli occhiali. In realtà è un difetto visivo molto comune, che spesso inizia in età scolare e può aumentare durante la crescita.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Introduzione — 2">
+    <div class="heading">INTRODUZIONE</div>
+    <p>Capire la miopia è importante perché non riguarda solo la scelta della lente giusta. Entrano in gioco sintomi da riconoscere, controlli periodici, abitudini quotidiane, tempo all'aria aperta e uso prolungato della visione da vicino.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Introduzione — 3">
+    <div class="heading">INTRODUZIONE</div>
+    <p>In questo episodio vedremo che cos'è la miopia, perché compare, come si riconosce, cosa può favorirne il peggioramento, quali sono le opzioni di correzione, quali false idee conviene evitare e quando è il caso di fare una valutazione oculistica senza rimandare.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Cos'è la miopia">
+    <div class="sec-label">Sezione 1</div>
+    <h2>COS'È<br>LA MIOPIA?</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'è — 1">
+    <div class="heading">COS'È LA MIOPIA?</div>
+    <p>La miopia è un difetto di refrazione. Significa che la luce che entra nell'occhio non viene messa a fuoco correttamente sulla retina, cioè sul tessuto che permette la visione, ma davanti ad essa. Il risultato è che gli oggetti lontani appaiono sfocati, mentre da vicino si può vedere abbastanza bene.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'è — 2">
+    <div class="heading">COS'È LA MIOPIA?</div>
+    <p>Nella forma più comune l'occhio è più lungo del normale da davanti a dietro. In altri casi il problema può dipendere dal fatto che cornea o cristallino hanno un potere refrattivo troppo forte. In entrambi i casi l'immagine non arriva nel punto giusto e la visione da lontano perde nitidezza.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'è — 3">
+    <div class="heading">COS'È LA MIOPIA?</div>
+    <p>Questo spiega anche perché la miopia richiede soprattutto una buona correzione, controlli regolari e, nei casi selezionati, valutazioni specialistiche più approfondite.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Come si riconosce">
+    <div class="sec-label">Sezione 2</div>
+    <h2>COME SI<br>RICONOSCE</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Sintomi — 1">
+    <div class="heading">COME SI RICONOSCE</div>
+    <p>Il segnale più tipico è vedere male in lontananza. Un bambino miope può fare fatica a leggere la lavagna, può sedersi molto vicino alla televisione o tenere tablet e smartphone troppo vicino al viso. Negli adulti si può notare difficoltà a leggere cartelli stradali, scritte a distanza o sottotitoli.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Sintomi — 2">
+    <div class="heading">COME SI RICONOSCE</div>
+    <p>Altri segnali possono essere strizzare gli occhi per cercare di mettere meglio a fuoco, mal di testa dopo attività visive prolungate e affaticamento oculare. Non sempre i sintomi sono eclatanti: a volte il problema emerge gradualmente e viene notato solo quando il comfort visivo peggiora.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Sintomi — 3">
+    <div class="heading">COME SI RICONOSCE</div>
+    <p>Proprio per questo negli anni della crescita è importante non aspettare solo che il bambino si lamenti. Se tende ad avvicinarsi troppo agli schermi, a socchiudere gli occhi o a perdere attenzione quando deve guardare lontano, una visita visiva è una buona idea.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Cause e fattori">
+    <div class="sec-label">Sezione 3</div>
+    <h2>DA COSA<br>DIPENDE</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 1">
+    <div class="heading">DA COSA DIPENDE</div>
+    <p>La miopia dipende da più fattori. La componente familiare conta: se uno o entrambi i genitori sono miopi, il rischio per il figlio è più alto. Ma non c'è solo la genetica. Oggi si guarda molto anche al ruolo dell'ambiente e delle abitudini quotidiane.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 2">
+    <div class="heading">DA COSA DIPENDE</div>
+    <p>Molti casi iniziano proprio negli anni della scuola, quando aumentano lettura, studio, compiti e uso continuativo della visione da vicino. Una vita molto sedentaria, con tante ore al chiuso e poche pause, può favorire una progressione più marcata.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 3">
+    <div class="heading">DA COSA DIPENDE</div>
+    <p>Un altro aspetto importante è che non tutti i casi sono uguali. Esistono forme lievi e forme elevate. Quando la miopia è molto alta, nel tempo aumenta il rischio di alcuni problemi oculari come alterazioni retiniche, distacco di retina, cataratta e glaucoma.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Età scolare">
+    <div class="sec-label">Sezione 4</div>
+    <h2>ETÀ SCOLARE<br>E PROGRESSIONE</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Età scolare — 1">
+    <div class="heading">ETÀ SCOLARE E PROGRESSIONE</div>
+    <p>La miopia spesso compare tra i 6 e i 13 anni e può aumentare durante l'adolescenza, cioè nel periodo in cui l'occhio sta ancora crescendo. In molti casi tende a stabilizzarsi quando la crescita corporea rallenta, ma questo non vuol dire che i controlli possano essere trascurati.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Età scolare — 2">
+    <div class="heading">ETÀ SCOLARE E PROGRESSIONE</div>
+    <p>Quando un bambino o un ragazzo cambia frequentemente gradazione, bisogna seguire l'evoluzione con regolarità. L'obiettivo non è solo vedere bene in quel momento, ma anche capire con che velocità sta progredendo il difetto e se servono strategie più mirate di controllo.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Età scolare — 3">
+    <div class="heading">ETÀ SCOLARE E PROGRESSIONE</div>
+    <p>Negli adulti la miopia può restare stabile, ma un cambiamento rapido della vista merita attenzione. Non sempre significa peggioramento della miopia in senso stretto: a volte possono entrare in gioco altri problemi oculari o del cristallino che vanno valutati.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Schermi e outdoor">
+    <div class="sec-label">Sezione 5</div>
+    <h2>SCHERMI,<br>VICINO E OUTDOOR</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Schermi — 1">
+    <div class="heading">SCHERMI, LAVORO DA VICINO E VITA ALL'APERTO</div>
+    <p>Oggi quando si parla di miopia viene spontaneo pensare subito agli schermi. Il punto, però, non è ridurre tutto alla luce blu o a slogan troppo semplici. Il problema reale è soprattutto passare moltissimo tempo su attività da vicino, senza pause e con poca esposizione alla luce naturale.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Schermi — 2">
+    <div class="heading">SCHERMI, LAVORO DA VICINO E VITA ALL'APERTO</div>
+    <p>Guardare da vicino per tante ore di fila non significa automaticamente diventare miopi, ma nei bambini predisposti può contribuire al peggioramento del quadro. Per questo è utile alternare i momenti di studio e schermo con pause regolari e ricordarsi di cambiare distanza e messa a fuoco durante la giornata.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Schermi — 3">
+    <div class="heading">SCHERMI, LAVORO DA VICINO E VITA ALL'APERTO</div>
+    <p>La vita all'aria aperta sembra invece avere un ruolo favorevole, soprattutto nei più piccoli. Non significa che stare fuori faccia sparire la miopia, ma che trascorrere più tempo all'aperto è associato a un rischio minore di svilupparla o a una progressione meno rapida.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Schermi — 4">
+    <div class="heading">SCHERMI, LAVORO DA VICINO E VITA ALL'APERTO</div>
+    <p>Quindi il messaggio corretto non è demonizzare tablet o computer in modo generico. È costruire una routine più equilibrata: attività da vicino sì, ma con pause, buona illuminazione e più tempo fuori casa quando possibile.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Diagnosi e controlli">
+    <div class="sec-label">Sezione 6</div>
+    <h2>DIAGNOSI E<br>CONTROLLI</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Diagnosi — 1">
+    <div class="heading">DIAGNOSI E CONTROLLI</div>
+    <p>La diagnosi si fa con una visita visiva. Nei bambini e nei ragazzi il controllo è particolarmente importante perché spesso non sono loro a rendersi conto subito del problema. Un controllo aiuta a capire se c'è miopia, di che entità è e se gli occhi stanno bene anche dal punto di vista anatomico.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Diagnosi — 2">
+    <div class="heading">DIAGNOSI E CONTROLLI</div>
+    <p>Non basta fare prove casalinghe o affidarsi al fatto che un occhio sembri andare meglio dell'altro. La gradazione deve essere misurata in modo corretto e, soprattutto nei più piccoli, la valutazione deve essere fatta con attenzione perché a volte il difetto può essere sottostimato o accompagnarsi ad altri problemi visivi.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Diagnosi — 3">
+    <div class="heading">DIAGNOSI E CONTROLLI</div>
+    <p>I controlli periodici servono anche quando la correzione è già stata prescritta. Una lente vecchia, portata troppo a lungo senza ricontrollo, può non essere più adeguata. E se la miopia è elevata, il follow-up serve anche a sorvegliare la retina e gli altri possibili rischi associati.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Occhiali e lenti">
+    <div class="sec-label">Sezione 7</div>
+    <h2>OCCHIALI E<br>LENTI A CONTATTO</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Correzione — 1">
+    <div class="heading green">OCCHIALI E LENTI A CONTATTO</div>
+    <p>Gli occhiali sono la correzione più semplice e sicura in moltissimi casi. Permettono di riportare la messa a fuoco sulla retina e di vedere bene da lontano. Non curano la miopia nel senso di eliminarla, ma correggono il difetto e migliorano la qualità della visione.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Correzione — 2">
+    <div class="heading green">OCCHIALI E LENTI A CONTATTO</div>
+    <p>Le lenti a contatto sono un'altra opzione molto usata, soprattutto negli adolescenti e negli adulti. Possono offrire grande comfort visivo, ma richiedono igiene rigorosa, mani pulite, tempi corretti di utilizzo e controlli periodici. Una lente gestita male può creare irritazioni e, in alcuni casi, infezioni corneali importanti.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Correzione — 3">
+    <div class="heading green">OCCHIALI E LENTI A CONTATTO</div>
+    <p>Nei bambini con progressione significativa, lo specialista può valutare anche percorsi di controllo della miopia con lenti o soluzioni specifiche. Sono scelte che devono essere guidate da professionisti e non improvvisate acquistando prodotti a caso online.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Chirurgia">
+    <div class="sec-label">Sezione 8</div>
+    <h2>CHIRURGIA<br>REFRATTIVA</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Chirurgia — 1">
+    <div class="heading">CHIRURGIA REFRATTIVA E LIMITI</div>
+    <p>La chirurgia refrattiva può essere presa in considerazione in alcuni adulti selezionati, soprattutto quando la gradazione è stabile e la valutazione oculistica conferma che ci sono le condizioni adatte. L'obiettivo è ridurre la dipendenza da occhiali o lenti a contatto, non promettere una soluzione magica valida per tutti.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Chirurgia — 2">
+    <div class="heading">CHIRURGIA REFRATTIVA E LIMITI</div>
+    <p>Non tutti sono candidati ideali. Conta lo spessore della cornea, conta la stabilità del difetto, contano eventuali alterazioni della retina e conta lo stato generale dell'occhio. Inoltre una miopia elevata resta una miopia elevata anche se la persona dopo l'intervento vede meglio senza occhiali.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Chirurgia — 3">
+    <div class="heading">CHIRURGIA REFRATTIVA E LIMITI</div>
+    <p>Questo è un punto importante: la chirurgia può correggere il difetto refrattivo, ma non azzera automaticamente i rischi legati alla miopia alta. Per questo chi ha una miopia importante deve continuare a fare controlli anche se si opera e vede bene.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Cosa non fare">
+    <div class="sec-label">Sezione 9</div>
+    <h2>COSA<br>NON FARE</h2>
+  </div>
+
+  <div class="slide s-text" data-label="No — 1">
+    <div class="heading">COSA NON FARE</div>
+    <p>Uno degli errori più comuni è banalizzare il problema. Dire “vedo bene da vicino, quindi va tutto bene” non basta, soprattutto nei bambini. Un altro errore è usare occhiali vecchi, presi senza controllo recente, o comprare lenti senza una valutazione seria della gradazione.</p>
+  </div>
+
+  <div class="slide s-text" data-label="No — 2">
+    <div class="heading">COSA NON FARE</div>
+    <p>Va evitata anche l'idea che basti scegliere uno schermo più grande, un filtro qualsiasi o un accessorio commerciale per risolvere la miopia. Gli schermi possono affaticare, seccare gli occhi e favorire abitudini sbagliate di visione ravvicinata, ma non esiste il trucco semplice che sostituisce visita, correzione e controlli.</p>
+  </div>
+
+  <div class="slide s-text" data-label="No — 3">
+    <div class="heading">COSA NON FARE</div>
+    <p>Infine non bisogna pensare che colliri o prodotti da banco possano correggere il difetto. Alcuni prodotti possono aiutare il comfort oculare, per esempio se c'è secchezza o irritazione, ma la miopia in sé non si corregge con automedicazione.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Valutazione rapida">
+    <div class="sec-label">Sezione 10</div>
+    <h2>QUANDO SERVE<br>MUOVERSI IN FRETTA</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Allarme — 1">
+    <div class="heading">QUANDO SERVE UNA VALUTAZIONE RAPIDA</div>
+    <p>Se la vista peggiora improvvisamente, se compaiono lampi di luce, molte mosche volanti nuove, una tenda nera in una parte del campo visivo o una perdita improvvisa della visione, non bisogna aspettare. Questi segnali possono indicare un problema retinico e meritano una valutazione urgente.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Allarme — 2">
+    <div class="heading">QUANDO SERVE UNA VALUTAZIONE RAPIDA</div>
+    <p>Serve attenzione rapida anche se chi porta lenti a contatto sviluppa occhio molto rosso, dolore, fastidio intenso alla luce o peggioramento della vista. In questi casi non basta togliere la lente e aspettare: è meglio far valutare l'occhio al più presto.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Prevenzione">
+    <div class="sec-label">Sezione 11</div>
+    <h2>PREVENZIONE E<br>GESTIONE QUOTIDIANA</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Prevenzione — 1">
+    <div class="heading">PREVENZIONE E GESTIONE QUOTIDIANA</div>
+    <p>Non sempre la miopia si può prevenire del tutto, soprattutto se c'è una forte predisposizione familiare. Però alcune abitudini possono aiutare a gestirla meglio: più tempo all'aperto, meno sedentarietà e pause regolari durante le attività prolungate da vicino.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Prevenzione — 2">
+    <div class="heading">PREVENZIONE E GESTIONE QUOTIDIANA</div>
+    <p>Anche l'organizzazione della postazione conta: luce adeguata, distanza ragionevole da libro o schermo, evitare posture troppo compresse e ricordarsi di far riposare lo sguardo. Sono indicazioni semplici, ma aiutano a ridurre affaticamento e cattive abitudini visive.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Prevenzione — 3">
+    <div class="heading">PREVENZIONE E GESTIONE QUOTIDIANA</div>
+    <p>Chi è miope dovrebbe inoltre rispettare i controlli consigliati, usare in modo corretto la correzione prescritta e non trascurare eventuali sintomi nuovi. La gestione quotidiana funziona meglio quando non ci si limita a cambiare occhiali all'ultimo momento, ma si segue il problema con continuità.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Il Decalogo">
+    <div class="sec-label">Sezione 12</div>
+    <h2>IL DECALOGO<br>PER I PRODOTTI<br>PER LA VISTA</h2>
+  </div>
+
+  <div class="slide s-list" data-label="Decalogo — Regole 1–5">
+    <div class="heading">IL DECALOGO PER I PRODOTTI PER LA VISTA</div>
+    <ul>
+      <li><span class="num">1</span>Usa occhiali o lenti a contatto secondo la prescrizione aggiornata.</li>
+      <li><span class="num">2</span>Non cambiare gradazione da solo e non acquistare correzioni improvvisate senza controllo.</li>
+      <li><span class="num">3</span>Se porti lenti a contatto, rispetta igiene, tempi d'uso e modalità di manutenzione.</li>
+      <li><span class="num">4</span>Non dormire con le lenti se non espressamente previsto dal professionista.</li>
+      <li><span class="num">5</span>Per dubbi su gradazione, fastidi o uso delle lenti, chiedi consiglio a oculista, optometrista o farmacista.</li>
+    </ul>
+  </div>
+
+  <div class="slide s-list" data-label="Decalogo — Regole 6–10">
+    <div class="heading">IL DECALOGO PER I PRODOTTI PER LA VISTA</div>
+    <ul>
+      <li><span class="num">6</span>Non usare colliri o prodotti oculari a caso se hai dolore o peggioramento della vista.</li>
+      <li><span class="num">7</span>Fai controlli periodici, soprattutto in età scolare e se la miopia aumenta rapidamente.</li>
+      <li><span class="num">8</span>Favorisci una routine con pause visive e più tempo all'aria aperta nei bambini.</li>
+      <li><span class="num">9</span>Non sottovalutare lampi, mosche volanti nuove o perdita improvvisa del campo visivo.</li>
+      <li><span class="num">10</span>Ricorda che vedere bene con una correzione non elimina la necessità dei controlli, soprattutto nella miopia elevata.</li>
+    </ul>
+  </div>
+
+  <div class="slide s-section" data-label="Conclusione">
+    <div class="sec-label">Chiusura</div>
+    <h2>IN SINTESI</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Conclusione — 1">
+    <div class="heading">CONCLUSIONE</div>
+    <p>In sintesi, la miopia è un difetto visivo molto comune, ma non va trattato con superficialità. Vedere male da lontano è il segnale più noto, però dietro ci sono crescita dell'occhio, familiarità, abitudini visive, controlli periodici e, nei casi importanti, anche rischi oculari che meritano attenzione.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Conclusione — 2">
+    <div class="heading">CONCLUSIONE</div>
+    <p>Le regole più utili da ricordare sono semplici: riconoscere presto i segnali, controllare la vista nei bambini, non improvvisare la correzione, usare bene lenti e occhiali, organizzare meglio il lavoro da vicino e valorizzare il tempo all'aperto.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Conclusione — 3">
+    <div class="heading">CONCLUSIONE</div>
+    <p>Il farmacista può aiutare a distinguere i sintomi da non sottovalutare, a orientare sull'uso corretto dei prodotti oculari e a capire quando serve passare rapidamente all'oculista. E quando la vista cambia all'improvviso o compaiono segnali d'allarme retinici, è meglio non aspettare.</p>
+  </div>
+
+  <div class="slide s-title" data-label="Fine">
+    <div class="tag">I Consigli del Farmacista</div>
+    <h1><span>MIOPIA</span></h1>
+    <div class="sub">Fine episodio — versione estesa</div>
+  </div>
+
+</div>
+
+<div id="hint">← → frecce tastiera &nbsp;|&nbsp; SPAZIO avanza &nbsp;|&nbsp; click sui pallini per saltare</div>
+
+<div id="nav">
+  <button id="btn-prev" disabled onclick="prevSlide()">◀ INDIETRO</button>
+  <div id="nav-center">
+    <span id="slide-label"></span>
+    <div id="dots"></div>
+  </div>
+  <button id="btn-next" class="primary" onclick="nextSlide()">AVANTI ▶</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  slides.forEach(slide => {
+    const paragraphs = [...slide.querySelectorAll('p')];
+    const totalLength = paragraphs.reduce((sum, paragraph) => sum + paragraph.textContent.trim().length, 0);
+    if (totalLength > 220) slide.classList.add('is-dense');
+    if (totalLength > 320) slide.classList.add('is-very-dense');
+
+    const items = [...slide.querySelectorAll('li')];
+    if (items.length) {
+      const longest = items.reduce((max, item) => Math.max(max, item.textContent.trim().length), 0);
+      if (items.length >= 4 || longest > 90) slide.classList.add('is-dense-list');
+      if (items.length >= 5 || longest > 120) slide.classList.add('is-very-dense-list');
+    }
+  });
+
+  const dotsEl = document.getElementById('dots');
+  for (let i = 0; i < total; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.onclick = () => showSlide(i);
+    dotsEl.appendChild(d);
+  }
+
+  function showSlide(n) {
+    slides[current].classList.remove('active');
+    document.querySelectorAll('.dot')[current].classList.remove('active');
+    current = Math.max(0, Math.min(n, total - 1));
+    slides[current].classList.add('active');
+    document.querySelectorAll('.dot')[current].classList.add('active');
+    document.getElementById('counter').textContent = `${current + 1} / ${total}`;
+    document.getElementById('progress-bar').style.width = `${((current + 1) / total) * 100}%`;
+    document.getElementById('slide-label').textContent = slides[current].dataset.label || '';
+    document.getElementById('btn-prev').disabled = current === 0;
+    document.getElementById('btn-next').disabled = current === total - 1;
+  }
+
+  function nextSlide() {
+    if (current < total - 1) showSlide(current + 1);
+  }
+
+  function prevSlide() {
+    if (current > 0) showSlide(current - 1);
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') {
+      e.preventDefault();
+      nextSlide();
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      prevSlide();
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      showSlide(0);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      showSlide(total - 1);
+    }
+  });
+
+  showSlide(0);
+</script>
+</body>
+</html>
