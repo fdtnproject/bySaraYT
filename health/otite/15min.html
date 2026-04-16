@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>OTITE – I Consigli del Farmacista | 15 Minuti</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lato:wght@300;400;700;900&display=swap');
+
+  :root {
+    --green: #1B5E20;
+    --green-light: #2E7D32;
+    --green-mid: #4CAF50;
+    --red: #B71C1C;
+    --red-light: #EF5350;
+    --blue: #0D47A1;
+    --blue-light: #42A5F5;
+    --white: #FAFAFA;
+    --dark: #04080f;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--dark);
+    font-family: 'Lato', sans-serif;
+    height: 100vh;
+    height: 100svh;
+    height: 100dvh;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    user-select: none;
+    overscroll-behavior: none;
+  }
+
+  #progress-bar {
+    height: 5px;
+    background: linear-gradient(90deg, var(--blue-light), var(--green-mid));
+    width: 0%; transition: width 0.35s ease;
+    position: fixed; top: 0; left: 0; z-index: 100;
+  }
+
+  #counter {
+    position: fixed; top: 14px; right: 24px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px; color: rgba(255,255,255,0.28);
+    letter-spacing: 2px; z-index: 100;
+  }
+
+  #slide-container {
+    flex: 1; display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    padding: 50px 90px 20px; overflow: hidden;
+  }
+
+  .slide { display: none; width: 100%; max-width: 1500px; animation: fadeIn 0.4s ease; }
+  .slide.active { display: flex; flex-direction: column; align-items: center; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .s-title { text-align: center; gap: 14px; }
+  .s-title .tag { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 7px; color: var(--green-mid); margin-bottom: 6px; }
+  .s-title h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(70px, 12vw, 160px); color: var(--white); letter-spacing: 8px; line-height: 1; text-shadow: 0 0 80px rgba(66,165,245,0.3); }
+  .s-title h1 span { color: var(--blue-light); }
+  .s-title .sub { font-size: clamp(18px, 2.2vw, 30px); color: rgba(255,255,255,0.45); font-weight: 300; margin-top: 12px; }
+
+  .s-section { text-align: center; gap: 12px; }
+  .s-section .sec-label { font-family: 'Bebas Neue', sans-serif; font-size: 13px; letter-spacing: 8px; color: var(--red-light); margin-bottom: 4px; }
+  .s-section h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(44px, 7vw, 100px); color: var(--white); letter-spacing: 4px; line-height: 1.05; text-align: center; }
+
+  .s-text { gap: 20px; width: 100%; }
+  .s-text .heading { font-family: 'Bebas Neue', sans-serif; font-size: clamp(14px, 1.8vw, 26px); color: var(--green-mid); letter-spacing: 3px; border-left: 5px solid var(--red); padding-left: 16px; margin-bottom: 4px; }
+  .s-text .heading.blue { color: var(--blue-light); border-left-color: var(--blue); }
+  .s-text p { font-size: clamp(24px, 3.1vw, 48px); color: var(--white); line-height: 1.55; font-weight: 400; max-width: 1450px; }
+
+  .s-list { gap: 14px; width: 100%; }
+  .s-list .heading { font-family: 'Bebas Neue', sans-serif; font-size: clamp(14px, 1.8vw, 24px); color: var(--green-mid); letter-spacing: 3px; margin-bottom: 8px; }
+  .s-list ul { list-style: none; display: flex; flex-direction: column; gap: 10px; width: 100%; }
+  .s-list ul li { display: flex; align-items: flex-start; gap: 16px; font-size: clamp(20px, 2.6vw, 40px); color: var(--white); line-height: 1.4; }
+  .s-list ul li .num { background: var(--red); color: white; font-family: 'Bebas Neue', sans-serif; font-size: 18px; width: 38px; height: 38px; min-width: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-top: 4px; }
+
+  #nav { display: flex; justify-content: space-between; align-items: center; padding: 14px 36px 20px; background: rgba(0,0,0,0.55); border-top: 1px solid rgba(255,255,255,0.05); }
+  #nav button { background: none; border: 2px solid rgba(255,255,255,0.18); color: white; font-family: 'Bebas Neue', sans-serif; font-size: 19px; letter-spacing: 3px; padding: 12px 36px; cursor: pointer; border-radius: 4px; transition: all 0.2s; }
+  #nav button:hover { background: rgba(255,255,255,0.07); border-color: var(--green-mid); }
+  #nav button:disabled { opacity: 0.15; cursor: default; }
+  #nav button.primary { background: var(--green-light); border-color: var(--green-light); padding: 12px 56px; font-size: 21px; }
+  #nav button.primary:hover { background: var(--green-mid); border-color: var(--green-mid); }
+
+  #nav-center { display: flex; flex-direction: column; align-items: center; gap: 5px; flex: 1; }
+  #slide-label { font-family: 'Bebas Neue', sans-serif; font-size: 14px; letter-spacing: 3px; color: rgba(255,255,255,0.22); }
+  #dots { display: flex; gap: 5px; flex-wrap: wrap; justify-content: center; max-width: 700px; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.12); transition: background 0.3s; cursor: pointer; }
+  .dot.active { background: var(--green-mid); }
+  .dot:hover { background: rgba(76,175,80,0.5); }
+
+  body::before { content: ''; position: fixed; bottom: -200px; right: -200px; width: 700px; height: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(13,71,161,0.08) 0%, transparent 70%); pointer-events: none; }
+  body::after { content: ''; position: fixed; top: -150px; left: -150px; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(46,125,50,0.06) 0%, transparent 70%); pointer-events: none; }
+  #hint { position: fixed; bottom: 86px; left: 50%; transform: translateX(-50%); font-size: 12px; color: rgba(255,255,255,0.12); letter-spacing: 2px; pointer-events: none; white-space: nowrap; }
+
+  .s-text p,
+  .s-list ul li {
+    text-wrap: pretty;
+  }
+
+  @media (max-width: 900px) {
+    #counter, #hint { display: none; }
+
+    #slide-container {
+      justify-content: flex-start;
+      padding:
+        max(18px, env(safe-area-inset-top))
+        16px
+        calc(10px + env(safe-area-inset-bottom));
+    }
+
+    .slide {
+      max-width: 100%;
+      min-height: calc(100dvh - 86px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      justify-content: center;
+    }
+
+    .slide.active {
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding-right: 4px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.18) transparent;
+    }
+
+    .slide.active::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .slide.active::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.18);
+      border-radius: 999px;
+    }
+
+    .s-title { gap: 10px; }
+    .s-title .tag { font-size: 11px; letter-spacing: 3px; margin-bottom: 2px; }
+    .s-title h1 { font-size: clamp(42px, 11vw, 72px); letter-spacing: 2px; text-shadow: 0 0 36px rgba(66,165,245,0.25); }
+    .s-title .sub { font-size: clamp(14px, 3.8vw, 19px); margin-top: 8px; }
+
+    .s-section { gap: 10px; }
+    .s-section .sec-label { font-size: 10px; letter-spacing: 4px; }
+    .s-section h2 { font-size: clamp(28px, 8.6vw, 54px); letter-spacing: 1px; line-height: 1.02; }
+
+    .s-text { gap: 12px; }
+    .s-text .heading { font-size: 14px; letter-spacing: 2px; border-left-width: 3px; padding-left: 10px; width: 100%; }
+    .s-text p { font-size: clamp(18px, 4.8vw, 28px); line-height: 1.34; max-width: 100%; }
+    .slide.is-dense.s-text p { font-size: clamp(16px, 4.3vw, 24px); line-height: 1.26; }
+    .slide.is-very-dense.s-text p { font-size: clamp(15px, 3.9vw, 22px); line-height: 1.2; }
+
+    .s-list { gap: 10px; }
+    .s-list .heading { font-size: 14px; letter-spacing: 2px; }
+    .s-list ul { gap: 8px; }
+    .s-list ul li { gap: 10px; font-size: clamp(16px, 4.2vw, 24px); line-height: 1.28; }
+    .slide.is-dense-list.s-list ul li { font-size: clamp(15px, 3.9vw, 22px); line-height: 1.22; }
+    .slide.is-very-dense-list.s-list ul li { font-size: clamp(14px, 3.6vw, 20px); line-height: 1.18; }
+    .s-list ul li .num { width: 28px; height: 28px; min-width: 28px; font-size: 14px; margin-top: 2px; }
+
+    #nav { gap: 10px; padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); }
+    #nav button { font-size: 14px; letter-spacing: 1px; padding: 10px 14px; }
+    #nav button.primary { padding: 10px 18px; font-size: 15px; }
+    #nav-center { min-width: 0; }
+    #slide-label { font-size: 11px; letter-spacing: 1px; text-align: center; }
+    #dots { display: none; }
+
+    body::before { width: 360px; height: 360px; bottom: -120px; right: -120px; }
+    body::after { width: 260px; height: 260px; top: -80px; left: -80px; }
+  }
+
+  @media (max-width: 932px) and (orientation: landscape) {
+    #counter { display: block; top: 10px; right: 14px; font-size: 15px; }
+
+    #slide-container {
+      padding:
+        max(16px, env(safe-area-inset-top))
+        24px
+        calc(8px + env(safe-area-inset-bottom));
+    }
+
+    .slide { min-height: calc(100dvh - 72px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); }
+    .s-title h1 { font-size: clamp(50px, 8.5vw, 88px); }
+    .s-section h2 { font-size: clamp(32px, 5.8vw, 58px); }
+    .s-text p { font-size: clamp(17px, 3.2vw, 24px); line-height: 1.28; }
+    .slide.is-dense.s-text p { font-size: clamp(15px, 2.9vw, 21px); line-height: 1.2; }
+    .slide.is-very-dense.s-text p { font-size: clamp(14px, 2.7vw, 19px); line-height: 1.14; }
+    .s-list ul li { font-size: clamp(15px, 3vw, 21px); }
+    .slide.is-dense-list.s-list ul li { font-size: clamp(14px, 2.7vw, 19px); line-height: 1.14; }
+    .slide.is-very-dense-list.s-list ul li { font-size: clamp(13px, 2.45vw, 18px); line-height: 1.1; }
+    #nav { padding: 8px 14px calc(8px + env(safe-area-inset-bottom)); }
+    #nav button { padding: 8px 16px; font-size: 13px; }
+    #nav button.primary { padding: 8px 20px; font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div id="counter"></div>
+
+<div id="slide-container">
+
+  <div class="slide s-title active" data-label="Titolo">
+    <div class="tag">I Consigli del Farmacista</div>
+    <h1><span>OTITE</span></h1>
+    <div class="sub">Versione estesa da circa 15 minuti</div>
+  </div>
+
+  <div class="slide s-section" data-label="Introduzione">
+    <div class="sec-label">Apertura</div>
+    <h2>PARLIAMO DI<br>OTITE</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Introduzione — 1">
+    <div class="heading">INTRODUZIONE</div>
+    <p>Quando si parla di otite, molte persone pensano semplicemente a un forte mal d'orecchio. In realtà con il termine otite si indicano condizioni diverse, che possono coinvolgere l'orecchio esterno oppure l'orecchio medio e che non si gestiscono tutte nello stesso modo.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Introduzione — 2">
+    <div class="heading">INTRODUZIONE</div>
+    <p>Il dolore all'orecchio può comparire all'improvviso, spesso di notte, e creare molta ansia. A volte dopo un raffreddore, a volte dopo il mare o la piscina, altre volte insieme a febbre, senso di orecchio chiuso o calo dell'udito.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Introduzione — 3">
+    <div class="heading">INTRODUZIONE</div>
+    <p>In questo episodio vedremo che cos'è l'otite, quali sono le forme più comuni, quali sintomi orientano di più, cosa si può fare nelle prime ore, quali comportamenti evitare, che ruolo hanno i farmaci e quando è il caso di sentire il medico senza aspettare.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Cos'è l'Otite?">
+    <div class="sec-label">Sezione 1</div>
+    <h2>COS'È<br>L'OTITE?</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'è — 1">
+    <div class="heading">COS'È L'OTITE?</div>
+    <p>L'otite è un'infiammazione o un'infezione che interessa l'orecchio. In modo molto semplice, le forme più comuni da ricordare sono due: l'otite esterna e l'otite media. L'otite esterna coinvolge il condotto uditivo esterno, mentre l'otite media riguarda la zona dietro il timpano.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'è — 2">
+    <div class="heading">COS'È L'OTITE?</div>
+    <p>Questa distinzione è utile perché cambia il contesto in cui compare il problema e cambia anche il tipo di gestione. L'otite esterna è spesso collegata a umidità, irritazione del condotto, piccoli traumi locali o infezioni favorite dall'acqua.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'è — 3">
+    <div class="heading">COS'È L'OTITE?</div>
+    <p>L'otite media invece è molto più spesso legata a raffreddori, infezioni delle prime vie respiratorie e alterazioni della tuba di Eustachio. Inoltre il mal d'orecchio non equivale sempre automaticamente a infezione batterica: il medico valuta il quadro completo prima di decidere la terapia.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Otite esterna">
+    <div class="sec-label">Sezione 2</div>
+    <h2>OTITE<br>ESTERNA</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Esterna — 1">
+    <div class="heading blue">OTITE ESTERNA</div>
+    <p>L'otite esterna, detta spesso anche orecchio del nuotatore, interessa il condotto uditivo esterno. È favorita da acqua che ristagna, da pelle irritata, da eczema, da piccoli traumi causati da cotton fioc, unghie, auricolari o altri oggetti introdotti nel condotto.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Esterna — 2">
+    <div class="heading blue">OTITE ESTERNA</div>
+    <p>I sintomi tipici sono dolore, fastidio, prurito, sensazione di orecchio pieno e a volte secrezione. Un dettaglio utile è che il dolore può aumentare quando si tocca il padiglione auricolare o si preme nella zona davanti all'orecchio, oppure durante la masticazione.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Esterna — 3">
+    <div class="heading blue">OTITE ESTERNA</div>
+    <p>In alcuni casi il condotto si gonfia e la sensazione di orecchio tappato aumenta. Proprio per questo l'automedicazione improvvisata con gocce usate a caso non è una buona idea: se il problema è importante, il medico o il farmacista devono prima orientare bene la situazione.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Otite media">
+    <div class="sec-label">Sezione 3</div>
+    <h2>OTITE<br>MEDIA</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Media — 1">
+    <div class="heading blue">OTITE MEDIA</div>
+    <p>L'otite media interessa l'orecchio medio ed è molto comune nei bambini. Dopo un raffreddore o un'infezione delle vie respiratorie, la tuba di Eustachio può funzionare peggio, il liquido si accumula dietro il timpano e può comparire infiammazione o infezione.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Media — 2">
+    <div class="heading blue">OTITE MEDIA</div>
+    <p>Il bambino piccolo spesso non dice chiaramente “mi fa male l'orecchio”, ma può essere irritabile, dormire male, piangere di più, toccarsi l'orecchio, mangiare meno o sembrare meno reattivo ai suoni. Negli adulti e nei bambini più grandi è più tipico riferire dolore, pressione auricolare e udito ridotto.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Media — 3">
+    <div class="heading blue">OTITE MEDIA</div>
+    <p>Non tutte le otiti medie hanno lo stesso decorso. Alcune migliorano spontaneamente in pochi giorni, altre richiedono una valutazione più attenta, soprattutto se il dolore è importante, la febbre è alta o il problema continua a ripresentarsi.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Sintomi">
+    <div class="sec-label">Sezione 4</div>
+    <h2>SINTOMI DA<br>RICONOSCERE</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Sintomi — 1">
+    <div class="heading">SINTOMI DA RICONOSCERE</div>
+    <p>Il sintomo più comune è il dolore all'orecchio, ma non è l'unico. Possono comparire senso di pressione o pienezza, calo dell'udito, ovattamento dei suoni, febbre, irritabilità, secrezione dall'orecchio e, in alcuni casi, nausea o disturbi dell'equilibrio.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Sintomi — 2">
+    <div class="heading">SINTOMI DA RICONOSCERE</div>
+    <p>Se esce del liquido dall'orecchio, il quadro merita più attenzione. Il liquido può comparire in alcune infezioni o in presenza di perforazione del timpano, e in questi casi non è il momento di mettere prodotti a caso nel condotto.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Sintomi — 3">
+    <div class="heading">SINTOMI DA RICONOSCERE</div>
+    <p>Un altro aspetto utile da capire è che il dolore può non dipendere sempre e solo da un'otite. Anche un raffreddore importante, una gola molto infiammata o un problema di pressione dietro il timpano possono dare mal d'orecchio. Per questo la valutazione clinica resta fondamentale quando il quadro non è chiaro.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Prime ore">
+    <div class="sec-label">Sezione 5</div>
+    <h2>COSA FARE<br>NELLE PRIME ORE</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Prime ore — 1">
+    <div class="heading">COSA FARE NELLE PRIME ORE</div>
+    <p>Se compare dolore all'orecchio, la prima cosa è tenere sotto controllo i sintomi e cercare di alleviare il dolore in modo corretto. I comuni antidolorifici e antipiretici possono essere utili, se adatti all'età e alla situazione clinica della persona. Su questo il farmacista può orientare bene.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Prime ore — 2">
+    <div class="heading">COSA FARE NELLE PRIME ORE</div>
+    <p>Nel frattempo conviene evitare di manipolare l'orecchio. Niente cotton fioc, niente oggetti introdotti nel condotto, niente pulizie aggressive. Se c'è secrezione, va tamponata delicatamente all'esterno senza cercare di “andare dentro”.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Prime ore — 3">
+    <div class="heading">COSA FARE NELLE PRIME ORE</div>
+    <p>Se si sospetta un'otite esterna, mantenere l'orecchio asciutto è importante. Meglio evitare nuoto, immersioni e ingresso di acqua o shampoo nell'orecchio finché il problema non è risolto o almeno valutato.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Cosa non fare">
+    <div class="sec-label">Sezione 6</div>
+    <h2>COSA<br>NON FARE</h2>
+  </div>
+
+  <div class="slide s-text" data-label="No — 1">
+    <div class="heading">COSA NON FARE</div>
+    <p>Uno degli errori più comuni è usare cotton fioc o altri oggetti per pulire il condotto. Questo gesto può irritare la pelle, spingere il cerume più in profondità e peggiorare sia dolore sia infiammazione.</p>
+  </div>
+
+  <div class="slide s-text" data-label="No — 2">
+    <div class="heading">COSA NON FARE</div>
+    <p>Un altro errore è usare gocce auricolari trovate in casa senza sapere se siano adatte alla situazione. Se c'è perforazione del timpano, secrezione o dubbio sulla diagnosi, le gocce non vanno scelte a caso.</p>
+  </div>
+
+  <div class="slide s-text" data-label="No — 3">
+    <div class="heading">COSA NON FARE</div>
+    <p>Va evitata anche l'idea che gli antibiotici siano sempre la soluzione automatica. Molte otiti, soprattutto alcune otiti medie, migliorano senza antibiotico e vengono gestite inizialmente con controllo dei sintomi. La decisione dipende da età, gravità, durata e quadro clinico generale.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Farmaci">
+    <div class="sec-label">Sezione 7</div>
+    <h2>QUAL È IL RUOLO<br>DEI FARMACI</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Farmaci — 1">
+    <div class="heading">QUAL È IL RUOLO DEI FARMACI</div>
+    <p>I farmaci possono avere ruoli diversi. Il primo obiettivo, molto spesso, è controllare il dolore. Questo è importante perché l'otalgia può essere intensa e compromettere sonno, appetito e benessere generale.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Farmaci — 2">
+    <div class="heading">QUAL È IL RUOLO DEI FARMACI</div>
+    <p>Nell'otite esterna, quando il medico conferma il quadro, spesso il trattamento si basa su gocce auricolari specifiche, che possono contenere antibiotici, antinfiammatori o altre sostanze a seconda del caso. Ma devono essere usate nel modo corretto e per il tempo indicato.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Farmaci — 3">
+    <div class="heading">QUAL È IL RUOLO DEI FARMACI</div>
+    <p>Nell'otite media, invece, l'antibiotico non è sempre necessario. In alcuni casi viene prescritto, in altri si preferisce osservare l'andamento per alcuni giorni e trattare soprattutto il dolore. Aspettare con criterio non significa trascurare il problema.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Farmaci — 4">
+    <div class="heading">QUAL È IL RUOLO DEI FARMACI</div>
+    <p>Anche i decongestionanti e gli antistaminici non sono automaticamente utili per tutte le otiti. Nelle indicazioni generali per le comuni infezioni dell'orecchio non sono il cardine della terapia. Meglio non accumulare farmaci senza una logica chiara.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Quando serve il medico">
+    <div class="sec-label">Sezione 8</div>
+    <h2>QUANDO SERVE<br>IL MEDICO</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Medico — 1">
+    <div class="heading">QUANDO SERVE IL MEDICO</div>
+    <p>È opportuno far valutare l'orecchio se il dolore non migliora dopo pochi giorni, se la febbre è alta, se esce liquido dall'orecchio, se compare un nuovo calo dell'udito o se la persona appare molto sofferente o debilitata.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Medico — 2">
+    <div class="heading">QUANDO SERVE IL MEDICO</div>
+    <p>Nei bambini molto piccoli serve maggiore prudenza. Un bambino sotto l'anno con sospetta otite merita una valutazione più rapida rispetto a un ragazzo più grande con sintomi lievi. Anche i bambini che continuano ad avere episodi ricorrenti vanno seguiti meglio.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Medico — 3">
+    <div class="heading">QUANDO SERVE IL MEDICO</div>
+    <p>Serve attenzione particolare anche se la persona ha diabete, difese immunitarie ridotte o altre malattie importanti. In questi contesti un'infezione dell'orecchio può richiedere un approccio meno attendista.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Segnali d'allarme">
+    <div class="sec-label">Sezione 9</div>
+    <h2>SEGNALI<br>D'ALLARME</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Allarme — 1">
+    <div class="heading">SEGNALI D'ALLARME</div>
+    <p>Ci sono poi segnali che non vanno banalizzati: gonfiore importante attorno all'orecchio, forte peggioramento del dolore, vertigini marcate, vomito persistente, importante abbattimento, secrezione abbondante, peggioramento dell'udito o sintomi che sembrano uscire dal quadro di una semplice otite comune.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Allarme — 2">
+    <div class="heading">SEGNALI D'ALLARME</div>
+    <p>Anche un arrossamento o una tumefazione dietro l'orecchio meritano una valutazione tempestiva. Non significa automaticamente una complicanza grave, ma è il tipo di situazione in cui non conviene aspettare troppo.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Prevenzione">
+    <div class="sec-label">Sezione 10</div>
+    <h2>PREVENZIONE</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Prevenzione — 1">
+    <div class="heading">PREVENZIONE</div>
+    <p>La prevenzione cambia un po' in base al tipo di otite. Per l'otite esterna, una delle cose più utili è evitare di traumatizzare il condotto con cotton fioc, forcine, dita o altri oggetti. Anche asciugare con delicatezza le orecchie dopo il bagno o la piscina può aiutare.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Prevenzione — 2">
+    <div class="heading">PREVENZIONE</div>
+    <p>Per chi tende a sviluppare otiti esterne ricorrenti, può essere utile discutere con il medico o il farmacista le strategie più adatte, soprattutto se c'è eczema, pelle molto sensibile o esposizione frequente all'acqua.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Prevenzione — 3">
+    <div class="heading">PREVENZIONE</div>
+    <p>Per l'otite media, invece, ridurre il rischio di infezioni respiratorie, evitare il fumo passivo e seguire le vaccinazioni consigliate nei bambini può contribuire a contenere il problema. Non si può prevenire tutto, ma alcune abitudini aiutano.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Vita quotidiana">
+    <div class="sec-label">Sezione 11</div>
+    <h2>VITA QUOTIDIANA<br>E GESTIONE PRATICA</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Quotidiano — 1">
+    <div class="heading">VITA QUOTIDIANA E GESTIONE PRATICA</div>
+    <p>Durante un episodio di otite è utile evitare nuoto e immersioni, proteggere l'orecchio dall'acqua se il problema è esterno, seguire con precisione l'eventuale terapia prescritta e non interrompere in anticipo i trattamenti solo perché il dolore è calato.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Quotidiano — 2">
+    <div class="heading">VITA QUOTIDIANA E GESTIONE PRATICA</div>
+    <p>Se sono state prescritte gocce auricolari, vanno usate bene. La modalità pratica di applicazione conta molto: posizione corretta, tempo di permanenza e rispetto della durata del trattamento possono fare la differenza.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Quotidiano — 3">
+    <div class="heading">VITA QUOTIDIANA E GESTIONE PRATICA</div>
+    <p>Anche dopo il miglioramento, se la sensazione di orecchio tappato o il calo dell'udito persistono, è utile una rivalutazione. A volte il dolore passa ma resta del liquido dietro il timpano oppure rimane un'infiammazione che richiede tempo o controllo.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Il Decalogo">
+    <div class="sec-label">Sezione 12</div>
+    <h2>IL DECALOGO<br>PER UN CORRETTO<br>USO DEI FARMACI</h2>
+  </div>
+
+  <div class="slide s-list" data-label="Decalogo — Regole 1–5">
+    <div class="heading">IL DECALOGO PER UN CORRETTO USO DEI FARMACI</div>
+    <ul>
+      <li><span class="num">1</span>Nell'usare il farmaco rispetta la posologia, la dose, il tempo e la modalità di somministrazione indicata dal medico o riportata correttamente sul prodotto.</li>
+      <li><span class="num">2</span>Non assumere più farmaci contemporaneamente senza il consiglio del medico o del farmacista.</li>
+      <li><span class="num">3</span>Non interrompere arbitrariamente una terapia.</li>
+      <li><span class="num">4</span>Controlla sempre la data di scadenza prima di utilizzare il farmaco.</li>
+      <li><span class="num">5</span>Ricorda che alcuni farmaci, una volta aperti, possono avere tempi d'uso più brevi rispetto alla data indicata sulla confezione.</li>
+    </ul>
+  </div>
+
+  <div class="slide s-list" data-label="Decalogo — Regole 6–10">
+    <div class="heading">IL DECALOGO PER UN CORRETTO USO DEI FARMACI</div>
+    <ul>
+      <li><span class="num">6</span>Per dubbi chiedi consiglio al medico o al farmacista.</li>
+      <li><span class="num">7</span>Conserva integra la confezione senza gettare l'astuccio e il foglietto illustrativo.</li>
+      <li><span class="num">8</span>Riponi i farmaci in luogo fresco e asciutto; non in bagno e non in cucina, ma nel luogo espressamente specificato.</li>
+      <li><span class="num">9</span>Tieni lontano i farmaci dalla portata dei bambini.</li>
+      <li><span class="num">10</span>Non gettare i farmaci nella spazzatura, ma negli appositi contenitori collocati all'interno o in prossimità delle farmacie.</li>
+    </ul>
+  </div>
+
+  <div class="slide s-section" data-label="Conclusione">
+    <div class="sec-label">Chiusura</div>
+    <h2>IN SINTESI</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Conclusione — 1">
+    <div class="heading">CONCLUSIONE</div>
+    <p>In sintesi, l'otite non è una sola e non si gestisce sempre nello stesso modo. Capire se il problema riguarda l'orecchio esterno o medio, controllare bene il dolore e riconoscere i segnali che meritano una valutazione medica aiuta a evitare sia allarmismi inutili sia sottovalutazioni.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Conclusione — 2">
+    <div class="heading">CONCLUSIONE</div>
+    <p>Le regole più utili da ricordare sono: non infilare nulla nell'orecchio, non usare gocce a caso, mantenere asciutto l'orecchio se il problema è esterno, controllare il dolore in modo corretto e non pretendere antibiotici automatici in ogni situazione.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Conclusione — 3">
+    <div class="heading">CONCLUSIONE</div>
+    <p>Il farmacista può aiutare molto a orientare il primo comportamento e a capire quando è ragionevole monitorare e quando invece bisogna passare subito al medico. E quando ci sono secrezione, febbre alta, calo dell'udito o forte malessere, è meglio non aspettare troppo.</p>
+  </div>
+
+  <div class="slide s-title" data-label="Fine">
+    <div class="tag">I Consigli del Farmacista</div>
+    <h1><span>OTITE</span></h1>
+    <div class="sub">Fine episodio — versione estesa</div>
+  </div>
+
+</div>
+
+<div id="hint">← → frecce tastiera &nbsp;|&nbsp; SPAZIO avanza &nbsp;|&nbsp; click sui pallini per saltare</div>
+
+<div id="nav">
+  <button id="btn-prev" disabled onclick="prevSlide()">◀ INDIETRO</button>
+  <div id="nav-center">
+    <span id="slide-label"></span>
+    <div id="dots"></div>
+  </div>
+  <button id="btn-next" class="primary" onclick="nextSlide()">AVANTI ▶</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  slides.forEach(slide => {
+    const paragraphs = [...slide.querySelectorAll('p')];
+    const totalLength = paragraphs.reduce((sum, paragraph) => sum + paragraph.textContent.trim().length, 0);
+    if (totalLength > 220) slide.classList.add('is-dense');
+    if (totalLength > 320) slide.classList.add('is-very-dense');
+
+    const items = [...slide.querySelectorAll('li')];
+    if (items.length) {
+      const longest = items.reduce((max, item) => Math.max(max, item.textContent.trim().length), 0);
+      if (items.length >= 4 || longest > 90) slide.classList.add('is-dense-list');
+      if (items.length >= 5 || longest > 120) slide.classList.add('is-very-dense-list');
+    }
+  });
+
+  const dotsEl = document.getElementById('dots');
+  for (let i = 0; i < total; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.onclick = () => showSlide(i);
+    dotsEl.appendChild(d);
+  }
+
+  function showSlide(n) {
+    slides[current].classList.remove('active');
+    document.querySelectorAll('.dot')[current].classList.remove('active');
+    current = Math.max(0, Math.min(n, total - 1));
+    slides[current].classList.add('active');
+    document.querySelectorAll('.dot')[current].classList.add('active');
+    document.getElementById('counter').textContent = `${current + 1} / ${total}`;
+    document.getElementById('progress-bar').style.width = `${((current + 1) / total) * 100}%`;
+    document.getElementById('slide-label').textContent = slides[current].dataset.label || '';
+    document.getElementById('btn-prev').disabled = current === 0;
+    document.getElementById('btn-next').disabled = current === total - 1;
+  }
+
+  function nextSlide() { if (current < total - 1) showSlide(current + 1); }
+  function prevSlide() { if (current > 0) showSlide(current - 1); }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    else if (e.key === 'Home') { e.preventDefault(); showSlide(0); }
+    else if (e.key === 'End') { e.preventDefault(); showSlide(total - 1); }
+  });
+
+  showSlide(0);
+</script>
+</body>
+</html>
