@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>MORBILLO – I Consigli del Farmacista | 15 Minuti</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lato:wght@300;400;700;900&display=swap');
+
+  :root {
+    --green: #1B5E20;
+    --green-light: #2E7D32;
+    --green-mid: #4CAF50;
+    --red: #B71C1C;
+    --red-light: #EF5350;
+    --teal: #004D40;
+    --teal-light: #4DB6AC;
+    --white: #FAFAFA;
+    --dark: #03100a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--dark);
+    font-family: 'Lato', sans-serif;
+    height: 100vh;
+    height: 100svh;
+    height: 100dvh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+    overscroll-behavior: none;
+  }
+
+  #progress-bar {
+    height: 5px;
+    background: linear-gradient(90deg, var(--teal-light), var(--green-mid));
+    width: 0%;
+    transition: width 0.35s ease;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+  }
+
+  #counter {
+    position: fixed;
+    top: 14px;
+    right: 24px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: rgba(255,255,255,0.28);
+    letter-spacing: 2px;
+    z-index: 100;
+  }
+
+  #slide-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 90px 20px;
+    overflow: hidden;
+  }
+
+  .slide {
+    display: none;
+    width: 100%;
+    max-width: 1500px;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .slide.active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .s-title { text-align: center; gap: 14px; }
+  .s-title .tag {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 7px;
+    color: var(--green-mid);
+    margin-bottom: 6px;
+  }
+  .s-title h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(70px, 12vw, 160px);
+    color: var(--white);
+    letter-spacing: 8px;
+    line-height: 1;
+    text-shadow: 0 0 80px rgba(77,182,172,0.35);
+  }
+  .s-title h1 span { color: var(--teal-light); }
+  .s-title .sub {
+    font-size: clamp(18px, 2.2vw, 30px);
+    color: rgba(255,255,255,0.45);
+    font-weight: 300;
+    margin-top: 12px;
+  }
+
+  .s-section { text-align: center; gap: 12px; }
+  .s-section .sec-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 8px;
+    color: var(--red-light);
+    margin-bottom: 4px;
+  }
+  .s-section h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(44px, 7vw, 100px);
+    color: var(--white);
+    letter-spacing: 4px;
+    line-height: 1.05;
+    text-align: center;
+  }
+
+  .s-text { gap: 20px; width: 100%; }
+  .s-text .heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(14px, 1.8vw, 26px);
+    color: var(--green-mid);
+    letter-spacing: 3px;
+    border-left: 5px solid var(--green);
+    padding-left: 16px;
+    margin-bottom: 4px;
+  }
+  .s-text .heading.teal {
+    color: var(--teal-light);
+    border-left-color: var(--teal);
+  }
+  .s-text p {
+    font-size: clamp(24px, 3.1vw, 48px);
+    color: var(--white);
+    line-height: 1.55;
+    font-weight: 400;
+    max-width: 1450px;
+  }
+
+  .s-fact { text-align: center; gap: 16px; }
+  .s-fact .f-label {
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: clamp(18px, 2vw, 28px);
+    color: rgba(255,255,255,0.55);
+    max-width: 950px;
+    line-height: 1.4;
+  }
+  .s-fact .f-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(80px, 14vw, 180px);
+    color: var(--teal-light);
+    line-height: 1;
+    text-shadow: 0 0 120px rgba(77,182,172,0.45);
+  }
+  .s-fact .f-text {
+    font-size: clamp(20px, 2.5vw, 38px);
+    color: var(--white);
+    font-weight: 300;
+    max-width: 950px;
+    line-height: 1.45;
+  }
+
+  .s-list { gap: 14px; width: 100%; }
+  .s-list .heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(14px, 1.8vw, 24px);
+    color: var(--green-mid);
+    letter-spacing: 3px;
+    margin-bottom: 8px;
+  }
+  .s-list ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+  .s-list ul li {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    font-size: clamp(20px, 2.6vw, 40px);
+    color: var(--white);
+    line-height: 1.4;
+  }
+  .s-list ul li .num {
+    background: var(--red);
+    color: white;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 4px;
+  }
+
+  #nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 36px 20px;
+    background: rgba(0,0,0,0.55);
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  #nav button {
+    background: none;
+    border: 2px solid rgba(255,255,255,0.18);
+    color: white;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 19px;
+    letter-spacing: 3px;
+    padding: 12px 36px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+  }
+  #nav button:hover {
+    background: rgba(255,255,255,0.07);
+    border-color: var(--green-mid);
+  }
+  #nav button:disabled { opacity: 0.15; cursor: default; }
+  #nav button.primary {
+    background: var(--green-light);
+    border-color: var(--green-light);
+    padding: 12px 56px;
+    font-size: 21px;
+  }
+  #nav button.primary:hover {
+    background: var(--green-mid);
+    border-color: var(--green-mid);
+  }
+
+  #nav-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    flex: 1;
+  }
+  #slide-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.22);
+  }
+  #dots {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 700px;
+  }
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    transition: background 0.3s;
+    cursor: pointer;
+  }
+  .dot.active { background: var(--green-mid); }
+  .dot:hover { background: rgba(76,175,80,0.5); }
+
+  body::before {
+    content: '';
+    position: fixed;
+    bottom: -200px;
+    right: -200px;
+    width: 700px;
+    height: 700px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,77,64,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    top: -150px;
+    left: -150px;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(46,125,50,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  #hint {
+    position: fixed;
+    bottom: 86px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    color: rgba(255,255,255,0.12);
+    letter-spacing: 2px;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .s-text p,
+  .s-list ul li,
+  .s-fact .f-text,
+  .s-fact .f-label {
+    text-wrap: pretty;
+  }
+
+  @media (max-width: 900px) {
+    #counter, #hint { display: none; }
+
+    #slide-container {
+      justify-content: flex-start;
+      padding:
+        max(18px, env(safe-area-inset-top))
+        16px
+        calc(10px + env(safe-area-inset-bottom));
+    }
+
+    .slide {
+      max-width: 100%;
+      min-height: calc(100dvh - 86px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      justify-content: center;
+    }
+
+    .slide.active {
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding-right: 4px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.18) transparent;
+    }
+
+    .slide.active::-webkit-scrollbar { width: 6px; }
+    .slide.active::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.18);
+      border-radius: 999px;
+    }
+
+    .s-title { gap: 10px; }
+    .s-title .tag { font-size: 11px; letter-spacing: 3px; margin-bottom: 2px; }
+    .s-title h1 { font-size: clamp(34px, 9vw, 64px); letter-spacing: 2px; text-shadow: 0 0 36px rgba(77,182,172,0.25); }
+    .s-title .sub { font-size: clamp(14px, 3.8vw, 19px); margin-top: 8px; }
+
+    .s-section { gap: 10px; }
+    .s-section .sec-label { font-size: 10px; letter-spacing: 4px; }
+    .s-section h2 { font-size: clamp(28px, 8.2vw, 54px); letter-spacing: 1px; line-height: 1.02; }
+
+    .s-text { gap: 12px; }
+    .s-text .heading {
+      font-size: 14px;
+      letter-spacing: 2px;
+      border-left-width: 3px;
+      padding-left: 10px;
+      width: 100%;
+    }
+    .s-text p { font-size: clamp(18px, 4.8vw, 28px); line-height: 1.34; max-width: 100%; }
+    .slide.is-dense.s-text p { font-size: clamp(16px, 4.3vw, 24px); line-height: 1.24; }
+    .slide.is-very-dense.s-text p { font-size: clamp(15px, 3.9vw, 22px); line-height: 1.18; }
+
+    .s-fact { gap: 10px; }
+    .s-fact .f-label { font-size: clamp(14px, 3.5vw, 18px); max-width: 100%; }
+    .s-fact .f-num { font-size: clamp(54px, 16vw, 92px); }
+    .s-fact .f-text { font-size: clamp(16px, 4vw, 22px); max-width: 100%; line-height: 1.28; }
+
+    .s-list { gap: 10px; }
+    .s-list .heading { font-size: 14px; letter-spacing: 2px; }
+    .s-list ul { gap: 8px; }
+    .s-list ul li { gap: 10px; font-size: clamp(16px, 4.2vw, 24px); line-height: 1.28; }
+    .slide.is-dense-list.s-list ul li { font-size: clamp(15px, 3.9vw, 22px); line-height: 1.22; }
+    .slide.is-very-dense-list.s-list ul li { font-size: clamp(14px, 3.6vw, 20px); line-height: 1.18; }
+    .s-list ul li .num { width: 28px; height: 28px; min-width: 28px; font-size: 14px; margin-top: 2px; }
+
+    #nav { gap: 10px; padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); }
+    #nav button { font-size: 14px; letter-spacing: 1px; padding: 10px 14px; }
+    #nav button.primary { padding: 10px 18px; font-size: 15px; }
+    #nav-center { min-width: 0; }
+    #slide-label { font-size: 11px; letter-spacing: 1px; text-align: center; }
+    #dots { display: none; }
+
+    body::before { width: 360px; height: 360px; bottom: -120px; right: -120px; }
+    body::after { width: 260px; height: 260px; top: -80px; left: -80px; }
+  }
+
+  @media (max-width: 932px) and (orientation: landscape) {
+    #counter { display: block; top: 10px; right: 14px; font-size: 15px; }
+
+    #slide-container {
+      padding:
+        max(16px, env(safe-area-inset-top))
+        24px
+        calc(8px + env(safe-area-inset-bottom));
+    }
+
+    .slide { min-height: calc(100dvh - 72px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); }
+    .s-title h1 { font-size: clamp(38px, 7vw, 70px); }
+    .s-section h2 { font-size: clamp(30px, 5.2vw, 56px); }
+    .s-text p { font-size: clamp(16px, 3vw, 23px); line-height: 1.24; }
+    .slide.is-dense.s-text p { font-size: clamp(14px, 2.7vw, 20px); line-height: 1.16; }
+    .slide.is-very-dense.s-text p { font-size: clamp(13px, 2.45vw, 18px); line-height: 1.1; }
+    .s-fact .f-label { font-size: clamp(12px, 2.2vw, 16px); }
+    .s-fact .f-num { font-size: clamp(52px, 10vw, 88px); }
+    .s-fact .f-text { font-size: clamp(14px, 2.5vw, 18px); line-height: 1.2; }
+    .s-list ul li { font-size: clamp(14px, 2.7vw, 19px); }
+    .slide.is-dense-list.s-list ul li { font-size: clamp(13px, 2.45vw, 18px); line-height: 1.12; }
+    .slide.is-very-dense-list.s-list ul li { font-size: clamp(12px, 2.2vw, 16px); line-height: 1.08; }
+    #nav { padding: 8px 14px calc(8px + env(safe-area-inset-bottom)); }
+    #nav button { padding: 8px 16px; font-size: 13px; }
+    #nav button.primary { padding: 8px 20px; font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div id="counter"></div>
+
+<div id="slide-container">
+
+  <div class="slide s-title active" data-label="Titolo">
+    <div class="tag">I Consigli del Farmacista</div>
+    <h1><span>MORBILLO</span></h1>
+    <div class="sub">Versione estesa da circa 15 minuti</div>
+  </div>
+
+  <div class="slide s-section" data-label="Introduzione">
+    <div class="sec-label">Apertura</div>
+    <h2>PARLIAMO DI<br>MORBILLO</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Introduzione — 1">
+    <div class="heading">INTRODUZIONE</div>
+    <p>Quando si parla di morbillo, molte persone pensano a una malattia dell'infanzia con febbre e puntini rossi sulla pelle. In realta' il morbillo non va ridotto a una semplice eruzione cutanea.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Introduzione — 2">
+    <div class="heading">INTRODUZIONE</div>
+    <p>E' una malattia virale molto contagiosa, capace di diffondersi facilmente per via respiratoria e, in alcuni casi, di provocare complicanze anche serie.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Introduzione — 3">
+    <div class="heading">INTRODUZIONE</div>
+    <p>Oggi il morbillo si puo' prevenire in modo efficace con la vaccinazione. Quando ricompare in una comunita', spesso significa che ci sono gruppi di persone non vaccinate, non completamente vaccinate o comunque non protette.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Introduzione — 4">
+    <div class="heading">INTRODUZIONE</div>
+    <p>In questo episodio vedremo che cos'e' il morbillo, come si trasmette, quali sintomi provoca, quali complicanze bisogna conoscere, come si gestisce a casa, quando bisogna sentire il medico e che ruolo hanno i farmaci.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Che cos'e'">
+    <div class="sec-label">Sezione 1</div>
+    <h2>CHE COS'E'<br>IL MORBILLO</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'e' — 1">
+    <div class="heading">CHE COS'E' IL MORBILLO</div>
+    <p>Il morbillo e' una malattia infettiva causata da un virus del genere Morbillivirus, della famiglia dei Paramyxoviridae. L'uomo e' l'unico ospite naturale del virus: la trasmissione avviene tra persone.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'e' — 2">
+    <div class="heading">CHE COS'E' IL MORBILLO</div>
+    <p>Il virus entra soprattutto attraverso le vie respiratorie. Dopo l'ingresso nell'organismo, si replica e poi si diffonde nel corpo. Per questo i sintomi non riguardano solo la pelle.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'e' — 3">
+    <div class="heading">CHE COS'E' IL MORBILLO</div>
+    <p>Il morbillo viene spesso definito una malattia esantematica, cioe' con eruzione cutanea. Ma il rash arriva dopo una fase iniziale in cui il paziente puo' sembrare avere una forte influenza o un'infezione respiratoria.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Contagiosita'">
+    <div class="sec-label">Sezione 2</div>
+    <h2>CONTAGIOSITA'</h2>
+  </div>
+
+  <div class="slide s-fact" data-label="Molto contagioso">
+    <div class="f-label">Tra le infezioni piu' contagiose</div>
+    <div class="f-num">9/10</div>
+    <div class="f-text">persone suscettibili a stretto contatto possono infettarsi se non sono protette</div>
+  </div>
+
+  <div class="slide s-text" data-label="Contagio — 1">
+    <div class="heading teal">CONTAGIOSITA'</div>
+    <p>Si trasmette attraverso goccioline respiratorie e particelle diffuse quando una persona infetta respira, tossisce o starnutisce. Gli ambienti chiusi e poco ventilati aumentano il rischio.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Contagio — 2">
+    <div class="heading teal">CONTAGIOSITA'</div>
+    <p>Il virus puo' rimanere nell'aria o su superfici contaminate per un periodo limitato, ma sufficiente a favorire il contagio. Non serve sempre un contatto fisico diretto.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Contagio — 3">
+    <div class="heading teal">CONTAGIOSITA'</div>
+    <p>Una persona con morbillo puo' essere contagiosa gia' prima che compaia l'eruzione cutanea. Questo rende il controllo piu' difficile, perche' all'inizio sembra spesso una influenza.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Sintomi">
+    <div class="sec-label">Sezione 3</div>
+    <h2>SINTOMI</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Sintomi — 1">
+    <div class="heading">SINTOMI</div>
+    <p>I primi sintomi compaiono di solito dopo un periodo di incubazione di circa una o due settimane. La malattia inizia spesso con febbre, tosse secca, naso che cola, occhi rossi e lacrimazione.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Sintomi — 2">
+    <div class="heading">SINTOMI</div>
+    <p>Un segno classico sono le macchie di Koplik: piccole macchie biancastre all'interno della bocca. Sono un indizio utile per il medico, perche' possono comparire prima del rash cutaneo.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Sintomi — 3">
+    <div class="heading">SINTOMI</div>
+    <p>Dopo alcuni giorni arriva l'esantema. Di solito parte dal viso o dalla zona dietro le orecchie e poi scende verso collo, tronco, braccia e gambe.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Sintomi — 4">
+    <div class="heading">SINTOMI</div>
+    <p>La febbre puo' aumentare proprio quando compare l'esantema. La tosse puo' persistere anche diversi giorni. In molti casi la guarigione avviene gradualmente, ma il decorso puo' essere impegnativo.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Complicanze">
+    <div class="sec-label">Sezione 4</div>
+    <h2>COMPLICANZE</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Complicanze — 1">
+    <div class="heading">COMPLICANZE</div>
+    <p>Il morbillo non e' sempre una malattia grave, ma puo' diventarlo. Le complicanze piu' frequenti includono otite, diarrea e disidratazione, soprattutto nei bambini piccoli.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Complicanze — 2">
+    <div class="heading">COMPLICANZE</div>
+    <p>Tra le complicanze piu' serie ci sono la polmonite e l'encefalite. La polmonite puo' richiedere ricovero; l'encefalite e' piu' rara, ma puo' lasciare conseguenze neurologiche.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Complicanze — 3">
+    <div class="heading">COMPLICANZE</div>
+    <p>Esiste anche una complicanza molto rara e tardiva, la panencefalite subacuta sclerosante. Puo' comparire anni dopo l'infezione naturale ed e' una malattia neurologica grave.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Complicanze — 4">
+    <div class="heading">COMPLICANZE</div>
+    <p>Sono a maggior rischio i bambini sotto i 5 anni, gli adulti, le donne in gravidanza, le persone immunodepresse e chi ha carenze nutrizionali, in particolare carenza di vitamina A.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Diagnosi">
+    <div class="sec-label">Sezione 5</div>
+    <h2>DIAGNOSI E<br>COSA FARE</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Diagnosi — 1">
+    <div class="heading teal">DIAGNOSI E COSA FARE</div>
+    <p>Se si sospetta il morbillo, la cosa piu' importante e' non presentarsi direttamente in una sala d'attesa senza avvisare. Meglio telefonare prima al medico, al pediatra o al servizio sanitario.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Diagnosi — 2">
+    <div class="heading teal">DIAGNOSI E COSA FARE</div>
+    <p>La diagnosi parte dai sintomi e dalla storia: febbre, tosse, raffreddore, congiuntivite, rash, contatto con casi sospetti, viaggi e stato vaccinale. Nei casi sospetti puo' servire conferma di laboratorio.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Diagnosi — 3">
+    <div class="heading teal">DIAGNOSI E COSA FARE</div>
+    <p>In Italia il morbillo e' una malattia soggetta a notifica. Questo permette di monitorare la situazione, ricostruire eventuali contatti e prevenire nuovi contagi.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Gestione">
+    <div class="sec-label">Sezione 6</div>
+    <h2>GESTIONE<br>A CASA</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Gestione — 1">
+    <div class="heading">GESTIONE A CASA</div>
+    <p>Non esiste una terapia antivirale specifica che elimini il morbillo. La gestione e' soprattutto di supporto: riposo, idratazione, controllo della febbre e attenzione ai segnali di peggioramento.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Gestione — 2">
+    <div class="heading">GESTIONE A CASA</div>
+    <p>Bere e' fondamentale, soprattutto se ci sono febbre alta, sudorazione, scarso appetito, vomito o diarrea. Nei bambini bisogna controllare urine, sonnolenza, respiro e segni di disidratazione.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Gestione — 3">
+    <div class="heading">GESTIONE A CASA</div>
+    <p>Il paziente deve stare isolato secondo le indicazioni sanitarie. Igiene e ventilazione aiutano, ma il punto centrale e' limitare i contatti durante il periodo contagioso.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Farmaci">
+    <div class="sec-label">Sezione 7</div>
+    <h2>FARMACI</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Farmaci — 1">
+    <div class="heading">FARMACI</div>
+    <p>Per il morbillo i farmaci servono soprattutto a controllare i sintomi. Paracetamolo o ibuprofene possono essere usati per febbre e dolore quando sono adatti alla persona, all'eta', al peso e alle condizioni cliniche.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Farmaci — 2">
+    <div class="heading">FARMACI</div>
+    <p>Non bisogna usare antibiotici "per il morbillo", perche' il morbillo e' causato da un virus. Gli antibiotici servono solo se compare una complicanza batterica e devono essere prescritti dal medico.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Farmaci — 3">
+    <div class="heading">FARMACI</div>
+    <p>La vitamina A puo' essere indicata in alcuni contesti, soprattutto in ambito pediatrico o ospedaliero, ma non deve diventare fai-da-te. Dosi e indicazioni vanno decise dal medico.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Farmaci — 4">
+    <div class="heading">FARMACI</div>
+    <p>Sciroppi, decongestionanti, integratori o rimedi "immunitari" non devono sostituire la valutazione medica quando il quadro e' compatibile con morbillo.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Quando chiedere aiuto">
+    <div class="sec-label">Sezione 8</div>
+    <h2>QUANDO CHIEDERE<br>AIUTO SUBITO</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Aiuto — 1">
+    <div class="heading teal">QUANDO CHIEDERE AIUTO SUBITO</div>
+    <p>Serve assistenza rapida se compaiono difficolta' respiratoria, respiro molto veloce, colorito bluastro, sonnolenza insolita, confusione, convulsioni, dolore toracico o peggioramento importante della tosse.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Aiuto — 2">
+    <div class="heading teal">QUANDO CHIEDERE AIUTO SUBITO</div>
+    <p>Attenzione anche a segni di disidratazione, febbre molto alta persistente o peggioramento dopo un apparente miglioramento. Nei neonati, nei fragili e in gravidanza la soglia di attenzione deve essere piu' bassa.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Aiuto — 3">
+    <div class="heading teal">QUANDO CHIEDERE AIUTO SUBITO</div>
+    <p>Se c'e' stata esposizione a un caso e la persona non e' vaccinata o non sa se e' protetta, bisogna contattare rapidamente medico o servizi vaccinali: in alcune situazioni si valutano misure post-esposizione.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Prevenzione">
+    <div class="sec-label">Sezione 9</div>
+    <h2>PREVENZIONE<br>E VACCINO</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Prevenzione — 1">
+    <div class="heading">PREVENZIONE E VACCINO</div>
+    <p>La prevenzione del morbillo si basa soprattutto sul vaccino. E' disponibile in forma combinata, per esempio MPR contro morbillo, parotite e rosolia, oppure MPRV quando include anche la varicella.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Prevenzione — 2">
+    <div class="heading">PREVENZIONE E VACCINO</div>
+    <p>La protezione richiede in genere due dosi secondo il calendario vaccinale. Chi e' adulto e non sa se ha avuto il morbillo o se e' vaccinato dovrebbe parlarne con il medico.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Prevenzione — 3">
+    <div class="heading">PREVENZIONE E VACCINO</div>
+    <p>Il vaccino contro il morbillo e' vivo attenuato: non e' indicato in alcune condizioni, come gravidanza o immunodepressione importante. Per questo e' essenziale proteggere anche chi non puo' vaccinarsi.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Decalogo">
+    <div class="sec-label">Sezione 10</div>
+    <h2>DECALOGO<br>DI PRUDENZA</h2>
+  </div>
+
+  <div class="slide s-list" data-label="Decalogo — Regole 1-5">
+    <div class="heading">DECALOGO PER UNA GESTIONE PRUDENTE DEL MORBILLO</div>
+    <ul>
+      <li><span class="num">1</span>Non considerare il morbillo una semplice eruzione cutanea.</li>
+      <li><span class="num">2</span>Se lo sospetti, chiama prima il medico e non andare direttamente in sala d'attesa.</li>
+      <li><span class="num">3</span>Controlla lo stato vaccinale tuo e dei bambini.</li>
+      <li><span class="num">4</span>Isola la persona malata secondo le indicazioni sanitarie.</li>
+      <li><span class="num">5</span>Usa farmaci per febbre e dolore solo con dosi corrette per eta' e peso.</li>
+    </ul>
+  </div>
+
+  <div class="slide s-list" data-label="Decalogo — Regole 6-10">
+    <div class="heading">DECALOGO PER UNA GESTIONE PRUDENTE DEL MORBILLO</div>
+    <ul>
+      <li><span class="num">6</span>Non usare antibiotici senza prescrizione.</li>
+      <li><span class="num">7</span>Non fare vitamina A ad alte dosi senza indicazione medica.</li>
+      <li><span class="num">8</span>Fai attenzione a respiro, idratazione, sonnolenza e febbre persistente.</li>
+      <li><span class="num">9</span>Proteggi neonati, gravidanza, immunodepressi e persone non vaccinate.</li>
+      <li><span class="num">10</span>Per dubbi su vaccino, esposizione o sintomi, chiedi al medico o al farmacista.</li>
+    </ul>
+  </div>
+
+  <div class="slide s-section" data-label="Conclusione">
+    <div class="sec-label">Chiusura</div>
+    <h2>IN SINTESI</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Conclusione — 1">
+    <div class="heading">CONCLUSIONE</div>
+    <p>Il morbillo e' una malattia virale molto contagiosa, prevenibile con il vaccino, che puo' dare un quadro iniziale simile a un'influenza e poi un rash caratteristico.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Conclusione — 2">
+    <div class="heading">CONCLUSIONE</div>
+    <p>La gestione corretta parte da tre idee semplici: riconoscere i sintomi, evitare di contagiare altri e chiedere aiuto quando ci sono segnali di rischio.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Conclusione — 3">
+    <div class="heading">CONCLUSIONE</div>
+    <p>Il messaggio finale e' chiaro: il morbillo non va affrontato con paura, ma con serieta'. Vaccinazione, isolamento quando serve e uso prudente dei farmaci sono gli strumenti migliori per proteggere il singolo e la comunita'.</p>
+  </div>
+
+  <div class="slide s-title" data-label="Fine">
+    <div class="tag">I Consigli del Farmacista</div>
+    <h1><span>MORBILLO</span></h1>
+    <div class="sub">Fine episodio — versione estesa</div>
+  </div>
+
+</div>
+
+<div id="hint">← → frecce tastiera &nbsp;|&nbsp; SPAZIO avanza &nbsp;|&nbsp; click sui pallini per saltare</div>
+
+<div id="nav">
+  <button id="btn-prev" disabled onclick="prevSlide()">◀ INDIETRO</button>
+  <div id="nav-center">
+    <span id="slide-label"></span>
+    <div id="dots"></div>
+  </div>
+  <button id="btn-next" class="primary" onclick="nextSlide()">AVANTI ▶</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  slides.forEach(slide => {
+    const paragraphs = [...slide.querySelectorAll('p')];
+    const totalLength = paragraphs.reduce((sum, paragraph) => sum + paragraph.textContent.trim().length, 0);
+    if (totalLength > 220) slide.classList.add('is-dense');
+    if (totalLength > 320) slide.classList.add('is-very-dense');
+
+    const items = [...slide.querySelectorAll('li')];
+    if (items.length) {
+      const longest = items.reduce((max, item) => Math.max(max, item.textContent.trim().length), 0);
+      if (items.length >= 4 || longest > 90) slide.classList.add('is-dense-list');
+      if (items.length >= 5 || longest > 120) slide.classList.add('is-very-dense-list');
+    }
+  });
+
+  const dotsEl = document.getElementById('dots');
+  for (let i = 0; i < total; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.onclick = () => showSlide(i);
+    dotsEl.appendChild(d);
+  }
+
+  function showSlide(n) {
+    slides[current].classList.remove('active');
+    document.querySelectorAll('.dot')[current].classList.remove('active');
+    current = Math.max(0, Math.min(n, total - 1));
+    slides[current].classList.add('active');
+    document.querySelectorAll('.dot')[current].classList.add('active');
+    document.getElementById('counter').textContent = `${current + 1} / ${total}`;
+    document.getElementById('progress-bar').style.width = `${((current + 1) / total) * 100}%`;
+    document.getElementById('slide-label').textContent = slides[current].dataset.label || '';
+    document.getElementById('btn-prev').disabled = current === 0;
+    document.getElementById('btn-next').disabled = current === total - 1;
+  }
+
+  function nextSlide() {
+    if (current < total - 1) showSlide(current + 1);
+  }
+
+  function prevSlide() {
+    if (current > 0) showSlide(current - 1);
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') {
+      e.preventDefault();
+      nextSlide();
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      prevSlide();
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      showSlide(0);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      showSlide(total - 1);
+    }
+  });
+
+  showSlide(0);
+</script>
+</body>
+</html>
