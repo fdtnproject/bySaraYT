@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ARITMIE CARDIACHE – I Consigli del Farmacista | 15 Minuti</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lato:wght@300;400;700;900&display=swap');
+
+  :root {
+    --green: #1B5E20;
+    --green-light: #2E7D32;
+    --green-mid: #4CAF50;
+    --red: #B71C1C;
+    --red-light: #EF5350;
+    --crimson: #C62828;
+    --crimson-light: #EF9A9A;
+    --white: #FAFAFA;
+    --dark: #0f0404;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--dark);
+    font-family: 'Lato', sans-serif;
+    height: 100vh;
+    height: 100svh;
+    height: 100dvh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+    overscroll-behavior: none;
+  }
+
+  #progress-bar {
+    height: 5px;
+    background: linear-gradient(90deg, var(--crimson-light), var(--green-mid));
+    width: 0%;
+    transition: width 0.35s ease;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+  }
+
+  #counter {
+    position: fixed;
+    top: 14px;
+    right: 24px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: rgba(255,255,255,0.28);
+    letter-spacing: 2px;
+    z-index: 100;
+  }
+
+  #slide-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 90px 20px;
+    overflow: hidden;
+  }
+
+  .slide {
+    display: none;
+    width: 100%;
+    max-width: 1500px;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .slide.active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .s-title { text-align: center; gap: 14px; }
+  .s-title .tag {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 7px;
+    color: var(--crimson-light);
+    margin-bottom: 6px;
+  }
+  .s-title h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(50px, 8vw, 120px);
+    color: var(--white);
+    letter-spacing: 5px;
+    line-height: 1;
+    text-shadow: 0 0 80px rgba(198,40,40,0.4);
+  }
+  .s-title h1 span { color: var(--crimson-light); }
+  .s-title .sub {
+    font-size: clamp(18px, 2.2vw, 30px);
+    color: rgba(255,255,255,0.45);
+    font-weight: 300;
+    margin-top: 12px;
+  }
+
+  .s-section { text-align: center; gap: 12px; }
+  .s-section .sec-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 8px;
+    color: var(--crimson-light);
+    margin-bottom: 4px;
+  }
+  .s-section h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(44px, 7vw, 100px);
+    color: var(--white);
+    letter-spacing: 4px;
+    line-height: 1.05;
+    text-align: center;
+  }
+
+  .s-text { gap: 20px; width: 100%; }
+  .s-text .heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(14px, 1.8vw, 26px);
+    color: var(--crimson-light);
+    letter-spacing: 3px;
+    border-left: 5px solid var(--crimson);
+    padding-left: 16px;
+    margin-bottom: 4px;
+  }
+  .s-text .heading.green {
+    color: var(--green-mid);
+    border-left-color: var(--green);
+  }
+  .s-text p {
+    font-size: clamp(24px, 3.1vw, 48px);
+    color: var(--white);
+    line-height: 1.55;
+    font-weight: 400;
+    max-width: 1450px;
+  }
+
+  .s-fact { text-align: center; gap: 16px; }
+  .s-fact .f-label {
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: clamp(18px, 2vw, 28px);
+    color: rgba(255,255,255,0.55);
+    max-width: 900px;
+    line-height: 1.4;
+  }
+  .s-fact .f-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(80px, 14vw, 180px);
+    color: var(--crimson-light);
+    line-height: 1;
+    text-shadow: 0 0 120px rgba(198,40,40,0.5);
+  }
+  .s-fact .f-text {
+    font-size: clamp(20px, 2.5vw, 38px);
+    color: var(--white);
+    font-weight: 300;
+    max-width: 950px;
+    line-height: 1.45;
+  }
+
+  .s-list { gap: 14px; width: 100%; }
+  .s-list .heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(14px, 1.8vw, 24px);
+    color: var(--green-mid);
+    letter-spacing: 3px;
+    margin-bottom: 8px;
+  }
+  .s-list ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+  .s-list ul li {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    font-size: clamp(20px, 2.6vw, 40px);
+    color: var(--white);
+    line-height: 1.4;
+  }
+  .s-list ul li .num {
+    background: var(--red);
+    color: white;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 4px;
+  }
+
+  #nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 36px 20px;
+    background: rgba(0,0,0,0.55);
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  #nav button {
+    background: none;
+    border: 2px solid rgba(255,255,255,0.18);
+    color: white;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 19px;
+    letter-spacing: 3px;
+    padding: 12px 36px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+  }
+  #nav button:hover {
+    background: rgba(255,255,255,0.07);
+    border-color: var(--crimson-light);
+  }
+  #nav button:disabled { opacity: 0.15; cursor: default; }
+  #nav button.primary {
+    background: var(--green-light);
+    border-color: var(--green-light);
+    padding: 12px 56px;
+    font-size: 21px;
+  }
+  #nav button.primary:hover {
+    background: var(--green-mid);
+    border-color: var(--green-mid);
+  }
+
+  #nav-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    flex: 1;
+  }
+  #slide-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.22);
+  }
+  #dots {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 700px;
+  }
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    transition: background 0.3s;
+    cursor: pointer;
+  }
+  .dot.active { background: var(--crimson-light); }
+  .dot:hover { background: rgba(239,154,154,0.5); }
+
+  body::before {
+    content: '';
+    position: fixed;
+    bottom: -200px;
+    right: -200px;
+    width: 700px;
+    height: 700px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(198,40,40,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    top: -150px;
+    left: -150px;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(46,125,50,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  #hint {
+    position: fixed;
+    bottom: 86px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    color: rgba(255,255,255,0.12);
+    letter-spacing: 2px;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .s-text p,
+  .s-list ul li,
+  .s-fact .f-text,
+  .s-fact .f-label {
+    text-wrap: pretty;
+  }
+
+  @media (max-width: 900px) {
+    #counter, #hint { display: none; }
+
+    #slide-container {
+      justify-content: flex-start;
+      padding:
+        max(18px, env(safe-area-inset-top))
+        16px
+        calc(10px + env(safe-area-inset-bottom));
+    }
+
+    .slide {
+      max-width: 100%;
+      min-height: calc(100dvh - 86px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      justify-content: center;
+    }
+
+    .slide.active {
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding-right: 4px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.18) transparent;
+    }
+
+    .slide.active::-webkit-scrollbar { width: 6px; }
+    .slide.active::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.18);
+      border-radius: 999px;
+    }
+
+    .s-title { gap: 10px; }
+    .s-title .tag { font-size: 11px; letter-spacing: 3px; margin-bottom: 2px; }
+    .s-title h1 { font-size: clamp(34px, 9vw, 64px); letter-spacing: 2px; text-shadow: 0 0 36px rgba(198,40,40,0.25); }
+    .s-title .sub { font-size: clamp(14px, 3.8vw, 19px); margin-top: 8px; }
+
+    .s-section { gap: 10px; }
+    .s-section .sec-label { font-size: 10px; letter-spacing: 4px; }
+    .s-section h2 { font-size: clamp(28px, 8.2vw, 54px); letter-spacing: 1px; line-height: 1.02; }
+
+    .s-text { gap: 12px; }
+    .s-text .heading {
+      font-size: 14px;
+      letter-spacing: 2px;
+      border-left-width: 3px;
+      padding-left: 10px;
+      width: 100%;
+    }
+    .s-text p { font-size: clamp(18px, 4.8vw, 28px); line-height: 1.34; max-width: 100%; }
+    .slide.is-dense.s-text p { font-size: clamp(16px, 4.3vw, 24px); line-height: 1.24; }
+    .slide.is-very-dense.s-text p { font-size: clamp(15px, 3.9vw, 22px); line-height: 1.18; }
+
+    .s-fact { gap: 10px; }
+    .s-fact .f-label { font-size: clamp(14px, 3.5vw, 18px); max-width: 100%; }
+    .s-fact .f-num { font-size: clamp(54px, 16vw, 92px); }
+    .s-fact .f-text { font-size: clamp(16px, 4vw, 22px); max-width: 100%; line-height: 1.28; }
+
+    .s-list { gap: 10px; }
+    .s-list .heading { font-size: 14px; letter-spacing: 2px; }
+    .s-list ul { gap: 8px; }
+    .s-list ul li { gap: 10px; font-size: clamp(16px, 4.2vw, 24px); line-height: 1.28; }
+    .slide.is-dense-list.s-list ul li { font-size: clamp(15px, 3.9vw, 22px); line-height: 1.22; }
+    .slide.is-very-dense-list.s-list ul li { font-size: clamp(14px, 3.6vw, 20px); line-height: 1.18; }
+    .s-list ul li .num { width: 28px; height: 28px; min-width: 28px; font-size: 14px; margin-top: 2px; }
+
+    #nav { gap: 10px; padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); }
+    #nav button { font-size: 14px; letter-spacing: 1px; padding: 10px 14px; }
+    #nav button.primary { padding: 10px 18px; font-size: 15px; }
+    #nav-center { min-width: 0; }
+    #slide-label { font-size: 11px; letter-spacing: 1px; text-align: center; }
+    #dots { display: none; }
+
+    body::before { width: 360px; height: 360px; bottom: -120px; right: -120px; }
+    body::after { width: 260px; height: 260px; top: -80px; left: -80px; }
+  }
+
+  @media (max-width: 932px) and (orientation: landscape) {
+    #counter { display: block; top: 10px; right: 14px; font-size: 15px; }
+
+    #slide-container {
+      padding:
+        max(16px, env(safe-area-inset-top))
+        24px
+        calc(8px + env(safe-area-inset-bottom));
+    }
+
+    .slide { min-height: calc(100dvh - 72px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); }
+    .s-title h1 { font-size: clamp(38px, 7vw, 70px); }
+    .s-section h2 { font-size: clamp(30px, 5.2vw, 56px); }
+    .s-text p { font-size: clamp(16px, 3vw, 23px); line-height: 1.24; }
+    .slide.is-dense.s-text p { font-size: clamp(14px, 2.7vw, 20px); line-height: 1.16; }
+    .slide.is-very-dense.s-text p { font-size: clamp(13px, 2.45vw, 18px); line-height: 1.1; }
+    .s-fact .f-label { font-size: clamp(12px, 2.2vw, 16px); }
+    .s-fact .f-num { font-size: clamp(52px, 10vw, 88px); }
+    .s-fact .f-text { font-size: clamp(14px, 2.5vw, 18px); line-height: 1.2; }
+    .s-list ul li { font-size: clamp(14px, 2.7vw, 19px); }
+    .slide.is-dense-list.s-list ul li { font-size: clamp(13px, 2.45vw, 18px); line-height: 1.12; }
+    .slide.is-very-dense-list.s-list ul li { font-size: clamp(12px, 2.2vw, 16px); line-height: 1.08; }
+    #nav { padding: 8px 14px calc(8px + env(safe-area-inset-bottom)); }
+    #nav button { padding: 8px 16px; font-size: 13px; }
+    #nav button.primary { padding: 8px 20px; font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div id="counter"></div>
+
+<div id="slide-container">
+
+  <div class="slide s-title active" data-label="Titolo">
+    <div class="tag">I Consigli del Farmacista</div>
+    <h1><span>ARITMIE</span> CARDIACHE</h1>
+    <div class="sub">Versione estesa da circa 15 minuti</div>
+  </div>
+
+  <div class="slide s-section" data-label="Introduzione">
+    <div class="sec-label">Apertura</div>
+    <h2>PARLIAMO DI<br>ARITMIE CARDIACHE</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Introduzione — 1">
+    <div class="heading">INTRODUZIONE</div>
+    <p>Quando si parla di aritmie cardiache, molte persone pensano subito a un cuore che batte forte, in modo irregolare o troppo veloce. In realtà il termine aritmia comprende situazioni molto diverse tra loro: il cuore può battere troppo rapidamente, troppo lentamente oppure in modo irregolare.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Introduzione — 2">
+    <div class="heading">INTRODUZIONE</div>
+    <p>Alcune aritmie passano quasi inosservate, altre si manifestano con palpitazioni, affanno, capogiri o stanchezza. In certi casi il problema viene scoperto per caso durante un controllo, in altri richiede invece una valutazione rapida perché può essere il segnale di una condizione più importante.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Introduzione — 3">
+    <div class="heading">INTRODUZIONE</div>
+    <p>In questo episodio vedremo che cos'è un'aritmia, come nasce, quali sintomi può dare, quali sono le cause e i fattori scatenanti più comuni, come si arriva alla diagnosi, quali sono le principali strategie di trattamento e quando bisogna cercare assistenza senza aspettare.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Che cos'è un'aritmia">
+    <div class="sec-label">Sezione 1</div>
+    <h2>CHE COS'È<br>UN'ARITMIA</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'è — 1">
+    <div class="heading">CHE COS'È UN'ARITMIA</div>
+    <p>Un'aritmia è un problema del ritmo del cuore. Significa che il battito non segue il normale schema elettrico che permette alle camere cardiache di contrarsi in modo coordinato e di pompare il sangue in maniera efficace.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'è — 2">
+    <div class="heading">CHE COS'È UN'ARITMIA</div>
+    <p>Il cuore possiede un sistema elettrico interno. L'impulso parte in genere dal nodo del seno, passa attraverso gli atri, arriva al nodo atrioventricolare e poi si diffonde ai ventricoli. Se questo segnale nasce nel punto sbagliato, arriva troppo presto, si blocca o viaggia in modo anomalo, il ritmo può alterarsi.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'è — 3">
+    <div class="heading">CHE COS'È UN'ARITMIA</div>
+    <p>In modo molto semplice possiamo pensare a tre grandi possibilità: il cuore batte troppo veloce, e allora parliamo di tachicardia; batte troppo lentamente, e allora parliamo di bradicardia; oppure batte in modo irregolare, con pause, salti o impulsi disordinati.</p>
+  </div>
+
+  <div class="slide s-fact" data-label="Battiti normali a riposo">
+    <div class="f-label">Negli adulti, a riposo, il cuore batte in genere</div>
+    <div class="f-num">60-100</div>
+    <div class="f-text">volte al minuto, con eccezioni possibili per esempio negli sportivi allenati</div>
+  </div>
+
+  <div class="slide s-section" data-label="Sintomi">
+    <div class="sec-label">Sezione 2</div>
+    <h2>COME SI<br>MANIFESTA</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Sintomi — 1">
+    <div class="heading">COME SI MANIFESTA</div>
+    <p>Il sintomo che più spesso fa pensare a un'aritmia è la palpitazione, cioè la sensazione che il cuore stia correndo, saltando, battendo in modo irregolare, troppo forte o “in gola”. Questa sensazione può durare pochi secondi oppure minuti, e non sempre indica un problema grave, ma va interpretata bene.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Sintomi — 2">
+    <div class="heading">COME SI MANIFESTA</div>
+    <p>Altri sintomi possibili sono stanchezza insolita, fiato corto, senso di debolezza, vertigini, capogiri, ridotta tolleranza allo sforzo, dolore o fastidio al torace, sensazione di svenimento o vero e proprio svenimento. Se il ritmo è molto veloce o molto lento, il cuore può non pompare sangue in modo efficiente e i sintomi diventano più evidenti.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Sintomi — 3">
+    <div class="heading">COME SI MANIFESTA</div>
+    <p>Va ricordato però che alcune aritmie non danno nessun sintomo. È il caso, per esempio, di alcuni episodi di fibrillazione atriale scoperti durante un elettrocardiogramma o un controllo di routine. Questo è uno dei motivi per cui non bisogna ragionare solo in base a ciò che si sente.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Sintomi — 4">
+    <div class="heading">COME SI MANIFESTA</div>
+    <p>Ci sono poi segnali che non vanno banalizzati: palpitazioni associate a svenimento, dolore toracico, affanno importante, marcata debolezza o sintomi neurologici come difficoltà a parlare, perdita di forza o deviazione della bocca. In questi casi serve una valutazione urgente.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Sintomi — 5">
+    <div class="heading">COME SI MANIFESTA</div>
+    <p>È utile anche ricordare che la parola palpitazione descrive un sintomo, non una diagnosi. Una palpitazione può corrispondere a una vera aritmia, ma in altri casi può dipendere da stress, febbre, anemia, ipertiroidismo o semplicemente da una maggiore percezione del battito. La distinzione la fa la valutazione clinica.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Cause">
+    <div class="sec-label">Sezione 3</div>
+    <h2>CAUSE E<br>FATTORI SCATENANTI</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 1">
+    <div class="heading">CAUSE E FATTORI SCATENANTI</div>
+    <p>Le aritmie possono dipendere da problemi del cuore stesso oppure da fattori esterni che interferiscono con il ritmo. Tra le cause cardiache troviamo malattia coronarica, esiti di infarto, insufficienza cardiaca, cardiomiopatie, valvulopatie, malformazioni congenite e alterazioni del sistema di conduzione.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 2">
+    <div class="heading">CAUSE E FATTORI SCATENANTI</div>
+    <p>Tra le cause non strettamente cardiache vanno ricordati disturbi tiroidei, febbre, anemia, disidratazione, alterazioni di potassio o magnesio, apnee del sonno, malattie polmonari e alcune condizioni metaboliche. Per questo in presenza di un'aritmia il ragionamento clinico non si ferma al solo cuore.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 3">
+    <div class="heading">CAUSE E FATTORI SCATENANTI</div>
+    <p>Anche sostanze e abitudini possono avere un ruolo: alcol in eccesso, fumo, cocaina, anfetamine e altri stimolanti sono fattori noti. Anche la caffeina, alcune bevande energetiche o alcuni farmaci possono favorire palpitazioni in soggetti predisposti, ma non bisogna fare semplificazioni assolute perché la sensibilità individuale cambia molto.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 4">
+    <div class="heading">CAUSE E FATTORI SCATENANTI</div>
+    <p>Stress e ansia possono aumentare la percezione del battito o innescare episodi di palpitazioni, ma non è corretto attribuire automaticamente tutto all'ansia. Dire a una persona “è solo stress” prima di aver escluso altre cause è uno degli errori più comuni.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Diagnosi">
+    <div class="sec-label">Sezione 4</div>
+    <h2>COME SI ARRIVA<br>ALLA DIAGNOSI</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Diagnosi — 1">
+    <div class="heading">COME SI ARRIVA ALLA DIAGNOSI</div>
+    <p>L'esame di riferimento per iniziare a capire il problema è l'elettrocardiogramma, cioè l'ECG. Ma non sempre basta un singolo tracciato di pochi secondi, soprattutto se il disturbo compare a episodi e poi scompare.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Diagnosi — 2">
+    <div class="heading">COME SI ARRIVA ALLA DIAGNOSI</div>
+    <p>Per questo il medico può richiedere monitoraggi più lunghi, come Holter ECG o registratori di evento, oltre ad esami del sangue, valutazione della tiroide, ecocardiogramma e altri approfondimenti. La scelta dipende dai sintomi, dall'età, dai fattori di rischio e dal sospetto clinico.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Diagnosi — 3">
+    <div class="heading">COME SI ARRIVA ALLA DIAGNOSI</div>
+    <p>Capire con precisione che tipo di aritmia è presente cambia completamente il percorso. Non si gestisce allo stesso modo una extrasistolia occasionale, una fibrillazione atriale, una tachicardia sopraventricolare o una bradicardia importante. Ecco perché l'autodiagnosi con smartwatch, app o solo sensazioni non basta.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Diagnosi — 4">
+    <div class="heading">COME SI ARRIVA ALLA DIAGNOSI</div>
+    <p>I dispositivi indossabili possono essere utili per notare un ritmo irregolare o per registrare il momento dei sintomi, ma non sostituiscono la diagnosi medica. Possono aiutare a portare al medico un sospetto più concreto, non a decidere da soli se il problema sia innocuo oppure no.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Trattamento">
+    <div class="sec-label">Sezione 5</div>
+    <h2>TRATTAMENTO</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Trattamento — 1">
+    <div class="heading green">TRATTAMENTO</div>
+    <p>Non tutte le aritmie richiedono una terapia specifica. In alcuni casi basta osservare, correggere fattori scatenanti o trattare la condizione che le favorisce. In altri casi, invece, il trattamento è necessario per ridurre i sintomi, prevenire complicanze o proteggere il cuore.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Trattamento — 2">
+    <div class="heading green">TRATTAMENTO</div>
+    <p>Le strategie terapeutiche possono includere farmaci per controllare la frequenza, farmaci antiaritmici per il ritmo, cardioversione elettrica o farmacologica, procedure di ablazione tramite catetere, impianto di pacemaker nelle bradicardie significative o defibrillatori impiantabili nei casi a rischio di aritmie ventricolari pericolose.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Trattamento — 3">
+    <div class="heading green">TRATTAMENTO</div>
+    <p>Un punto molto importante riguarda la fibrillazione atriale. In questa aritmia, oltre al controllo del ritmo o della frequenza, in molti pazienti bisogna valutare il rischio di ictus e quindi l'eventuale necessità di una terapia anticoagulante. Non tutti devono assumerla, ma chi la deve prendere non deve sospenderla di propria iniziativa.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Trattamento — 4">
+    <div class="heading green">TRATTAMENTO</div>
+    <p>Anche per i farmaci antiaritmici vale una regola chiave: non si improvvisano. Sono medicinali utili, ma vanno scelti e monitorati dal medico perché possono avere interazioni, effetti collaterali e, in alcuni casi, perfino peggiorare il ritmo se usati nel paziente sbagliato o senza controllo.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Trattamento — 5">
+    <div class="heading green">TRATTAMENTO</div>
+    <p>In alcune persone il percorso terapeutico non punta tanto a “far sparire” per forza ogni episodio, ma a ridurre il rischio di complicanze e a far vivere meglio il paziente. Questo è importante da capire perché non sempre la terapia più aggressiva è la più adatta: dipende dal tipo di aritmia, dall'età, dalle malattie associate e dai sintomi.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Trattamento — 6">
+    <div class="heading green">TRATTAMENTO</div>
+    <p>Anche procedure come cardioversione, ablazione o impianto di pacemaker non vanno vissute come qualcosa di “estremo” in senso generico. In molti pazienti rappresentano semplicemente il modo più appropriato per correggere un circuito elettrico anomalo, prevenire recidive o proteggere da ritmi troppo lenti.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Gestione quotidiana">
+    <div class="sec-label">Sezione 6</div>
+    <h2>GESTIONE<br>QUOTIDIANA</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Quotidiano — 1">
+    <div class="heading">GESTIONE QUOTIDIANA</div>
+    <p>Nella vita di tutti i giorni può essere utile osservare se ci sono fattori che favoriscono i sintomi: poco sonno, alcol, disidratazione, bevande energetiche, sostanze stimolanti, sforzi particolari o assunzione di nuovi farmaci. Tenere traccia degli episodi può aiutare molto il medico a orientarsi.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Quotidiano — 2">
+    <div class="heading">GESTIONE QUOTIDIANA</div>
+    <p>Vale anche la pena controllare con prudenza l'uso di medicinali apparentemente banali. Alcuni decongestionanti nasali, alcuni integratori stimolanti o prodotti dimagranti possono non essere una buona idea in persone predisposte a palpitazioni o aritmie. Qui il ruolo del farmacista è molto importante.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Quotidiano — 3">
+    <div class="heading">GESTIONE QUOTIDIANA</div>
+    <p>Se è già stata prescritta una terapia cardiologica, non va modificata da soli. Saltare dosi, sospendere beta-bloccanti, antiaritmici o anticoagulanti per paura o per sentirsi meglio solo in quel momento può creare più problemi del beneficio che si pensa di ottenere.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Quotidiano — 4">
+    <div class="heading">GESTIONE QUOTIDIANA</div>
+    <p>Anche lo stile di vita conta. Trattare bene pressione alta, diabete, obesità e apnee del sonno, limitare l'alcol e smettere di fumare può ridurre il peso di diversi fattori che peggiorano le aritmie, soprattutto la fibrillazione atriale.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Quotidiano — 5">
+    <div class="heading">GESTIONE QUOTIDIANA</div>
+    <p>Quando gli episodi sono intermittenti, descriverli bene aiuta davvero: quanto durano, se il battito è rapido o irregolare, se compaiono a riposo o sotto sforzo, se ci sono svenimento, dolore toracico o affanno, e quali farmaci o sostanze erano stati assunti quel giorno. Sono dettagli che cambiano molto l'interpretazione del quadro.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Quando chiedere aiuto">
+    <div class="sec-label">Sezione 7</div>
+    <h2>QUANDO CHIEDERE<br>AIUTO</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Aiuto — 1">
+    <div class="heading">QUANDO CHIEDERE AIUTO</div>
+    <p>È opportuno parlare con il medico se le palpitazioni sono ricorrenti, se il battito sembra spesso irregolare, se compaiono episodi di tachicardia o bradicardia nuovi, se c'è affanno facile o se si avverte un peggioramento netto della tolleranza allo sforzo.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Aiuto — 2">
+    <div class="heading">QUANDO CHIEDERE AIUTO</div>
+    <p>Serve più attenzione se la persona ha già una malattia cardiaca, ha avuto un infarto, ha una storia familiare di morte cardiaca improvvisa o se compaiono episodi di svenimento. In questi contesti la soglia per approfondire deve essere più bassa.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Aiuto — 3">
+    <div class="heading">QUANDO CHIEDERE AIUTO</div>
+    <p>Bisogna invece cercare assistenza urgente se le palpitazioni si associano a dolore al torace, grave mancanza di respiro, svenimento, confusione, debolezza marcata o segni compatibili con ictus. Anche una tachicardia molto prolungata con malessere importante non va gestita aspettando a casa.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Il Decalogo">
+    <div class="sec-label">Sezione 8</div>
+    <h2>DECALOGO<br>DI PRUDENZA</h2>
+  </div>
+
+  <div class="slide s-list" data-label="Decalogo — Regole 1–5">
+    <div class="heading">DECALOGO PER UNA GESTIONE PIÙ PRUDENTE DELLE ARITMIE</div>
+    <ul>
+      <li><span class="num">1</span>Non attribuire automaticamente tutte le palpitazioni all'ansia.</li>
+      <li><span class="num">2</span>Non sospendere farmaci cardiologici senza indicazione medica.</li>
+      <li><span class="num">3</span>Se assumi anticoagulanti, segui con precisione le istruzioni ricevute.</li>
+      <li><span class="num">4</span>Segnala al medico nuovi farmaci, integratori o stimolanti che stai usando.</li>
+      <li><span class="num">5</span>Limita alcol, sostanze d'abuso e prodotti eccitanti se noti che peggiorano i sintomi.</li>
+    </ul>
+  </div>
+
+  <div class="slide s-list" data-label="Decalogo — Regole 6–10">
+    <div class="heading">DECALOGO PER UNA GESTIONE PIÙ PRUDENTE DELLE ARITMIE</div>
+    <ul>
+      <li><span class="num">6</span>Annota quando compaiono gli episodi, quanto durano e con quali sintomi si accompagnano.</li>
+      <li><span class="num">7</span>Controlla e cura bene pressione, tiroide e altre condizioni che possono favorire aritmie.</li>
+      <li><span class="num">8</span>Rivolgiti al medico se le palpitazioni sono ricorrenti o stanno cambiando.</li>
+      <li><span class="num">9</span>Chiama i soccorsi se compaiono dolore toracico, svenimento, grave affanno o segni neurologici.</li>
+      <li><span class="num">10</span>Ricorda che una diagnosi precisa cambia completamente la terapia, quindi non fare autodiagnosi.</li>
+    </ul>
+  </div>
+
+  <div class="slide s-section" data-label="Conclusione">
+    <div class="sec-label">Chiusura</div>
+    <h2>IN SINTESI</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Conclusione — 1">
+    <div class="heading">CONCLUSIONE</div>
+    <p>In sintesi, le aritmie cardiache non sono tutte uguali. Alcune sono benigne o transitorie, altre richiedono attenzione e un percorso diagnostico preciso. Il punto decisivo è distinguere una semplice percezione del battito da un disturbo del ritmo che può avere conseguenze più importanti.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Conclusione — 2">
+    <div class="heading">CONCLUSIONE</div>
+    <p>Le regole più utili da ricordare sono: non banalizzare i sintomi, non attribuire tutto allo stress senza verifiche, non modificare da soli le terapie e farsi valutare quando compaiono palpitazioni ricorrenti, svenimenti, affanno o dolore toracico.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Conclusione — 3">
+    <div class="heading">CONCLUSIONE</div>
+    <p>Il farmacista può aiutare a riconoscere farmaci o sostanze che possono peggiorare il quadro e a capire quando è il momento di passare rapidamente al medico. Ma quando i sintomi sono importanti o associati a segnali d'allarme, bisogna cercare assistenza urgente senza aspettare.</p>
+  </div>
+
+  <div class="slide s-title" data-label="Fine">
+    <div class="tag">I Consigli del Farmacista</div>
+    <h1><span>ARITMIE</span> CARDIACHE</h1>
+    <div class="sub">Fine episodio — versione estesa</div>
+  </div>
+
+</div>
+
+<div id="hint">← → frecce tastiera &nbsp;|&nbsp; SPAZIO avanza &nbsp;|&nbsp; click sui pallini per saltare</div>
+
+<div id="nav">
+  <button id="btn-prev" disabled onclick="prevSlide()">◀ INDIETRO</button>
+  <div id="nav-center">
+    <span id="slide-label"></span>
+    <div id="dots"></div>
+  </div>
+  <button id="btn-next" class="primary" onclick="nextSlide()">AVANTI ▶</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  slides.forEach(slide => {
+    const paragraphs = [...slide.querySelectorAll('p')];
+    const totalLength = paragraphs.reduce((sum, paragraph) => sum + paragraph.textContent.trim().length, 0);
+    if (totalLength > 220) slide.classList.add('is-dense');
+    if (totalLength > 320) slide.classList.add('is-very-dense');
+
+    const items = [...slide.querySelectorAll('li')];
+    if (items.length) {
+      const longest = items.reduce((max, item) => Math.max(max, item.textContent.trim().length), 0);
+      if (items.length >= 4 || longest > 90) slide.classList.add('is-dense-list');
+      if (items.length >= 5 || longest > 120) slide.classList.add('is-very-dense-list');
+    }
+  });
+
+  const dotsEl = document.getElementById('dots');
+  for (let i = 0; i < total; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.onclick = () => showSlide(i);
+    dotsEl.appendChild(d);
+  }
+
+  function showSlide(n) {
+    slides[current].classList.remove('active');
+    document.querySelectorAll('.dot')[current].classList.remove('active');
+    current = Math.max(0, Math.min(n, total - 1));
+    slides[current].classList.add('active');
+    document.querySelectorAll('.dot')[current].classList.add('active');
+    document.getElementById('counter').textContent = `${current + 1} / ${total}`;
+    document.getElementById('progress-bar').style.width = `${((current + 1) / total) * 100}%`;
+    document.getElementById('slide-label').textContent = slides[current].dataset.label || '';
+    document.getElementById('btn-prev').disabled = current === 0;
+    document.getElementById('btn-next').disabled = current === total - 1;
+  }
+
+  function nextSlide() {
+    if (current < total - 1) showSlide(current + 1);
+  }
+
+  function prevSlide() {
+    if (current > 0) showSlide(current - 1);
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') {
+      e.preventDefault();
+      nextSlide();
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      prevSlide();
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      showSlide(0);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      showSlide(total - 1);
+    }
+  });
+
+  showSlide(0);
+</script>
+</body>
+</html>
