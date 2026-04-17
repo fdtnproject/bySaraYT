@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ACNE – I Consigli del Farmacista | 15 Minuti</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lato:wght@300;400;700;900&display=swap');
+
+  :root {
+    --green: #1B5E20;
+    --green-light: #2E7D32;
+    --green-mid: #4CAF50;
+    --red: #B71C1C;
+    --red-light: #EF5350;
+    --rose: #880E4F;
+    --rose-light: #F06292;
+    --white: #FAFAFA;
+    --dark: #0f0408;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--dark);
+    font-family: 'Lato', sans-serif;
+    height: 100vh;
+    height: 100svh;
+    height: 100dvh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+    overscroll-behavior: none;
+  }
+
+  #progress-bar {
+    height: 5px;
+    background: linear-gradient(90deg, var(--rose-light), var(--green-mid));
+    width: 0%;
+    transition: width 0.35s ease;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+  }
+
+  #counter {
+    position: fixed;
+    top: 14px;
+    right: 24px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: rgba(255,255,255,0.28);
+    letter-spacing: 2px;
+    z-index: 100;
+  }
+
+  #slide-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 90px 20px;
+    overflow: hidden;
+  }
+
+  .slide {
+    display: none;
+    width: 100%;
+    max-width: 1500px;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .slide.active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .s-title { text-align: center; gap: 14px; }
+  .s-title .tag {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 7px;
+    color: var(--rose-light);
+    margin-bottom: 6px;
+  }
+  .s-title h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(70px, 13vw, 170px);
+    color: var(--white);
+    letter-spacing: 10px;
+    line-height: 1;
+    text-shadow: 0 0 80px rgba(240,98,146,0.35);
+  }
+  .s-title h1 span { color: var(--rose-light); }
+  .s-title .sub {
+    font-size: clamp(18px, 2.2vw, 30px);
+    color: rgba(255,255,255,0.45);
+    font-weight: 300;
+    margin-top: 12px;
+  }
+
+  .s-section { text-align: center; gap: 12px; }
+  .s-section .sec-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 8px;
+    color: var(--red-light);
+    margin-bottom: 4px;
+  }
+  .s-section h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(44px, 7vw, 100px);
+    color: var(--white);
+    letter-spacing: 4px;
+    line-height: 1.05;
+    text-align: center;
+  }
+
+  .s-text { gap: 20px; width: 100%; }
+  .s-text .heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(14px, 1.8vw, 26px);
+    color: var(--rose-light);
+    letter-spacing: 3px;
+    border-left: 5px solid var(--rose);
+    padding-left: 16px;
+    margin-bottom: 4px;
+  }
+  .s-text .heading.green {
+    color: var(--green-mid);
+    border-left-color: var(--green);
+  }
+  .s-text p {
+    font-size: clamp(24px, 3.1vw, 48px);
+    color: var(--white);
+    line-height: 1.55;
+    font-weight: 400;
+    max-width: 1450px;
+  }
+
+  .s-list { gap: 14px; width: 100%; }
+  .s-list .heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(14px, 1.8vw, 24px);
+    color: var(--green-mid);
+    letter-spacing: 3px;
+    margin-bottom: 8px;
+  }
+  .s-list ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+  .s-list ul li {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    font-size: clamp(20px, 2.6vw, 40px);
+    color: var(--white);
+    line-height: 1.4;
+  }
+  .s-list ul li .num {
+    background: var(--red);
+    color: white;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 4px;
+  }
+
+  #nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 36px 20px;
+    background: rgba(0,0,0,0.55);
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  #nav button {
+    background: none;
+    border: 2px solid rgba(255,255,255,0.18);
+    color: white;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 19px;
+    letter-spacing: 3px;
+    padding: 12px 36px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+  }
+  #nav button:hover {
+    background: rgba(255,255,255,0.07);
+    border-color: var(--rose-light);
+  }
+  #nav button:disabled { opacity: 0.15; cursor: default; }
+  #nav button.primary {
+    background: var(--green-light);
+    border-color: var(--green-light);
+    padding: 12px 56px;
+    font-size: 21px;
+  }
+  #nav button.primary:hover {
+    background: var(--green-mid);
+    border-color: var(--green-mid);
+  }
+
+  #nav-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    flex: 1;
+  }
+  #slide-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.22);
+  }
+  #dots {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 700px;
+  }
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    transition: background 0.3s;
+    cursor: pointer;
+  }
+  .dot.active { background: var(--rose-light); }
+  .dot:hover { background: rgba(240,98,146,0.5); }
+
+  body::before {
+    content: '';
+    position: fixed;
+    bottom: -200px;
+    right: -200px;
+    width: 700px;
+    height: 700px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(136,14,79,0.09) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    top: -150px;
+    left: -150px;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(46,125,50,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  #hint {
+    position: fixed;
+    bottom: 86px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    color: rgba(255,255,255,0.12);
+    letter-spacing: 2px;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .s-text p,
+  .s-list ul li {
+    text-wrap: pretty;
+  }
+
+  @media (max-width: 900px) {
+    #counter, #hint { display: none; }
+
+    #slide-container {
+      justify-content: flex-start;
+      padding:
+        max(18px, env(safe-area-inset-top))
+        16px
+        calc(10px + env(safe-area-inset-bottom));
+    }
+
+    .slide {
+      max-width: 100%;
+      min-height: calc(100dvh - 86px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      justify-content: center;
+    }
+
+    .slide.active {
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding-right: 4px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.18) transparent;
+    }
+
+    .slide.active::-webkit-scrollbar { width: 6px; }
+    .slide.active::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.18);
+      border-radius: 999px;
+    }
+
+    .s-title { gap: 10px; }
+    .s-title .tag { font-size: 11px; letter-spacing: 3px; margin-bottom: 2px; }
+    .s-title h1 { font-size: clamp(42px, 11vw, 72px); letter-spacing: 2px; text-shadow: 0 0 36px rgba(240,98,146,0.25); }
+    .s-title .sub { font-size: clamp(14px, 3.8vw, 19px); margin-top: 8px; }
+
+    .s-section { gap: 10px; }
+    .s-section .sec-label { font-size: 10px; letter-spacing: 4px; }
+    .s-section h2 { font-size: clamp(28px, 8.6vw, 54px); letter-spacing: 1px; line-height: 1.02; }
+
+    .s-text { gap: 12px; }
+    .s-text .heading {
+      font-size: 14px;
+      letter-spacing: 2px;
+      border-left-width: 3px;
+      padding-left: 10px;
+      width: 100%;
+    }
+    .s-text p { font-size: clamp(18px, 4.8vw, 28px); line-height: 1.34; max-width: 100%; }
+    .slide.is-dense.s-text p { font-size: clamp(16px, 4.3vw, 24px); line-height: 1.26; }
+    .slide.is-very-dense.s-text p { font-size: clamp(15px, 3.9vw, 22px); line-height: 1.2; }
+
+    .s-list { gap: 10px; }
+    .s-list .heading { font-size: 14px; letter-spacing: 2px; }
+    .s-list ul { gap: 8px; }
+    .s-list ul li { gap: 10px; font-size: clamp(16px, 4.2vw, 24px); line-height: 1.28; }
+    .slide.is-dense-list.s-list ul li { font-size: clamp(15px, 3.9vw, 22px); line-height: 1.22; }
+    .slide.is-very-dense-list.s-list ul li { font-size: clamp(14px, 3.6vw, 20px); line-height: 1.18; }
+    .s-list ul li .num { width: 28px; height: 28px; min-width: 28px; font-size: 14px; margin-top: 2px; }
+
+    #nav { gap: 10px; padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); }
+    #nav button { font-size: 14px; letter-spacing: 1px; padding: 10px 14px; }
+    #nav button.primary { padding: 10px 18px; font-size: 15px; }
+    #nav-center { min-width: 0; }
+    #slide-label { font-size: 11px; letter-spacing: 1px; text-align: center; }
+    #dots { display: none; }
+
+    body::before { width: 360px; height: 360px; bottom: -120px; right: -120px; }
+    body::after { width: 260px; height: 260px; top: -80px; left: -80px; }
+  }
+
+  @media (max-width: 932px) and (orientation: landscape) {
+    #counter { display: block; top: 10px; right: 14px; font-size: 15px; }
+
+    #slide-container {
+      padding:
+        max(16px, env(safe-area-inset-top))
+        24px
+        calc(8px + env(safe-area-inset-bottom));
+    }
+
+    .slide { min-height: calc(100dvh - 72px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); }
+    .s-title h1 { font-size: clamp(50px, 8.5vw, 88px); }
+    .s-section h2 { font-size: clamp(32px, 5.8vw, 58px); }
+    .s-text p { font-size: clamp(17px, 3.2vw, 24px); line-height: 1.28; }
+    .slide.is-dense.s-text p { font-size: clamp(15px, 2.9vw, 21px); line-height: 1.2; }
+    .slide.is-very-dense.s-text p { font-size: clamp(14px, 2.7vw, 19px); line-height: 1.14; }
+    .s-list ul li { font-size: clamp(15px, 3vw, 21px); }
+    .slide.is-dense-list.s-list ul li { font-size: clamp(14px, 2.7vw, 19px); line-height: 1.14; }
+    .slide.is-very-dense-list.s-list ul li { font-size: clamp(13px, 2.45vw, 18px); line-height: 1.1; }
+    #nav { padding: 8px 14px calc(8px + env(safe-area-inset-bottom)); }
+    #nav button { padding: 8px 16px; font-size: 13px; }
+    #nav button.primary { padding: 8px 20px; font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div id="counter"></div>
+
+<div id="slide-container">
+
+  <div class="slide s-title active" data-label="Titolo">
+    <div class="tag">I Consigli del Farmacista</div>
+    <h1><span>ACNE</span></h1>
+    <div class="sub">Versione estesa da circa 15 minuti</div>
+  </div>
+
+  <div class="slide s-section" data-label="Introduzione">
+    <div class="sec-label">Apertura</div>
+    <h2>PARLIAMO DI<br>ACNE</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Introduzione — 1">
+    <div class="heading">INTRODUZIONE</div>
+    <p>Quando si parla di acne, molte persone pensano a un problema estetico dell'adolescenza e basta. In realtà l'acne è una condizione infiammatoria molto comune della pelle, può comparire in forme diverse, può continuare anche in età adulta e, se trascurata o gestita male, può lasciare segni e cicatrici.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Introduzione — 2">
+    <div class="heading">INTRODUZIONE</div>
+    <p>L'acne non è solo una questione di brufoli. Entra in gioco il modo in cui funzionano i follicoli pilosebacei, il sebo, l'infiammazione, la predisposizione individuale, i cambiamenti ormonali e anche il modo in cui ci si prende cura della pelle ogni giorno.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Introduzione — 3">
+    <div class="heading">INTRODUZIONE</div>
+    <p>In questo episodio vedremo che cos'è l'acne, come si presenta, perché compare, quali miti conviene abbandonare, come impostare una routine più corretta, che ruolo hanno i prodotti e i farmaci e quando è il caso di passare dal medico o dal dermatologo.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Che cos'è l'acne">
+    <div class="sec-label">Sezione 1</div>
+    <h2>CHE COS'È<br>L'ACNE</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'è — 1">
+    <div class="heading">CHE COS'È L'ACNE</div>
+    <p>L'acne è una condizione della pelle che nasce quando i follicoli pilosebacei si ostruiscono e si infiammano. In pratica, dentro il poro si accumulano sebo e cellule morte, si forma il comedone e da lì possono comparire lesioni di intensità diversa.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'è — 2">
+    <div class="heading">CHE COS'È L'ACNE</div>
+    <p>Le forme più semplici comprendono punti neri e punti bianchi. Poi ci sono papule e pustole, cioè i classici brufoli rossi e infiammati. Nei casi più importanti possono comparire noduli e cisti, che sono più profondi, più dolorosi e hanno un rischio maggiore di lasciare cicatrici.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'è — 3">
+    <div class="heading">CHE COS'È L'ACNE</div>
+    <p>L'acne interessa soprattutto volto, spalle, dorso e torace, cioè le zone dove le ghiandole sebacee sono più attive. È molto comune negli adolescenti, ma può colpire anche gli adulti e in particolare può persistere o ricomparire nelle donne.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'è — 4">
+    <div class="heading">CHE COS'È L'ACNE</div>
+    <p>Non è una condizione pericolosa in senso generale, ma può pesare molto sulla qualità della vita. Oltre al fastidio fisico, molte persone vivono imbarazzo, stress, riduzione dell'autostima e paura che la pelle resti segnata.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Perché compare">
+    <div class="sec-label">Sezione 2</div>
+    <h2>PERCHÉ<br>COMPARE</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 1">
+    <div class="heading">PERCHÉ COMPARE</div>
+    <p>La comparsa dell'acne dipende da più fattori insieme. Uno dei più importanti è l'aumento della produzione di sebo, spesso favorito dagli ormoni, soprattutto durante la pubertà. Quando il sebo si combina con cellule morte e ostruisce il poro, si crea il terreno su cui l'acne si sviluppa.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 2">
+    <div class="heading">PERCHÉ COMPARE</div>
+    <p>Un altro pezzo del problema è l'infiammazione. Alcuni microrganismi che fanno parte della normale flora cutanea, come Cutibacterium acnes, possono contribuire al processo infiammatorio, ma non bisogna ridurre tutto alla vecchia idea che l'acne sia semplicemente un'infezione da batteri.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 3">
+    <div class="heading">PERCHÉ COMPARE</div>
+    <p>Conta anche la predisposizione familiare. Se in famiglia acne e pelle molto seborroica sono frequenti, il rischio può essere più alto. Inoltre alcuni fattori pratici possono peggiorare il quadro: cosmetici troppo grassi, prodotti per capelli che finiscono sul viso, sfregamento continuo, sudorazione, maschere, casco o cappelli stretti.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 4">
+    <div class="heading">PERCHÉ COMPARE</div>
+    <p>Alcuni farmaci possono favorire o peggiorare l'acne, così come alcune situazioni ormonali. Per questo, quando l'acne compare all'improvviso in modo importante, cambia molto o si accompagna ad altri segnali, non bisogna ragionare solo in termini di crema o detergente.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Miti da sfatare">
+    <div class="sec-label">Sezione 3</div>
+    <h2>MITI DA<br>SFATARE</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Miti — 1">
+    <div class="heading">MITI DA SFATARE</div>
+    <p>Uno dei miti più diffusi è che l'acne dipenda dalla pelle sporca. Non è così. Lavarsi troppo o con prodotti aggressivi non “asciuga” il problema: spesso irrita di più la cute, altera la barriera cutanea e può far peggiorare rossore e sensibilità.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Miti — 2">
+    <div class="heading">MITI DA SFATARE</div>
+    <p>Un altro errore classico è strofinare la pelle con scrub forti, spazzoline o detergenti troppo sgrassanti. La pelle acneica va pulita, sì, ma con delicatezza. L'obiettivo non è grattare via il sebo, ma ridurre irritazione e accumulo senza traumatizzare la cute.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Miti — 3">
+    <div class="heading">MITI DA SFATARE</div>
+    <p>Anche sul cibo bisogna evitare semplificazioni. Non è corretto dire che cioccolato o cibi grassi causano direttamente l'acne in tutti. Però in alcune persone un'alimentazione molto squilibrata, soprattutto ricca di zuccheri ad alto indice glicemico, può peggiorare un quadro già predisposto.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Miti — 4">
+    <div class="heading">MITI DA SFATARE</div>
+    <p>Infine, stress e acne si influenzano a vicenda. Lo stress non è l'unica causa, ma può peggiorare l'infiammazione e rendere più frequente il gesto di toccare o schiacciare le lesioni. E quando la pelle peggiora, lo stress spesso aumenta ancora.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Routine">
+    <div class="sec-label">Sezione 4</div>
+    <h2>COME PRENDERSI<br>CURA DELLA PELLE</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Routine — 1">
+    <div class="heading">COME PRENDERSI CURA DELLA PELLE</div>
+    <p>La routine di base deve essere semplice e regolare. In genere conviene detergere il viso con un prodotto delicato, non abrasivo, fino a due volte al giorno e dopo aver sudato molto. Lavaggi continui durante il giorno, invece, tendono a irritare e non aiutano davvero.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Routine — 2">
+    <div class="heading">COME PRENDERSI CURA DELLA PELLE</div>
+    <p>Meglio evitare detergenti troppo aggressivi, scrub meccanici, spugne ruvide e sfregamenti energici. La detersione deve essere fatta con le dita, con movimenti delicati, e poi la pelle va asciugata tamponando, non strofinando.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Routine — 3">
+    <div class="heading">COME PRENDERSI CURA DELLA PELLE</div>
+    <p>Il trucco non è vietato, ma conviene scegliere prodotti non comedogenici e togliere sempre il makeup a fine giornata. Lo stesso vale per creme molto pesanti o oli non adatti al viso: non tutto ciò che “nutre” la pelle aiuta davvero quando c'è tendenza a comedoni e brufoli.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Routine — 4">
+    <div class="heading">COME PRENDERSI CURA DELLA PELLE</div>
+    <p>Anche i capelli hanno il loro peso, soprattutto se sono molto oleosi o se prodotti per lo styling restano a contatto con la fronte. E poi c'è una regola fondamentale: non spremere, non grattare, non continuare a toccare i brufoli. È uno dei modi più rapidi per aumentare infiammazione, macchie e cicatrici.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Routine — 5">
+    <div class="heading">COME PRENDERSI CURA DELLA PELLE</div>
+    <p>Quando si usano trattamenti antiacne che seccano o irritano, può essere utile associare una crema idratante leggera e non comedogenica. Non è una contraddizione: una pelle troppo irritata tollera peggio le cure e porta più facilmente la persona a sospendere tutto prima del tempo.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Prodotti e farmaci">
+    <div class="sec-label">Sezione 5</div>
+    <h2>PRODOTTI<br>E FARMACI</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Farmaci — 1">
+    <div class="heading green">PRODOTTI E FARMACI</div>
+    <p>Se l'acne è lieve, con pochi punti neri, punti bianchi e qualche lesione infiammata, il farmacista può orientare verso prodotti da banco adatti. Uno dei trattamenti più usati è il perossido di benzoile, che ha azione antibatterica superficiale e antinfiammatoria e può aiutare anche a ridurre comedoni e lesioni lievi.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Farmaci — 2">
+    <div class="heading green">PRODOTTI E FARMACI</div>
+    <p>In alcuni casi possono essere utili anche prodotti con acido salicilico o altri attivi cheratolitici, che aiutano a liberare i pori. A seconda del Paese e della disponibilità locale, esistono anche retinoidi topici o prodotti retinoid-like che possono avere un ruolo, ma vanno introdotti con criterio perché possono irritare nelle prime settimane.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Farmaci — 3">
+    <div class="heading green">PRODOTTI E FARMACI</div>
+    <p>Una cosa importante da spiegare bene è che i trattamenti per l'acne non funzionano in tre giorni. Molte terapie topiche richiedono diverse settimane prima di dare un miglioramento chiaro, e spesso all'inizio possono causare rossore, secchezza o una fase di apparente peggioramento. Serve costanza, non cambi continui di prodotto.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Farmaci — 4">
+    <div class="heading green">PRODOTTI E FARMACI</div>
+    <p>Va ricordato anche che alcuni trattamenti rendono la pelle più sensibile al sole. Per questo, soprattutto se si usano esfolianti, retinoidi o prodotti irritanti, conviene associare una protezione solare adeguata e non comedogenica. Curare l'acne e contemporaneamente favorire macchie post-infiammatorie per cattiva fotoprotezione è un errore frequente.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Farmaci — 5">
+    <div class="heading green">PRODOTTI E FARMACI</div>
+    <p>Quando l'acne è moderata o severa, o quando lascia cicatrici o colpisce anche torace e dorso in modo importante, entrano in gioco trattamenti prescritti dal medico: retinoidi topici, acido azelaico, combinazioni con antibiotici topici o, in alcuni casi, antibiotici per bocca per un periodo limitato. Quindi no, non è corretto dire che oggi gli antibiotici non abbiano mai più alcun ruolo: il punto è che non vanno usati a caso e non sono la risposta automatica per tutti.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Farmaci — 6">
+    <div class="heading green">PRODOTTI E FARMACI</div>
+    <p>Nelle donne selezionate possono avere un ruolo anche terapie ormonali o contraccettivi combinati, ma questa è una scelta medica, non una scorciatoia valida per chiunque. Allo stesso modo, i farmaci più forti come l'isotretinoina non sono trattamenti da improvvisare: richiedono supervisione specialistica, controlli e attenzione a gravidanza, effetti collaterali e interazioni.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Farmaci — 7">
+    <div class="heading green">PRODOTTI E FARMACI</div>
+    <p>Un altro punto pratico è distinguere tra acne lieve, che spesso si può iniziare a gestire con una buona routine e prodotti da banco, e acne che sta già uscendo da quel perimetro. Quando una persona continua a provare detergenti, sieri e spot treatment senza una logica chiara, spesso finisce solo per irritare la pelle e perdere mesi utili.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Quando serve il medico">
+    <div class="sec-label">Sezione 6</div>
+    <h2>QUANDO SERVE<br>IL MEDICO</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Medico — 1">
+    <div class="heading">QUANDO SERVE IL MEDICO O IL DERMATOLOGO</div>
+    <p>È bene sentire il medico se l'acne è diffusa, profonda, dolorosa, se compaiono noduli o cisti, se stanno comparendo cicatrici oppure se dopo diverse settimane di trattamento corretto la situazione non migliora. Anche il coinvolgimento importante di schiena e torace spesso richiede una gestione più strutturata.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Medico — 2">
+    <div class="heading">QUANDO SERVE IL MEDICO O IL DERMATOLOGO</div>
+    <p>Serve attenzione anche quando l'acne ha un forte impatto psicologico. Se la persona evita uscite, trucco, sport, relazioni o vive il problema con molta sofferenza, non bisogna aspettare troppo nel chiedere un supporto più efficace. Curare bene l'acne significa anche prevenire le conseguenze emotive.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Medico — 3">
+    <div class="heading">QUANDO SERVE IL MEDICO O IL DERMATOLOGO</div>
+    <p>Inoltre, se l'acne è associata a ciclo molto irregolare, aumento della peluria, caduta dei capelli o altri segni che fanno pensare a un quadro ormonale da valutare, il medico può decidere di approfondire. E in gravidanza o allattamento non bisogna iniziare prodotti antiacne attivi senza prima chiedere consiglio.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Medico — 4">
+    <div class="heading">QUANDO SERVE IL MEDICO O IL DERMATOLOGO</div>
+    <p>Anche una acne dell'adulto che compare tardi o si concentra molto su mandibola e mento merita attenzione, soprattutto se continua a recidivare. Non perché sia automaticamente qualcosa di grave, ma perché spesso richiede un ragionamento meno improvvisato e una terapia più personalizzata.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Cicatrici">
+    <div class="sec-label">Sezione 7</div>
+    <h2>CICATRICI<br>E SEGNI</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Cicatrici — 1">
+    <div class="heading">CICATRICI E SEGNI</div>
+    <p>Uno dei motivi per cui l'acne non va sottovalutata è il rischio di cicatrici. Più l'infiammazione è profonda e prolungata, più aumenta la probabilità che restino segni permanenti o macchie post-infiammatorie. Prima si imposta una strategia corretta, maggiore è la possibilità di ridurre questo rischio.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cicatrici — 2">
+    <div class="heading">CICATRICI E SEGNI</div>
+    <p>Schiacciare le lesioni, grattarle o insistere continuamente davanti allo specchio peggiora quasi sempre il risultato finale. È comprensibile farlo per nervosismo o frustrazione, ma dal punto di vista della pelle è una cattiva idea.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Il Decalogo">
+    <div class="sec-label">Sezione 8</div>
+    <h2>DECALOGO<br>ANTI ERRORI</h2>
+  </div>
+
+  <div class="slide s-list" data-label="Decalogo — Regole 1–5">
+    <div class="heading">DECALOGO PER UNA GESTIONE PIÙ CORRETTA DELL'ACNE</div>
+    <ul>
+      <li><span class="num">1</span>Detergi la pelle con delicatezza, senza scrub aggressivi e senza lavaggi continui.</li>
+      <li><span class="num">2</span>Non schiacciare punti neri e brufoli.</li>
+      <li><span class="num">3</span>Scegli prodotti non comedogenici quando possibile.</li>
+      <li><span class="num">4</span>Rimuovi sempre il trucco a fine giornata.</li>
+      <li><span class="num">5</span>Non cambiare trattamento ogni pochi giorni per impazienza.</li>
+    </ul>
+  </div>
+
+  <div class="slide s-list" data-label="Decalogo — Regole 6–10">
+    <div class="heading">DECALOGO PER UNA GESTIONE PIÙ CORRETTA DELL'ACNE</div>
+    <ul>
+      <li><span class="num">6</span>Ricorda che molte terapie hanno bisogno di settimane per funzionare.</li>
+      <li><span class="num">7</span>Se un prodotto irrita troppo, non insistere alla cieca: chiedi consiglio.</li>
+      <li><span class="num">8</span>Proteggi la pelle dal sole, soprattutto se usi trattamenti che la rendono più sensibile.</li>
+      <li><span class="num">9</span>Fatti valutare se compaiono noduli, cicatrici o un'acne molto estesa.</li>
+      <li><span class="num">10</span>Non vivere l'acne come un problema banale se sta pesando molto sulla tua qualità di vita.</li>
+    </ul>
+  </div>
+
+  <div class="slide s-section" data-label="Conclusione">
+    <div class="sec-label">Chiusura</div>
+    <h2>IN SINTESI</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Conclusione — 1">
+    <div class="heading">CONCLUSIONE</div>
+    <p>In sintesi, l'acne è una condizione infiammatoria molto comune e molto più complessa del semplice “brufolo”. Conta la predisposizione, contano gli ormoni, conta il modo in cui si cura la pelle e conta anche quanto presto si interviene quando il quadro sta peggiorando.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Conclusione — 2">
+    <div class="heading">CONCLUSIONE</div>
+    <p>Le regole più utili da ricordare sono: detergere in modo delicato, evitare di schiacciare le lesioni, non fidarsi dei rimedi aggressivi o delle promesse lampo, scegliere prodotti sensati e dare il tempo necessario ai trattamenti per funzionare.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Conclusione — 3">
+    <div class="heading">CONCLUSIONE</div>
+    <p>Il farmacista può aiutare molto a orientare la scelta dei prodotti per le forme lievi e a riconoscere quando è il momento di passare al medico o al dermatologo. E quando ci sono noduli, cicatrici, estensione importante o forte impatto emotivo, è meglio non aspettare.</p>
+  </div>
+
+  <div class="slide s-title" data-label="Fine">
+    <div class="tag">I Consigli del Farmacista</div>
+    <h1><span>ACNE</span></h1>
+    <div class="sub">Fine episodio — versione estesa</div>
+  </div>
+
+</div>
+
+<div id="hint">← → frecce tastiera &nbsp;|&nbsp; SPAZIO avanza &nbsp;|&nbsp; click sui pallini per saltare</div>
+
+<div id="nav">
+  <button id="btn-prev" disabled onclick="prevSlide()">◀ INDIETRO</button>
+  <div id="nav-center">
+    <span id="slide-label"></span>
+    <div id="dots"></div>
+  </div>
+  <button id="btn-next" class="primary" onclick="nextSlide()">AVANTI ▶</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  slides.forEach(slide => {
+    const paragraphs = [...slide.querySelectorAll('p')];
+    const totalLength = paragraphs.reduce((sum, paragraph) => sum + paragraph.textContent.trim().length, 0);
+    if (totalLength > 220) slide.classList.add('is-dense');
+    if (totalLength > 320) slide.classList.add('is-very-dense');
+
+    const items = [...slide.querySelectorAll('li')];
+    if (items.length) {
+      const longest = items.reduce((max, item) => Math.max(max, item.textContent.trim().length), 0);
+      if (items.length >= 4 || longest > 90) slide.classList.add('is-dense-list');
+      if (items.length >= 5 || longest > 120) slide.classList.add('is-very-dense-list');
+    }
+  });
+
+  const dotsEl = document.getElementById('dots');
+  for (let i = 0; i < total; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.onclick = () => showSlide(i);
+    dotsEl.appendChild(d);
+  }
+
+  function showSlide(n) {
+    slides[current].classList.remove('active');
+    document.querySelectorAll('.dot')[current].classList.remove('active');
+    current = Math.max(0, Math.min(n, total - 1));
+    slides[current].classList.add('active');
+    document.querySelectorAll('.dot')[current].classList.add('active');
+    document.getElementById('counter').textContent = `${current + 1} / ${total}`;
+    document.getElementById('progress-bar').style.width = `${((current + 1) / total) * 100}%`;
+    document.getElementById('slide-label').textContent = slides[current].dataset.label || '';
+    document.getElementById('btn-prev').disabled = current === 0;
+    document.getElementById('btn-next').disabled = current === total - 1;
+  }
+
+  function nextSlide() {
+    if (current < total - 1) showSlide(current + 1);
+  }
+
+  function prevSlide() {
+    if (current > 0) showSlide(current - 1);
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') {
+      e.preventDefault();
+      nextSlide();
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      prevSlide();
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      showSlide(0);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      showSlide(total - 1);
+    }
+  });
+
+  showSlide(0);
+</script>
+</body>
+</html>

@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ACNE – I Consigli del Farmacista</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lato:wght@300;400;700;900&display=swap');
+
+  :root {
+    --green: #1B5E20;
+    --green-light: #2E7D32;
+    --green-mid: #4CAF50;
+    --red: #B71C1C;
+    --red-light: #EF5350;
+    --rose: #880E4F;
+    --rose-light: #F06292;
+    --white: #FAFAFA;
+    --dark: #0f0408;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--dark);
+    font-family: 'Lato', sans-serif;
+    height: 100vh;
+    height: 100svh;
+    height: 100dvh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+    overscroll-behavior: none;
+  }
+
+  #progress-bar {
+    height: 5px;
+    background: linear-gradient(90deg, var(--rose-light), var(--green-mid));
+    width: 0%;
+    transition: width 0.35s ease;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+  }
+
+  #counter {
+    position: fixed;
+    top: 14px;
+    right: 24px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: rgba(255,255,255,0.28);
+    letter-spacing: 2px;
+    z-index: 100;
+  }
+
+  #slide-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 90px 20px;
+    overflow: hidden;
+  }
+
+  .slide {
+    display: none;
+    width: 100%;
+    max-width: 1500px;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .slide.active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .s-title { text-align: center; gap: 14px; }
+  .s-title .tag {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 7px;
+    color: var(--rose-light);
+    margin-bottom: 6px;
+  }
+  .s-title h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(70px, 13vw, 170px);
+    color: var(--white);
+    letter-spacing: 10px;
+    line-height: 1;
+    text-shadow: 0 0 80px rgba(240,98,146,0.35);
+  }
+  .s-title h1 span { color: var(--rose-light); }
+  .s-title .sub {
+    font-size: clamp(18px, 2.2vw, 30px);
+    color: rgba(255,255,255,0.45);
+    font-weight: 300;
+    margin-top: 12px;
+  }
+
+  .s-section { text-align: center; gap: 12px; }
+  .s-section .sec-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 8px;
+    color: var(--red-light);
+    margin-bottom: 4px;
+  }
+  .s-section h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(44px, 7vw, 100px);
+    color: var(--white);
+    letter-spacing: 4px;
+    line-height: 1.05;
+    text-align: center;
+  }
+
+  .s-text { gap: 20px; width: 100%; }
+  .s-text .heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(14px, 1.8vw, 26px);
+    color: var(--rose-light);
+    letter-spacing: 3px;
+    border-left: 5px solid var(--rose);
+    padding-left: 16px;
+    margin-bottom: 4px;
+  }
+  .s-text .heading.green {
+    color: var(--green-mid);
+    border-left-color: var(--green);
+  }
+  .s-text p {
+    font-size: clamp(24px, 3.1vw, 48px);
+    color: var(--white);
+    line-height: 1.55;
+    font-weight: 400;
+    max-width: 1450px;
+  }
+
+  .s-list, .s-rules { gap: 14px; width: 100%; }
+  .s-list .heading, .s-rules .heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(14px, 1.8vw, 24px);
+    letter-spacing: 3px;
+    margin-bottom: 8px;
+  }
+  .s-list .heading { color: var(--green-mid); }
+  .s-rules .heading {
+    color: var(--rose-light);
+    border-left: 5px solid var(--rose);
+    padding-left: 16px;
+    margin-bottom: 10px;
+  }
+  .s-list ul, .s-rules ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+  .s-list ul li {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    font-size: clamp(20px, 2.6vw, 40px);
+    color: var(--white);
+    line-height: 1.4;
+  }
+  .s-rules ul li {
+    font-size: clamp(24px, 3vw, 46px);
+    color: var(--white);
+    line-height: 1.45;
+    border-left: 3px solid rgba(240,98,146,0.3);
+    padding-left: 16px;
+  }
+  .s-list ul li .num {
+    background: var(--red);
+    color: white;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 4px;
+  }
+
+  #nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 36px 20px;
+    background: rgba(0,0,0,0.55);
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  #nav button {
+    background: none;
+    border: 2px solid rgba(255,255,255,0.18);
+    color: white;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 19px;
+    letter-spacing: 3px;
+    padding: 12px 36px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+  }
+  #nav button:hover {
+    background: rgba(255,255,255,0.07);
+    border-color: var(--rose-light);
+  }
+  #nav button:disabled { opacity: 0.15; cursor: default; }
+  #nav button.primary {
+    background: var(--green-light);
+    border-color: var(--green-light);
+    padding: 12px 56px;
+    font-size: 21px;
+  }
+  #nav button.primary:hover {
+    background: var(--green-mid);
+    border-color: var(--green-mid);
+  }
+
+  #nav-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    flex: 1;
+  }
+  #slide-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.22);
+  }
+  #dots {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 700px;
+  }
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    transition: background 0.3s;
+    cursor: pointer;
+  }
+  .dot.active { background: var(--rose-light); }
+  .dot:hover { background: rgba(240,98,146,0.5); }
+
+  body::before {
+    content: '';
+    position: fixed;
+    bottom: -200px;
+    right: -200px;
+    width: 700px;
+    height: 700px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(136,14,79,0.09) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    top: -150px;
+    left: -150px;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(46,125,50,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  #hint {
+    position: fixed;
+    bottom: 86px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    color: rgba(255,255,255,0.12);
+    letter-spacing: 2px;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .s-text p,
+  .s-list ul li,
+  .s-rules ul li {
+    text-wrap: pretty;
+  }
+
+  @media (max-width: 900px) {
+    #counter, #hint { display: none; }
+
+    #slide-container {
+      justify-content: flex-start;
+      padding:
+        max(18px, env(safe-area-inset-top))
+        16px
+        calc(10px + env(safe-area-inset-bottom));
+    }
+
+    .slide {
+      max-width: 100%;
+      min-height: calc(100dvh - 86px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      justify-content: center;
+    }
+
+    .slide.active {
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding-right: 4px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.18) transparent;
+    }
+
+    .slide.active::-webkit-scrollbar { width: 6px; }
+    .slide.active::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.18);
+      border-radius: 999px;
+    }
+
+    .s-title { gap: 10px; }
+    .s-title .tag { font-size: 11px; letter-spacing: 3px; margin-bottom: 2px; }
+    .s-title h1 { font-size: clamp(42px, 11vw, 72px); letter-spacing: 2px; text-shadow: 0 0 36px rgba(240,98,146,0.25); }
+    .s-title .sub { font-size: clamp(14px, 3.8vw, 19px); margin-top: 8px; }
+
+    .s-section { gap: 10px; }
+    .s-section .sec-label { font-size: 10px; letter-spacing: 4px; }
+    .s-section h2 { font-size: clamp(28px, 8.6vw, 54px); letter-spacing: 1px; line-height: 1.02; }
+
+    .s-text { gap: 12px; }
+    .s-text .heading,
+    .s-rules .heading {
+      font-size: 14px;
+      letter-spacing: 2px;
+      border-left-width: 3px;
+      padding-left: 10px;
+      width: 100%;
+    }
+    .s-text p { font-size: clamp(18px, 4.8vw, 28px); line-height: 1.34; max-width: 100%; }
+    .slide.is-dense.s-text p { font-size: clamp(16px, 4.3vw, 24px); line-height: 1.26; }
+    .slide.is-very-dense.s-text p { font-size: clamp(15px, 3.9vw, 22px); line-height: 1.2; }
+
+    .s-list, .s-rules { gap: 10px; }
+    .s-list .heading, .s-rules .heading { font-size: 14px; letter-spacing: 2px; }
+    .s-list ul, .s-rules ul { gap: 8px; }
+    .s-list ul li { gap: 10px; font-size: clamp(16px, 4.2vw, 24px); line-height: 1.28; }
+    .s-rules ul li { font-size: clamp(16px, 4.2vw, 24px); line-height: 1.28; padding-left: 12px; }
+    .slide.is-dense-list.s-list ul li,
+    .slide.is-dense-list.s-rules ul li { font-size: clamp(15px, 3.9vw, 22px); line-height: 1.22; }
+    .slide.is-very-dense-list.s-list ul li,
+    .slide.is-very-dense-list.s-rules ul li { font-size: clamp(14px, 3.6vw, 20px); line-height: 1.18; }
+    .s-list ul li .num { width: 28px; height: 28px; min-width: 28px; font-size: 14px; margin-top: 2px; }
+
+    #nav { gap: 10px; padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); }
+    #nav button { font-size: 14px; letter-spacing: 1px; padding: 10px 14px; }
+    #nav button.primary { padding: 10px 18px; font-size: 15px; }
+    #nav-center { min-width: 0; }
+    #slide-label { font-size: 11px; letter-spacing: 1px; text-align: center; }
+    #dots { display: none; }
+
+    body::before { width: 360px; height: 360px; bottom: -120px; right: -120px; }
+    body::after { width: 260px; height: 260px; top: -80px; left: -80px; }
+  }
+
+  @media (max-width: 932px) and (orientation: landscape) {
+    #counter { display: block; top: 10px; right: 14px; font-size: 15px; }
+
+    #slide-container {
+      padding:
+        max(16px, env(safe-area-inset-top))
+        24px
+        calc(8px + env(safe-area-inset-bottom));
+    }
+
+    .slide { min-height: calc(100dvh - 72px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); }
+    .s-title h1 { font-size: clamp(50px, 8.5vw, 88px); }
+    .s-section h2 { font-size: clamp(32px, 5.8vw, 58px); }
+    .s-text p { font-size: clamp(17px, 3.2vw, 24px); line-height: 1.28; }
+    .slide.is-dense.s-text p { font-size: clamp(15px, 2.9vw, 21px); line-height: 1.2; }
+    .slide.is-very-dense.s-text p { font-size: clamp(14px, 2.7vw, 19px); line-height: 1.14; }
+    .s-list ul li, .s-rules ul li { font-size: clamp(15px, 3vw, 21px); }
+    .slide.is-dense-list.s-list ul li,
+    .slide.is-dense-list.s-rules ul li { font-size: clamp(14px, 2.7vw, 19px); line-height: 1.14; }
+    .slide.is-very-dense-list.s-list ul li,
+    .slide.is-very-dense-list.s-rules ul li { font-size: clamp(13px, 2.45vw, 18px); line-height: 1.1; }
+    #nav { padding: 8px 14px calc(8px + env(safe-area-inset-bottom)); }
+    #nav button { padding: 8px 16px; font-size: 13px; }
+    #nav button.primary { padding: 8px 20px; font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div id="counter"></div>
+
+<div id="slide-container">
+
+  <div class="slide s-title active" data-label="Titolo">
+    <div class="tag">I Consigli del Farmacista</div>
+    <h1><span>ACNE</span></h1>
+  </div>
+
+  <div class="slide s-section" data-label="Che cos'è l'acne?">
+    <div class="sec-label">Sezione 1</div>
+    <h2>CHE COS'È<br>L'ACNE?</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'è — 1">
+    <div class="heading">CHE COS'È L'ACNE?</div>
+    <p>L'acne è un'infiammazione dei follicoli pilosebacei che si mostra esteriormente sulla pelle attraverso i brufoli.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'è — 2">
+    <div class="heading">CHE COS'È L'ACNE?</div>
+    <p>La prima fase dell'acne prevede la formazione di comedoni (acne comedonica), comunemente chiamati "punti neri", che si trasformano nel tempo in papule o pustole, appunto i brufoli. Nelle condizioni più grave ci può essere anche la formazione di noduli o cisti (acne cistica).</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'è — 3">
+    <div class="heading">CHE COS'È L'ACNE?</div>
+    <p>L'acne colpisce soprattutto le aree di volto, collo, torace e dorso. Si distingue in acne giovanile o adolescenziale, che compare nella fase dello sviluppo ormonale e può guarire in questo periodo della vita o perdurare anche in età adulta.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cos'è — 4">
+    <div class="heading">CHE COS'È L'ACNE?</div>
+    <p>Acne tardiva (o tarda) che compare nelle persone adulte anche se queste non ne hanno sofferto in età giovanile. Non si tratta di un disturbo grave, ma se si presenta in forma severa può provocare la presenza di cicatrici permanenti che possono interferire sulla psiche di chi ne è colpito.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Cause">
+    <div class="sec-label">Sezione 2</div>
+    <h2>CAUSE</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 1: sebo e comedone">
+    <div class="heading">CAUSE</div>
+    <p>La comparsa degli ormoni nel periodo dell'adolescenza causa l'aumento di volume delle ghiandole sebacee e l'inizio della produzione del sebo. Il sebo è una secrezione oleosa, che serve a proteggere la cute dalle infezioni. In alcuni soggetti maggiormente predisposti, il sebo svolge un'azione irritante e induce la formazione del comedone o punto nero.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 2: follicolo e cicatrice">
+    <div class="heading">CAUSE</div>
+    <p>Il comedone è come un tappo, che impedisce lo scorrimento del sebo dalla ghiandola alla superficie della cute. I grassi che compongono il sebo, ristagnando, si degradano e diventano irritanti. Si sviluppano in eccesso i batteri. Infine, può avvenire una distruzione del follicolo con la formazione della relativa cicatrice.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 3: familiarità e stress">
+    <div class="heading">CAUSE</div>
+    <p>La causa più importante dell'insorgenza dell'acne è la familiarità, cioè una predisposizione specifica a sviluppare questo disturbo. Intervengono poi fattori esterni come l'igiene, l'inquinamento ambientale, disordini di alimentazione e, soprattutto, lo stress. Lo stress può far peggiorare l'acne ed il peggioramento dell'acne può provocare stress: si crea così un circolo vizioso.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 4: alimentazione">
+    <div class="heading">CAUSE</div>
+    <p>Al contrario di quanto si crede comunemente, alimenti molto grassi quali cioccolato, insaccati, formaggi, non creano l'acne. Tuttavia, un'alimentazione troppo calorica, soprattutto negli adolescenti, può far peggiorare un'acne già in atto, oltre a far aumentare il peso.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 5: lavaggi eccessivi">
+    <div class="heading">CAUSE</div>
+    <p>Un altro comportamento che si vede spesso ed è basato su un concetto sbagliato: il paziente con acne cerca di lavarsi con frequenza, spesso con molto sapone, nel tentativo di "asciugare" la cute seborroica e acneica; purtroppo, facendo questo aumenta la secrezione di sebo e l'irritazione, quindi peggiora l'acne. Quando si ha l'acne occorre lavarsi poco, non strofinare ed utilizzare poco sapone. Nei casi con molta infiammazione, poi, il sapone va sostituito con una crema da lavaggio.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 6: schiacciamento e estetista">
+    <div class="heading">CAUSE</div>
+    <p>Infine, lo schiacciamento dei punti neri o dei foruncoli provoca una diffusione dell'infiammazione, quindi aumenta la possibilità di formazione di cicatrici. Anche la pulizia del volto dall'estetista, che tenta di togliere i punti neri, è da evitare per gli stessi motivi.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 7: antibiotici">
+    <div class="heading">CAUSE</div>
+    <p>Un tempo si pensava che l'acne fosse una malattia causata da batteri presenti nel follicolo (teoria batterica), capaci di produrre acidi grassi dotati di attività infiammatoria. In realtà, studi più recenti hanno dimostrato che i batteri svolgono un ruolo secondario nell'acne e quindi il trattamento con antibiotici non è più indicato. Inoltre, gli antibiotici che si usavano per l'acne erano spesso poco tollerati dal fegato e reagivano con la luce del sole (fototossicità). La cura moderna dell'acne non prevede l'uso di antibiotici, nemmeno per applicazione locale.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cause — 8: pillola contraccettiva">
+    <div class="heading">CAUSE</div>
+    <p>Alle ragazze o alle donne che hanno l'acne viene spesso prescritta la pillola contraccettiva semplice, o con aggiunta di antiandrogeni. Questo comportamento terapeutico deriva dalla falsa premessa che l'acne sia causata da una disfunzione degli ormoni sessuali. In realtà, le adolescenti o le donne con acne non hanno affatto disfunzioni ormonali. L'impiego della pillola contraccettiva per la cura dell'acne, oltre a non produrre un significativo miglioramento, espone ai rischi dell'uso di estrogeni e antiandrogeni, fra i quali vi sono aumento di peso, comparsa di cellulite, ipertensione, alterazioni del fegato, pericolo di trombosi.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Farmaci">
+    <div class="sec-label">Sezione 3</div>
+    <h2>FARMACI</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Farmaci — 1">
+    <div class="heading green">FARMACI</div>
+    <p>Prima di intraprendere un percorso terapeutico basato sulla somministrazione di farmaci per la cura dell'acne, è bene tener presente alcune norme igienico-comportamentali, utili sia per prevenire l'acne, sia per velocizzarne la guarigione quando la "malattia" è in atto.</p>
+  </div>
+
+  <div class="slide s-rules" data-label="Farmaci — 2: regole igieniche">
+    <div class="heading green">NORME IGIENICO-COMPORTAMENTALI</div>
+    <ul>
+      <li>La pelle va sempre pulita delicatamente, con detergenti delicati e poco aggressivi</li>
+      <li>Evitare di detergere eccessivamente la pelle: un eccesso di pulizia, infatti, rimuove il sottile strato lipidico naturale che riveste la pelle, seccando la cute e rendendola più sensibile</li>
+      <li>Struccare sempre il viso dopo il trucco</li>
+      <li>In caso di acne, i capelli dovrebbero rimanere a contatto con il viso il meno possibile</li>
+      <li>Non strofinare o grattare i brufoli, per evitare lesioni cicatriziali anche permanenti. Non applicare creme oleose sul viso, soprattutto in presenza di acne.</li>
+    </ul>
+  </div>
+
+  <div class="slide s-section" data-label="Il Decalogo">
+    <div class="sec-label">Sezione 4</div>
+    <h2>IL DECALOGO<br>PER UN CORRETTO<br>USO DEI FARMACI</h2>
+  </div>
+
+  <div class="slide s-list" data-label="Decalogo — Regole 1–5">
+    <div class="heading">IL DECALOGO PER UN CORRETTO USO DEI FARMACI</div>
+    <ul>
+      <li><span class="num">1</span>Nell'usare il farmaco rispetta la posologia dose, tempo e modalità di somministrazione indicata dal medico.</li>
+      <li><span class="num">2</span>Non assumere più farmaci contemporaneamente senza il consiglio del medico o del farmacista.</li>
+      <li><span class="num">3</span>Non interrompere arbitrariamente una terapia.</li>
+      <li><span class="num">4</span>Controlla sempre la data di scadenza prima di utilizzare il farmaco.</li>
+      <li><span class="num">5</span>Ricorda che alcuni farmaci (colliri, sciroppi, gocce, spray), una volta aperti scadono prima della data indicata sulla confezione.</li>
+    </ul>
+  </div>
+
+  <div class="slide s-list" data-label="Decalogo — Regole 6–10">
+    <div class="heading">IL DECALOGO PER UN CORRETTO USO DEI FARMACI</div>
+    <ul>
+      <li><span class="num">6</span>Per dubbi chiedi consiglio al medico o al farmacista.</li>
+      <li><span class="num">7</span>Conserva integra la confezione senza gettare l'astuccio e il foglietto illustrativo.</li>
+      <li><span class="num">8</span>Riponi i farmaci in luogo fresco e asciutto; non in bagno, non in cucina, ma in luogo espressamente specificato.</li>
+      <li><span class="num">9</span>Tieni lontano i farmaci dalla portata dei bambini.</li>
+      <li><span class="num">10</span>Non gettare i farmaci nella spazzatura, ma negli appositi contenitori per i rifiuti differenziati collocati all'interno o in prossimità delle farmacie.</li>
+    </ul>
+  </div>
+
+  <div class="slide s-title" data-label="Fine">
+    <div class="tag">I Consigli del Farmacista</div>
+    <h1><span>ACNE</span></h1>
+    <div class="sub">Fine episodio</div>
+  </div>
+
+</div>
+
+<div id="hint">← → frecce tastiera &nbsp;|&nbsp; SPAZIO avanza &nbsp;|&nbsp; click sui pallini per saltare</div>
+
+<div id="nav">
+  <button id="btn-prev" disabled onclick="prevSlide()">◀ INDIETRO</button>
+  <div id="nav-center">
+    <span id="slide-label"></span>
+    <div id="dots"></div>
+  </div>
+  <button id="btn-next" class="primary" onclick="nextSlide()">AVANTI ▶</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  slides.forEach(slide => {
+    const paragraphs = [...slide.querySelectorAll('p')];
+    const totalLength = paragraphs.reduce((sum, paragraph) => sum + paragraph.textContent.trim().length, 0);
+    if (totalLength > 220) slide.classList.add('is-dense');
+    if (totalLength > 320) slide.classList.add('is-very-dense');
+
+    const items = [...slide.querySelectorAll('li')];
+    if (items.length) {
+      const longest = items.reduce((max, item) => Math.max(max, item.textContent.trim().length), 0);
+      if (items.length >= 4 || longest > 90) slide.classList.add('is-dense-list');
+      if (items.length >= 5 || longest > 120) slide.classList.add('is-very-dense-list');
+    }
+  });
+
+  const dotsEl = document.getElementById('dots');
+  for (let i = 0; i < total; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.onclick = () => showSlide(i);
+    dotsEl.appendChild(d);
+  }
+
+  function showSlide(n) {
+    slides[current].classList.remove('active');
+    document.querySelectorAll('.dot')[current].classList.remove('active');
+    current = Math.max(0, Math.min(n, total - 1));
+    slides[current].classList.add('active');
+    document.querySelectorAll('.dot')[current].classList.add('active');
+    document.getElementById('counter').textContent = `${current + 1} / ${total}`;
+    document.getElementById('progress-bar').style.width = `${((current + 1) / total) * 100}%`;
+    document.getElementById('slide-label').textContent = slides[current].dataset.label || '';
+    document.getElementById('btn-prev').disabled = current === 0;
+    document.getElementById('btn-next').disabled = current === total - 1;
+  }
+
+  function nextSlide() {
+    if (current < total - 1) showSlide(current + 1);
+  }
+
+  function prevSlide() {
+    if (current > 0) showSlide(current - 1);
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') {
+      e.preventDefault();
+      nextSlide();
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      prevSlide();
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      showSlide(0);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      showSlide(total - 1);
+    }
+  });
+
+  showSlide(0);
+</script>
+</body>
+</html>
