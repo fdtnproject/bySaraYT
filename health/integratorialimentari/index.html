@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>bySaraYT Health / Integratori Alimentari</title>
+  <style>
+    :root {
+      --bg: #09120d;
+      --panel: rgba(255, 255, 255, 0.06);
+      --panel-border: rgba(255, 255, 255, 0.1);
+      --text: #f7fbf8;
+      --muted: rgba(247, 251, 248, 0.72);
+      --green: #4caf50;
+      --green-dark: #2e7d32;
+      --red: #d84b4b;
+      --blue: #f4b95a;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top right, rgba(76, 175, 80, 0.18), transparent 30%),
+        radial-gradient(circle at bottom left, rgba(244, 185, 90, 0.14), transparent 28%),
+        var(--bg);
+    }
+
+    main {
+      width: min(1100px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 48px 0 64px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 12px;
+      padding: 8px 12px;
+      border: 1px solid rgba(76, 175, 80, 0.35);
+      border-radius: 999px;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #a5d6a7;
+    }
+
+    h1 {
+      margin: 0 0 14px;
+      font-size: clamp(40px, 8vw, 76px);
+      line-height: 0.95;
+    }
+
+    .lead {
+      max-width: 760px;
+      margin: 0 0 36px;
+      font-size: clamp(18px, 2.5vw, 24px);
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .card {
+      padding: 24px;
+      border: 1px solid var(--panel-border);
+      border-radius: 24px;
+      background: var(--panel);
+      backdrop-filter: blur(10px);
+    }
+
+    .card h2 {
+      margin: 0 0 10px;
+      font-size: 28px;
+    }
+
+    .card p {
+      margin: 0 0 18px;
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 12px 16px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 700;
+      color: var(--text);
+      background: var(--green-dark);
+    }
+
+    .button.alt {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+    }
+
+    .downloads {
+      padding: 24px;
+      border: 1px solid var(--panel-border);
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .downloads h2 {
+      margin: 0 0 12px;
+      font-size: 26px;
+    }
+
+    .downloads ul {
+      margin: 0;
+      padding-left: 18px;
+      line-height: 1.9;
+      color: var(--muted);
+    }
+
+    .downloads a, footer a {
+      color: #c8f7cb;
+    }
+
+    footer {
+      margin-top: 28px;
+      color: rgba(247, 251, 248, 0.58);
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <span class="eyebrow">bySaraYT / Health / Integratori Alimentari</span>
+    <h1>Integratori Alimentari</h1>
+    <p class="lead">
+      Pagina episodio con le versioni HTML disponibili e gli script scaricabili relativi al tema integratori alimentari.
+    </p>
+
+    <section class="grid">
+      <article class="card">
+        <h2>Versione Originale</h2>
+        <p>
+          Presentazione HTML basata sullo script iniziale, resa piu' prudente nei passaggi su efficacia, rischi e interazioni, e adattata per una lettura piu' stabile anche da iPhone verso TV.
+        </p>
+        <div class="actions">
+          <a class="button" href="./originale.html">Apri HTML</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <h2>Versione 15 Minuti</h2>
+        <p>
+          Presentazione HTML estesa con spiegazione semplice su cosa sono, quando servono, quando non servono, rischi, interazioni, qualita', sport, persone fragili e uso consapevole, costruita per un video intorno ai 15 minuti.
+        </p>
+        <div class="actions">
+          <a class="button" href="./15min.html">Apri HTML</a>
+          <a class="button alt" href="./scripts/IntegratoriAlimentari_Consigli_Farmacista_15min_source.txt">Apri testo</a>
+        </div>
+      </article>
+    </section>
+
+    <section class="downloads">
+      <h2>Script e sorgenti</h2>
+      <ul>
+        <li><a href="./scripts/IntegratoriAlimentari_Consigli_Farmacista.docx">Scarica script originale DOCX</a></li>
+        <li><a href="./scripts/IntegratoriAlimentari_Consigli_Farmacista_15min.docx">Scarica script esteso DOCX</a></li>
+        <li><a href="./scripts/IntegratoriAlimentari_Consigli_Farmacista_15min_source.txt">Apri script esteso TXT</a></li>
+      </ul>
+    </section>
+
+    <footer>
+      <a href="../">Torna alla playlist Health</a>
+    </footer>
+  </main>
+</body>
+</html>

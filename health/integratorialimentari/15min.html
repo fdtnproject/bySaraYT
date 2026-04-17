@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>INTEGRATORI ALIMENTARI – I Consigli del Farmacista | 15 Minuti</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lato:wght@300;400;700;900&display=swap');
+
+  :root {
+    --green: #1B5E20;
+    --green-light: #2E7D32;
+    --green-mid: #4CAF50;
+    --green-bright: #69F0AE;
+    --red: #B71C1C;
+    --red-light: #EF5350;
+    --white: #FAFAFA;
+    --dark: #030f04;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--dark);
+    font-family: 'Lato', sans-serif;
+    height: 100vh;
+    height: 100svh;
+    height: 100dvh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+    overscroll-behavior: none;
+  }
+
+  #progress-bar {
+    height: 5px;
+    background: linear-gradient(90deg, var(--green-bright), var(--green-mid));
+    width: 0%;
+    transition: width 0.35s ease;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+  }
+
+  #counter {
+    position: fixed;
+    top: 14px;
+    right: 24px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: rgba(255,255,255,0.28);
+    letter-spacing: 2px;
+    z-index: 100;
+  }
+
+  #slide-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 90px 20px;
+    overflow: hidden;
+  }
+
+  .slide {
+    display: none;
+    width: 100%;
+    max-width: 1500px;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .slide.active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .s-title { text-align: center; gap: 14px; }
+  .s-title .tag {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 7px;
+    color: var(--green-bright);
+    margin-bottom: 6px;
+  }
+  .s-title h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(44px, 7vw, 110px);
+    color: var(--white);
+    letter-spacing: 4px;
+    line-height: 1.05;
+    text-shadow: 0 0 80px rgba(105,240,174,0.3);
+    text-align: center;
+  }
+  .s-title h1 span { color: var(--green-bright); }
+  .s-title .sub {
+    font-size: clamp(18px, 2.2vw, 30px);
+    color: rgba(255,255,255,0.45);
+    font-weight: 300;
+    margin-top: 12px;
+  }
+
+  .s-section { text-align: center; gap: 12px; }
+  .s-section .sec-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 8px;
+    color: var(--green-bright);
+    margin-bottom: 4px;
+  }
+  .s-section h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 6.5vw, 95px);
+    color: var(--white);
+    letter-spacing: 3px;
+    line-height: 1.05;
+    text-align: center;
+  }
+
+  .s-text { gap: 20px; width: 100%; }
+  .s-text .heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(14px, 1.8vw, 26px);
+    color: var(--green-bright);
+    letter-spacing: 3px;
+    border-left: 5px solid var(--green-light);
+    padding-left: 16px;
+    margin-bottom: 4px;
+  }
+  .s-text p {
+    font-size: clamp(24px, 3.1vw, 48px);
+    color: var(--white);
+    line-height: 1.55;
+    font-weight: 400;
+    max-width: 1450px;
+  }
+
+  .s-fact { text-align: center; gap: 16px; }
+  .s-fact .f-label {
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: clamp(18px, 2vw, 28px);
+    color: rgba(255,255,255,0.55);
+    max-width: 950px;
+    line-height: 1.4;
+  }
+  .s-fact .f-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(80px, 14vw, 180px);
+    color: var(--green-bright);
+    line-height: 1;
+    text-shadow: 0 0 120px rgba(105,240,174,0.45);
+  }
+  .s-fact .f-text {
+    font-size: clamp(20px, 2.5vw, 38px);
+    color: var(--white);
+    font-weight: 300;
+    max-width: 950px;
+    line-height: 1.45;
+  }
+
+  .s-list { gap: 14px; width: 100%; }
+  .s-list .heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(14px, 1.8vw, 24px);
+    color: var(--green-bright);
+    letter-spacing: 3px;
+    margin-bottom: 8px;
+  }
+  .s-list ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+  .s-list ul li {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    font-size: clamp(20px, 2.6vw, 40px);
+    color: var(--white);
+    line-height: 1.4;
+  }
+  .s-list ul li .num {
+    background: var(--red);
+    color: white;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 4px;
+  }
+
+  #nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 36px 20px;
+    background: rgba(0,0,0,0.55);
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  #nav button {
+    background: none;
+    border: 2px solid rgba(255,255,255,0.18);
+    color: white;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 19px;
+    letter-spacing: 3px;
+    padding: 12px 36px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+  }
+  #nav button:hover {
+    background: rgba(255,255,255,0.07);
+    border-color: var(--green-bright);
+  }
+  #nav button:disabled { opacity: 0.15; cursor: default; }
+  #nav button.primary {
+    background: var(--green-light);
+    border-color: var(--green-light);
+    padding: 12px 56px;
+    font-size: 21px;
+  }
+  #nav button.primary:hover {
+    background: var(--green-mid);
+    border-color: var(--green-mid);
+  }
+
+  #nav-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    flex: 1;
+  }
+  #slide-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.22);
+  }
+  #dots {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 700px;
+  }
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    transition: background 0.3s;
+    cursor: pointer;
+  }
+  .dot.active { background: var(--green-bright); }
+  .dot:hover { background: rgba(105,240,174,0.5); }
+
+  body::before {
+    content: '';
+    position: fixed;
+    bottom: -200px;
+    right: -200px;
+    width: 700px;
+    height: 700px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(27,94,32,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    top: -150px;
+    left: -150px;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(105,240,174,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  #hint {
+    position: fixed;
+    bottom: 86px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    color: rgba(255,255,255,0.12);
+    letter-spacing: 2px;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .s-text p,
+  .s-list ul li,
+  .s-fact .f-text,
+  .s-fact .f-label {
+    text-wrap: pretty;
+  }
+
+  @media (max-width: 900px) {
+    #counter, #hint { display: none; }
+
+    #slide-container {
+      justify-content: flex-start;
+      padding:
+        max(18px, env(safe-area-inset-top))
+        16px
+        calc(10px + env(safe-area-inset-bottom));
+    }
+
+    .slide {
+      max-width: 100%;
+      min-height: calc(100dvh - 86px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      justify-content: center;
+    }
+
+    .slide.active {
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding-right: 4px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.18) transparent;
+    }
+
+    .slide.active::-webkit-scrollbar { width: 6px; }
+    .slide.active::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.18);
+      border-radius: 999px;
+    }
+
+    .s-title { gap: 10px; }
+    .s-title .tag { font-size: 11px; letter-spacing: 3px; margin-bottom: 2px; }
+    .s-title h1 { font-size: clamp(30px, 8vw, 58px); letter-spacing: 1px; text-shadow: 0 0 36px rgba(105,240,174,0.25); }
+    .s-title .sub { font-size: clamp(14px, 3.8vw, 19px); margin-top: 8px; }
+
+    .s-section { gap: 10px; }
+    .s-section .sec-label { font-size: 10px; letter-spacing: 4px; }
+    .s-section h2 { font-size: clamp(26px, 7.8vw, 50px); letter-spacing: 1px; line-height: 1.02; }
+
+    .s-text { gap: 12px; }
+    .s-text .heading {
+      font-size: 14px;
+      letter-spacing: 2px;
+      border-left-width: 3px;
+      padding-left: 10px;
+      width: 100%;
+    }
+    .s-text p { font-size: clamp(18px, 4.8vw, 28px); line-height: 1.34; max-width: 100%; }
+    .slide.is-dense.s-text p { font-size: clamp(16px, 4.3vw, 24px); line-height: 1.24; }
+    .slide.is-very-dense.s-text p { font-size: clamp(15px, 3.9vw, 22px); line-height: 1.18; }
+
+    .s-fact { gap: 10px; }
+    .s-fact .f-label { font-size: clamp(14px, 3.5vw, 18px); max-width: 100%; }
+    .s-fact .f-num { font-size: clamp(54px, 16vw, 92px); }
+    .s-fact .f-text { font-size: clamp(16px, 4vw, 22px); max-width: 100%; line-height: 1.28; }
+
+    .s-list { gap: 10px; }
+    .s-list .heading { font-size: 14px; letter-spacing: 2px; }
+    .s-list ul { gap: 8px; }
+    .s-list ul li { gap: 10px; font-size: clamp(16px, 4.2vw, 24px); line-height: 1.28; }
+    .slide.is-dense-list.s-list ul li { font-size: clamp(15px, 3.9vw, 22px); line-height: 1.22; }
+    .slide.is-very-dense-list.s-list ul li { font-size: clamp(14px, 3.6vw, 20px); line-height: 1.18; }
+    .s-list ul li .num { width: 28px; height: 28px; min-width: 28px; font-size: 14px; margin-top: 2px; }
+
+    #nav { gap: 10px; padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); }
+    #nav button { font-size: 14px; letter-spacing: 1px; padding: 10px 14px; }
+    #nav button.primary { padding: 10px 18px; font-size: 15px; }
+    #nav-center { min-width: 0; }
+    #slide-label { font-size: 11px; letter-spacing: 1px; text-align: center; }
+    #dots { display: none; }
+
+    body::before { width: 360px; height: 360px; bottom: -120px; right: -120px; }
+    body::after { width: 260px; height: 260px; top: -80px; left: -80px; }
+  }
+
+  @media (max-width: 932px) and (orientation: landscape) {
+    #counter { display: block; top: 10px; right: 14px; font-size: 15px; }
+
+    #slide-container {
+      padding:
+        max(16px, env(safe-area-inset-top))
+        24px
+        calc(8px + env(safe-area-inset-bottom));
+    }
+
+    .slide { min-height: calc(100dvh - 72px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); }
+    .s-title h1 { font-size: clamp(30px, 5.4vw, 56px); }
+    .s-section h2 { font-size: clamp(28px, 5vw, 52px); }
+    .s-text p { font-size: clamp(16px, 3vw, 23px); line-height: 1.24; }
+    .slide.is-dense.s-text p { font-size: clamp(14px, 2.7vw, 20px); line-height: 1.16; }
+    .slide.is-very-dense.s-text p { font-size: clamp(13px, 2.45vw, 18px); line-height: 1.1; }
+    .s-fact .f-label { font-size: clamp(12px, 2.2vw, 16px); }
+    .s-fact .f-num { font-size: clamp(52px, 10vw, 88px); }
+    .s-fact .f-text { font-size: clamp(14px, 2.5vw, 18px); line-height: 1.2; }
+    .s-list ul li { font-size: clamp(14px, 2.7vw, 19px); }
+    .slide.is-dense-list.s-list ul li { font-size: clamp(13px, 2.45vw, 18px); line-height: 1.12; }
+    .slide.is-very-dense-list.s-list ul li { font-size: clamp(12px, 2.2vw, 16px); line-height: 1.08; }
+    #nav { padding: 8px 14px calc(8px + env(safe-area-inset-bottom)); }
+    #nav button { padding: 8px 16px; font-size: 13px; }
+    #nav button.primary { padding: 8px 20px; font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div id="counter"></div>
+
+<div id="slide-container">
+
+  <div class="slide s-title active" data-label="Titolo">
+    <div class="tag">I Consigli del Farmacista</div>
+    <h1><span>INTEGRATORI</span><br>ALIMENTARI</h1>
+    <div class="sub">Cosa sono, quando servono e quando no</div>
+  </div>
+
+  <div class="slide s-section" data-label="Introduzione">
+    <div class="sec-label">Apertura</div>
+    <h2>NON SONO<br>CARAMELLE</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Introduzione — 1">
+    <div class="heading">INTRODUZIONE</div>
+    <p>Gli integratori alimentari sono ovunque: farmacia, supermercato, palestra, social, pubblicita' online. Il rischio e' pensare che, siccome sono venduti liberamente, siano sempre necessari e sempre innocui.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Introduzione — 2">
+    <div class="heading">INTRODUZIONE</div>
+    <p>La verita' e' piu' equilibrata: alcuni integratori possono essere utili in persone e situazioni precise; altri sono inutili se non c'e' un bisogno reale; altri ancora possono creare problemi.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Cosa sono">
+    <div class="sec-label">Sezione 1</div>
+    <h2>CHE COSA SONO</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Cosa sono — 1">
+    <div class="heading">CHE COSA SONO GLI INTEGRATORI</div>
+    <p>Sono prodotti destinati a integrare la dieta. Possono contenere vitamine, minerali, aminoacidi, acidi grassi essenziali, fibre, probiotici, enzimi, estratti vegetali o altre sostanze con effetto nutritivo o fisiologico.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cosa sono — 2">
+    <div class="heading">CHE COSA SONO GLI INTEGRATORI</div>
+    <p>La parola chiave e' "integrare". Un integratore non sostituisce una dieta varia, non sostituisce una diagnosi, non sostituisce una terapia prescritta e non dovrebbe coprire uno stile di vita disordinato.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cosa sono — 3">
+    <div class="heading">CHE COSA SONO GLI INTEGRATORI</div>
+    <p>Se una persona ha una carenza documentata di vitamina D, l'integrazione puo' essere appropriata. Se invece assume vitamine a caso per "sentirsi piu' forte", il beneficio e' molto meno chiaro.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Quando servono">
+    <div class="sec-label">Sezione 2</div>
+    <h2>QUANDO POSSONO<br>SERVIRE</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Quando servono — 1">
+    <div class="heading">QUANDO POSSONO SERVIRE</div>
+    <p>Possono servire quando la dieta non copre un fabbisogno, quando ci sono carenze accertate, quando alcune fasi della vita aumentano le necessita' o quando il medico consiglia un supporto specifico.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Quando servono — 2">
+    <div class="heading">QUANDO POSSONO SERVIRE</div>
+    <p>Esempi: acido folico prima e all'inizio della gravidanza, ferro in caso di carenza documentata, vitamina B12 in alcune diete o condizioni, calcio e vitamina D in situazioni selezionate.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Domanda giusta">
+    <div class="heading">LA DOMANDA GIUSTA</div>
+    <p>La domanda corretta non e' "qual e' il miglior integratore?", ma "qual e' il problema che voglio risolvere?". Stanchezza, crampi, capelli, intestino, sport o sonno richiedono ragionamenti diversi.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Quando non servono">
+    <div class="sec-label">Sezione 3</div>
+    <h2>QUANDO NON<br>SERVONO</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Quando non servono — 1">
+    <div class="heading">QUANDO NON SERVONO</div>
+    <p>Non servono quando vengono usati per compensare una dieta povera senza correggerla, quando promettono risultati irrealistici, quando vengono assunti solo perche' "lo prendono tutti" o quando duplicano altri prodotti.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Quando non servono — 2">
+    <div class="heading">QUANDO NON SERVONO</div>
+    <p>Attenzione alla parola "detox". Il corpo ha gia' sistemi di eliminazione e regolazione, come fegato e reni. Se ci sono sintomi importanti, serve valutazione medica, non un integratore casuale.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Naturale">
+    <div class="sec-label">Sezione 4</div>
+    <h2>NATURALE NON<br>SIGNIFICA SICURO</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Naturale — 1">
+    <div class="heading">NATURALE NON SIGNIFICA SICURO</div>
+    <p>Anche piante, estratti vegetali e prodotti "green" possono avere effetti farmacologici, interazioni o controindicazioni. Naturale non vuol dire automaticamente innocuo.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Naturale — 2">
+    <div class="heading">NATURALE NON SIGNIFICA SICURO</div>
+    <p>La sicurezza dipende da dose, qualita' del prodotto, durata d'uso, eta' della persona, gravidanza, allattamento, malattie presenti e farmaci assunti.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Sintetico">
+    <div class="heading">NATURALE E SINTETICO</div>
+    <p>Anche il contrario e' vero: "sintetico" non significa automaticamente peggiore. Una vitamina prodotta in modo controllato puo' essere piu' dosabile e prevedibile di un estratto vegetale variabile.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Rischi">
+    <div class="sec-label">Sezione 5</div>
+    <h2>RISCHI E<br>INTERAZIONI</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Rischi — 1">
+    <div class="heading">RISCHI E INTERAZIONI</div>
+    <p>Gli integratori possono interagire con farmaci per pressione, diabete, tiroide, epilessia, immunosoppressori, contraccettivi, anticoagulanti, antiaggreganti o terapie oncologiche.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Rischi — 2">
+    <div class="heading">RISCHI E INTERAZIONI</div>
+    <p>Prima di un intervento chirurgico bisogna comunicare anche integratori e prodotti erboristici: alcuni possono influenzare sanguinamento, sedazione o risposta all'anestesia.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Rischi — 3">
+    <div class="heading">RISCHI E INTERAZIONI</div>
+    <p>"Di piu'" non significa "meglio". Vitamine liposolubili come A, D, E e K possono accumularsi piu' facilmente, e anche minerali come ferro, selenio o zinco possono creare problemi se assunti senza bisogno.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Etichetta">
+    <div class="sec-label">Sezione 6</div>
+    <h2>QUALITA' ED<br>ETICHETTA</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Etichetta — 1">
+    <div class="heading">QUALITA' ED ETICHETTA</div>
+    <p>Bisogna guardare ingredienti, dose per porzione, dose giornaliera consigliata, avvertenze, data di scadenza, modalita' di conservazione, allergeni e possibili sostanze duplicate.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Etichetta — 2">
+    <div class="heading">QUALITA' ED ETICHETTA</div>
+    <p>In Europa gli integratori sono regolati come alimenti, non come farmaci. Non possono promettere di curare, prevenire o guarire malattie.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Etichetta — 3">
+    <div class="heading">PROMESSE TROPPO FORTI</div>
+    <p>Attenzione a claim come "brucia grassi", "cura l'ansia", "abbassa la glicemia", "fa ricrescere i capelli", "sostituisce il farmaco", "risultati garantiti". Quando promette troppo, meglio fermarsi.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Sport">
+    <div class="sec-label">Sezione 7</div>
+    <h2>INTEGRATORI<br>E SPORT</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Sport — 1">
+    <div class="heading">INTEGRATORI E SPORT</div>
+    <p>Nel mondo dello sport gli integratori possono avere un ruolo, ma non devono essere la base. Prima vengono alimentazione, allenamento, recupero, sonno e programmazione.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Sport — 2">
+    <div class="heading">INTEGRATORI E SPORT</div>
+    <p>Proteine in polvere possono essere comode se l'apporto proteico con la dieta non e' sufficiente. Creatina, elettroliti e carboidrati possono essere utili in contesti precisi, ma non servono a tutti.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Sport — 3">
+    <div class="heading">INTEGRATORI E SPORT</div>
+    <p>Per chi fa sport agonistico, conta anche la qualita' del prodotto e il rischio di contaminazioni. Meglio evitare prodotti estremi, miscele poco chiare o canali non affidabili.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Figure fragili">
+    <div class="sec-label">Sezione 8</div>
+    <h2>PERSONE PIU'<br>FRAGILI</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Figure fragili — 1">
+    <div class="heading">PERSONE PIU' FRAGILI</div>
+    <p>Bisogna essere piu' cauti con bambini, adolescenti, gravidanza, allattamento, anziani, persone con malattie renali o epatiche, patologie croniche, percorsi oncologici o molte terapie.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Figure fragili — 2">
+    <div class="heading">PERSONE PIU' FRAGILI</div>
+    <p>In questi casi anche ferro, vitamina A, vitamina D, iodio, erbe, lassativi vegetali, prodotti dimagranti o prodotti per energia possono essere problematici se usati senza indicazione.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Esempi">
+    <div class="sec-label">Sezione 9</div>
+    <h2>ESEMPI<br>PRATICI</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Stanchezza">
+    <div class="heading">ESEMPIO: STANCHEZZA</div>
+    <p>La stanchezza puo' dipendere da poco sonno, stress, alimentazione insufficiente, anemia, tiroide, vitamina B12, depressione, infezioni o farmaci. Un prodotto generico per "energia" puo' far perdere tempo.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Capelli">
+    <div class="heading">ESEMPIO: CAPELLI E UNGHIE</div>
+    <p>Biotina, zinco, ferro o aminoacidi possono avere senso se c'e' carenza. Ma se la caduta dipende da ormoni, stress, farmaci, dermatite o alopecia, l'integratore da solo non risolve.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Dimagrimento">
+    <div class="heading">ESEMPIO: DIMAGRIMENTO</div>
+    <p>Nessun integratore sostituisce deficit calorico, movimento, sonno e percorso nutrizionale. Prodotti "brucia grassi", drenanti o stimolanti possono dare palpitazioni, insonnia o interazioni.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Probiotici">
+    <div class="heading">ESEMPIO: PROBIOTICI</div>
+    <p>I probiotici non sono tutti uguali. Conta ceppo, dose, obiettivo e durata. Un prodotto dopo antibiotico non e' automaticamente lo stesso per gonfiore, diarrea del viaggiatore o colon irritabile.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Come scegliere">
+    <div class="sec-label">Sezione 10</div>
+    <h2>COME SCEGLIERE</h2>
+  </div>
+
+  <div class="slide s-list" data-label="Quattro domande">
+    <div class="heading">QUATTRO DOMANDE PRIMA DI COMPRARE</div>
+    <ul>
+      <li><span class="num">1</span>Qual e' il mio obiettivo preciso?</li>
+      <li><span class="num">2</span>Ho una carenza o un fabbisogno plausibile?</li>
+      <li><span class="num">3</span>Assumo farmaci o ho condizioni che rendono il prodotto meno sicuro?</li>
+      <li><span class="num">4</span>Per quanto tempo lo usero' e come capiro' se funziona?</li>
+    </ul>
+  </div>
+
+  <div class="slide s-text" data-label="Come scegliere — 2">
+    <div class="heading">COME SCEGLIERE</div>
+    <p>Un buon prodotto dovrebbe avere etichetta chiara, composizione comprensibile, dosi leggibili, avvertenze presenti e produttore identificabile. Meglio diffidare di miscele troppo complesse.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Accumulo">
+    <div class="heading">ATTENZIONE ALL'ACCUMULO</div>
+    <p>Multivitaminico, prodotto per capelli, prodotto per difese e prodotto per energia possono duplicare le stesse sostanze. Il rischio non e' solo sprecare soldi: in alcuni casi l'eccesso puo' diventare un problema.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Medico">
+    <div class="sec-label">Sezione 11</div>
+    <h2>QUANDO SERVE<br>IL MEDICO</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Medico — 1">
+    <div class="heading">QUANDO SERVE IL MEDICO</div>
+    <p>Perdita di peso non spiegata, stanchezza marcata e persistente, sangue nelle feci, dolore importante, febbre prolungata, diarrea cronica, vomito ricorrente, svenimenti o palpitazioni meritano valutazione.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Medico — 2">
+    <div class="heading">QUANDO SERVE IL MEDICO</div>
+    <p>Se un sintomo dura da settimane e ritorna nonostante il prodotto, cambiare integratore ogni mese rischia di confondere la situazione. Meglio fermarsi e parlarne con un professionista.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Decalogo">
+    <div class="sec-label">Sezione 12</div>
+    <h2>DECALOGO</h2>
+  </div>
+
+  <div class="slide s-list" data-label="Decalogo — 1-5">
+    <div class="heading">DECALOGO PER USARE GLI INTEGRATORI</div>
+    <ul>
+      <li><span class="num">1</span>Parti dal bisogno reale, non dalla pubblicita'.</li>
+      <li><span class="num">2</span>Non sostituire dieta o farmaci con un integratore.</li>
+      <li><span class="num">3</span>Controlla dose, ingredienti, durata e duplicazioni.</li>
+      <li><span class="num">4</span>Non superare le dosi pensando di ottenere piu' beneficio.</li>
+      <li><span class="num">5</span>Se assumi farmaci, chiedi consiglio prima di iniziare.</li>
+    </ul>
+  </div>
+
+  <div class="slide s-list" data-label="Decalogo — 6-10">
+    <div class="heading">DECALOGO PER USARE GLI INTEGRATORI</div>
+    <ul>
+      <li><span class="num">6</span>In gravidanza, allattamento, eta' pediatrica o malattie croniche evita il fai-da-te.</li>
+      <li><span class="num">7</span>Diffida da promesse di cura, dimagrimento rapido o risultati garantiti.</li>
+      <li><span class="num">8</span>Scegli canali affidabili e prodotti con etichette chiare.</li>
+      <li><span class="num">9</span>Sospendi e chiedi aiuto se compaiono effetti indesiderati.</li>
+      <li><span class="num">10</span>Porta l'elenco degli integratori quando parli con medico o farmacista.</li>
+    </ul>
+  </div>
+
+  <div class="slide s-section" data-label="Conclusione">
+    <div class="sec-label">Chiusura</div>
+    <h2>IN SINTESI</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Conclusione — 1">
+    <div class="heading">CONCLUSIONE</div>
+    <p>Gli integratori possono essere utili, ma solo se usati con criterio. Il punto non e' prenderne tanti, ma scegliere quelli giusti, per il motivo giusto, alla dose giusta e per il tempo giusto.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Conclusione — 2">
+    <div class="heading">CONCLUSIONE</div>
+    <p>Non sono caramelle, non sono farmaci e non sono miracoli. Sono strumenti. E come tutti gli strumenti, funzionano bene quando vengono usati nel contesto corretto.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Conclusione — 3">
+    <div class="heading">CONCLUSIONE</div>
+    <p>Prima di iniziare un integratore, soprattutto se ci sono farmaci, patologie, gravidanza, allattamento o dubbi, chiedere consiglio al medico o al farmacista e' la scelta piu' sicura.</p>
+  </div>
+
+  <div class="slide s-title" data-label="Fine">
+    <div class="tag">I Consigli del Farmacista</div>
+    <h1><span>INTEGRATORI</span><br>ALIMENTARI</h1>
+    <div class="sub">Fine episodio — versione estesa</div>
+  </div>
+
+</div>
+
+<div id="hint">← → frecce tastiera &nbsp;|&nbsp; SPAZIO avanza &nbsp;|&nbsp; click sui pallini per saltare</div>
+
+<div id="nav">
+  <button id="btn-prev" disabled onclick="prevSlide()">◀ INDIETRO</button>
+  <div id="nav-center">
+    <span id="slide-label"></span>
+    <div id="dots"></div>
+  </div>
+  <button id="btn-next" class="primary" onclick="nextSlide()">AVANTI ▶</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  slides.forEach(slide => {
+    const paragraphs = [...slide.querySelectorAll('p')];
+    const totalLength = paragraphs.reduce((sum, paragraph) => sum + paragraph.textContent.trim().length, 0);
+    if (totalLength > 220) slide.classList.add('is-dense');
+    if (totalLength > 320) slide.classList.add('is-very-dense');
+
+    const items = [...slide.querySelectorAll('li')];
+    if (items.length) {
+      const longest = items.reduce((max, item) => Math.max(max, item.textContent.trim().length), 0);
+      if (items.length >= 4 || longest > 90) slide.classList.add('is-dense-list');
+      if (items.length >= 5 || longest > 120) slide.classList.add('is-very-dense-list');
+    }
+  });
+
+  const dotsEl = document.getElementById('dots');
+  for (let i = 0; i < total; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.onclick = () => showSlide(i);
+    dotsEl.appendChild(d);
+  }
+
+  function showSlide(n) {
+    slides[current].classList.remove('active');
+    document.querySelectorAll('.dot')[current].classList.remove('active');
+    current = Math.max(0, Math.min(n, total - 1));
+    slides[current].classList.add('active');
+    document.querySelectorAll('.dot')[current].classList.add('active');
+    document.getElementById('counter').textContent = `${current + 1} / ${total}`;
+    document.getElementById('progress-bar').style.width = `${((current + 1) / total) * 100}%`;
+    document.getElementById('slide-label').textContent = slides[current].dataset.label || '';
+    document.getElementById('btn-prev').disabled = current === 0;
+    document.getElementById('btn-next').disabled = current === total - 1;
+  }
+
+  function nextSlide() {
+    if (current < total - 1) showSlide(current + 1);
+  }
+
+  function prevSlide() {
+    if (current > 0) showSlide(current - 1);
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') {
+      e.preventDefault();
+      nextSlide();
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      prevSlide();
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      showSlide(0);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      showSlide(total - 1);
+    }
+  });
+
+  showSlide(0);
+</script>
+</body>
+</html>
