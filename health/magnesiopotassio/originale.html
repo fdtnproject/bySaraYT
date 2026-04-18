@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>MAGNESIO E POTASSIO – I Consigli del Farmacista</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lato:wght@300;400;700;900&display=swap');
+
+  :root {
+    --green: #1B5E20;
+    --green-light: #2E7D32;
+    --green-mid: #4CAF50;
+    --green-bright: #69F0AE;
+    --teal: #00695C;
+    --teal-light: #4DB6AC;
+    --red: #B71C1C;
+    --white: #FAFAFA;
+    --dark: #020f09;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--dark);
+    font-family: 'Lato', sans-serif;
+    height: 100vh;
+    height: 100svh;
+    height: 100dvh;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    user-select: none;
+    overscroll-behavior: none;
+  }
+
+  #progress-bar {
+    height: 5px;
+    background: linear-gradient(90deg, var(--teal-light), var(--green-bright));
+    width: 0%; transition: width 0.35s ease;
+    position: fixed; top: 0; left: 0; z-index: 100;
+  }
+
+  #counter {
+    position: fixed; top: 14px; right: 24px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px; color: rgba(255,255,255,0.28);
+    letter-spacing: 2px; z-index: 100;
+  }
+
+  #slide-container {
+    flex: 1; display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    padding: 50px 90px 20px; overflow: hidden;
+  }
+
+  .slide { display: none; width: 100%; max-width: 1500px; animation: fadeIn 0.4s ease; }
+  .slide.active { display: flex; flex-direction: column; align-items: center; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .s-title { text-align: center; gap: 14px; }
+  .s-title .tag { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 7px; color: var(--teal-light); margin-bottom: 6px; }
+  .s-title h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(44px, 7.5vw, 110px); color: var(--white); letter-spacing: 4px; line-height: 1.05; text-shadow: 0 0 80px rgba(77,182,172,0.35); text-align: center; }
+  .s-title h1 span { color: var(--teal-light); }
+  .s-title .sub { font-size: clamp(18px, 2.2vw, 30px); color: rgba(255,255,255,0.45); font-weight: 300; margin-top: 12px; }
+
+  .s-section { text-align: center; gap: 12px; }
+  .s-section .sec-label { font-family: 'Bebas Neue', sans-serif; font-size: 13px; letter-spacing: 8px; color: var(--teal-light); margin-bottom: 4px; }
+  .s-section h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(38px, 6vw, 90px); color: var(--white); letter-spacing: 3px; line-height: 1.05; text-align: center; }
+
+  .s-subsection { text-align: center; gap: 10px; }
+  .s-subsection .sub-num { font-family: 'Bebas Neue', sans-serif; font-size: clamp(50px, 9vw, 130px); color: var(--teal-light); line-height: 1; text-shadow: 0 0 60px rgba(77,182,172,0.4); }
+  .s-subsection h3 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(28px, 4.5vw, 65px); color: var(--white); letter-spacing: 3px; line-height: 1.1; text-align: center; }
+
+  .s-text { gap: 20px; width: 100%; }
+  .s-text .heading { font-family: 'Bebas Neue', sans-serif; font-size: clamp(14px, 1.8vw, 26px); color: var(--teal-light); letter-spacing: 3px; border-left: 5px solid var(--teal); padding-left: 16px; margin-bottom: 4px; }
+  .s-text .heading.green { color: var(--green-bright); border-left-color: var(--green-light); }
+  .s-text p { font-size: clamp(24px, 3.1vw, 48px); color: var(--white); line-height: 1.55; font-weight: 400; max-width: 1450px; }
+
+  .s-list { gap: 14px; width: 100%; }
+  .s-list .heading { font-family: 'Bebas Neue', sans-serif; font-size: clamp(14px, 1.8vw, 24px); color: var(--teal-light); letter-spacing: 3px; margin-bottom: 8px; }
+  .s-list ul { list-style: none; display: flex; flex-direction: column; gap: 10px; width: 100%; }
+  .s-list ul li { display: flex; align-items: flex-start; gap: 16px; font-size: clamp(20px, 2.6vw, 40px); color: var(--white); line-height: 1.4; }
+  .s-list ul li .bullet { width: 12px; height: 12px; min-width: 12px; border-radius: 50%; background: var(--teal-light); margin-top: 10px; }
+
+  #nav { display: flex; justify-content: space-between; align-items: center; padding: 14px 36px 20px; background: rgba(0,0,0,0.55); border-top: 1px solid rgba(255,255,255,0.05); }
+  #nav button { background: none; border: 2px solid rgba(255,255,255,0.18); color: white; font-family: 'Bebas Neue', sans-serif; font-size: 19px; letter-spacing: 3px; padding: 12px 36px; cursor: pointer; border-radius: 4px; transition: all 0.2s; }
+  #nav button:hover { background: rgba(255,255,255,0.07); border-color: var(--teal-light); }
+  #nav button:disabled { opacity: 0.15; cursor: default; }
+  #nav button.primary { background: var(--teal); border-color: var(--teal); padding: 12px 56px; font-size: 21px; }
+  #nav button.primary:hover { background: var(--teal-light); border-color: var(--teal-light); color: var(--dark); }
+
+  #nav-center { display: flex; flex-direction: column; align-items: center; gap: 5px; flex: 1; }
+  #slide-label { font-family: 'Bebas Neue', sans-serif; font-size: 14px; letter-spacing: 3px; color: rgba(255,255,255,0.22); }
+  #dots { display: flex; gap: 5px; flex-wrap: wrap; justify-content: center; max-width: 700px; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.12); transition: background 0.3s; cursor: pointer; }
+  .dot.active { background: var(--teal-light); }
+  .dot:hover { background: rgba(77,182,172,0.5); }
+
+  body::before { content: ''; position: fixed; bottom: -200px; right: -200px; width: 700px; height: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(0,105,92,0.1) 0%, transparent 70%); pointer-events: none; }
+  body::after { content: ''; position: fixed; top: -150px; left: -150px; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(105,240,174,0.06) 0%, transparent 70%); pointer-events: none; }
+  #hint { position: fixed; bottom: 86px; left: 50%; transform: translateX(-50%); font-size: 12px; color: rgba(255,255,255,0.12); letter-spacing: 2px; pointer-events: none; white-space: nowrap; }
+
+  .s-text p,
+  .s-list ul li {
+    text-wrap: pretty;
+  }
+
+  @media (max-width: 900px) {
+    #counter, #hint { display: none; }
+
+    #slide-container {
+      justify-content: flex-start;
+      padding:
+        max(18px, env(safe-area-inset-top))
+        16px
+        calc(10px + env(safe-area-inset-bottom));
+    }
+
+    .slide {
+      max-width: 100%;
+      min-height: calc(100dvh - 86px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      justify-content: center;
+    }
+
+    .slide.active {
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding-right: 4px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.18) transparent;
+    }
+
+    .slide.active::-webkit-scrollbar { width: 6px; }
+    .slide.active::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.18);
+      border-radius: 999px;
+    }
+
+    .s-title { gap: 10px; }
+    .s-title .tag { font-size: 11px; letter-spacing: 3px; margin-bottom: 2px; }
+    .s-title h1 { font-size: clamp(30px, 8vw, 58px); letter-spacing: 1px; text-shadow: 0 0 36px rgba(77,182,172,0.25); }
+    .s-title .sub { font-size: clamp(14px, 3.8vw, 19px); margin-top: 8px; }
+
+    .s-section { gap: 10px; }
+    .s-section .sec-label { font-size: 10px; letter-spacing: 4px; }
+    .s-section h2 { font-size: clamp(26px, 7.5vw, 48px); letter-spacing: 1px; line-height: 1.02; }
+
+    .s-subsection { gap: 8px; }
+    .s-subsection .sub-num { font-size: clamp(44px, 12vw, 72px); }
+    .s-subsection h3 { font-size: clamp(22px, 6vw, 42px); letter-spacing: 1px; }
+
+    .s-text { gap: 12px; }
+    .s-text .heading {
+      font-size: 14px;
+      letter-spacing: 2px;
+      border-left-width: 3px;
+      padding-left: 10px;
+      width: 100%;
+    }
+    .s-text p { font-size: clamp(18px, 4.8vw, 28px); line-height: 1.34; max-width: 100%; }
+    .slide.is-dense.s-text p { font-size: clamp(16px, 4.3vw, 24px); line-height: 1.24; }
+    .slide.is-very-dense.s-text p { font-size: clamp(15px, 3.9vw, 22px); line-height: 1.18; }
+
+    .s-list { gap: 10px; }
+    .s-list .heading { font-size: 14px; letter-spacing: 2px; }
+    .s-list ul { gap: 8px; }
+    .s-list ul li { gap: 10px; font-size: clamp(16px, 4.2vw, 24px); line-height: 1.28; }
+    .slide.is-dense-list.s-list ul li { font-size: clamp(15px, 3.9vw, 22px); line-height: 1.22; }
+    .slide.is-very-dense-list.s-list ul li { font-size: clamp(14px, 3.6vw, 20px); line-height: 1.18; }
+    .s-list ul li .bullet { width: 10px; height: 10px; min-width: 10px; margin-top: 8px; }
+
+    #nav { gap: 10px; padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); }
+    #nav button { font-size: 14px; letter-spacing: 1px; padding: 10px 14px; }
+    #nav button.primary { padding: 10px 18px; font-size: 15px; }
+    #nav-center { min-width: 0; }
+    #slide-label { font-size: 11px; letter-spacing: 1px; text-align: center; }
+    #dots { display: none; }
+
+    body::before { width: 360px; height: 360px; bottom: -120px; right: -120px; }
+    body::after { width: 260px; height: 260px; top: -80px; left: -80px; }
+  }
+
+  @media (max-width: 932px) and (orientation: landscape) {
+    #counter { display: block; top: 10px; right: 14px; font-size: 15px; }
+
+    #slide-container {
+      padding:
+        max(16px, env(safe-area-inset-top))
+        24px
+        calc(8px + env(safe-area-inset-bottom));
+    }
+
+    .slide { min-height: calc(100dvh - 72px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); }
+    .s-title h1 { font-size: clamp(30px, 5.4vw, 56px); }
+    .s-section h2 { font-size: clamp(28px, 5vw, 52px); }
+    .s-subsection .sub-num { font-size: clamp(42px, 9vw, 76px); }
+    .s-subsection h3 { font-size: clamp(21px, 4vw, 40px); }
+    .s-text p { font-size: clamp(16px, 3vw, 23px); line-height: 1.24; }
+    .slide.is-dense.s-text p { font-size: clamp(14px, 2.7vw, 20px); line-height: 1.16; }
+    .slide.is-very-dense.s-text p { font-size: clamp(13px, 2.45vw, 18px); line-height: 1.1; }
+    .s-list ul li { font-size: clamp(14px, 2.7vw, 19px); }
+    .slide.is-dense-list.s-list ul li { font-size: clamp(13px, 2.45vw, 18px); line-height: 1.12; }
+    .slide.is-very-dense-list.s-list ul li { font-size: clamp(12px, 2.2vw, 16px); line-height: 1.08; }
+    #nav { padding: 8px 14px calc(8px + env(safe-area-inset-bottom)); }
+    #nav button { padding: 8px 16px; font-size: 13px; }
+    #nav button.primary { padding: 8px 20px; font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div id="counter"></div>
+
+<div id="slide-container">
+
+  <!-- 1 -->
+  <div class="slide s-title active" data-label="Titolo">
+    <div class="tag">I Consigli del Farmacista</div>
+    <h1>I BENEFICI E L'IMPORTANZA DI<br><span>MAGNESIO E POTASSIO</span></h1>
+  </div>
+
+  <!-- ══ INTRO ══ -->
+  <div class="slide s-text" data-label="Introduzione">
+    <div class="heading">MAGNESIO E POTASSIO</div>
+    <p>Magnesio e potassio sono due sali minerali indispensabili per il naturale benessere del nostro organismo. Essi vanno assunti quotidianamente tramite un'alimentazione sana e bilanciata e, in casi di aumentato fabbisogno o scarso apporto, il medico può consigliare una supplementazione sotto forma di specifici integratori.</p>
+  </div>
+
+  <!-- ══ FUNZIONI DI BASE ══ -->
+  <div class="slide s-text" data-label="Funzioni del Magnesio">
+    <div class="heading green">IL MAGNESIO SERVE A</div>
+    <p>Il magnesio contribuisce a molte funzioni dell'organismo: metabolismo energetico, funzione muscolare e nervosa, salute delle ossa, equilibrio degli elettroliti e normale ritmo cardiaco. Puo' essere utile in caso di carenza o aumentato fabbisogno, ma non va presentato come rimedio generico per "eliminare tossine" o curare disturbi senza diagnosi.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Funzioni del Potassio">
+    <div class="heading green">IL POTASSIO SERVE A</div>
+    <p>Il potassio e' un elettrolita essenziale per equilibrio dei liquidi, trasmissione degli impulsi nervosi, contrazione muscolare e regolarita' del battito cardiaco. Un apporto adeguato e' importante, ma l'integrazione va valutata con prudenza, soprattutto in chi ha problemi renali o assume farmaci specifici.</p>
+  </div>
+
+  <!-- ══ FONTI ALIMENTARI ══ -->
+  <div class="slide s-section" data-label="Fonti alimentari di Magnesio">
+    <div class="sec-label">Sezione 1</div>
+    <h2>IMPORTANZA DELLE FONTI<br>ALIMENTARI DI MAGNESIO</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Fonti alimentari — 1">
+    <div class="heading">FONTI ALIMENTARI DI MAGNESIO</div>
+    <p>Il magnesio è un minerale essenziale che svolge un ruolo cruciale nella salute umana, ed è presente in molti alimenti. Le principali fonti alimentari di magnesio includono verdure a foglia verde come spinaci e bietole, noci (in particolare mandorle e anacardi), semi (come quelli di zucca e di girasole), legumi (fagioli e lenticchie), cereali integrali (quali riso integrale, avena e quinoa) e cioccolato fondente. Anche alcuni frutti, come le banane e gli avocado, contengono quantità significative di magnesio.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Fonti alimentari — 2">
+    <div class="heading">FONTI ALIMENTARI DI MAGNESIO</div>
+    <p>Un apporto adeguato di magnesio sostiene diverse funzioni fisiologiche, tra cui metabolismo energetico, funzione muscolare e nervosa e salute delle ossa. La carenza significativa puo' associarsi a stanchezza, debolezza, crampi o alterazioni neuromuscolari, ma questi sintomi non dipendono sempre dal magnesio. Una dieta equilibrata resta la prima strategia.</p>
+  </div>
+
+  <!-- ══ 1 ECCESSO POTASSIO ══ -->
+  <div class="slide s-subsection" data-label="1 — Rischi eccesso Potassio">
+    <div class="sub-num">1</div>
+    <h3>RISCHI E CAUSE<br>DELL'ECCESSO DI POTASSIO</h3>
+  </div>
+
+  <div class="slide s-text" data-label="Eccesso Potassio — 1">
+    <div class="heading">RISCHI E CAUSE DELL'ECCESSO DI POTASSIO</div>
+    <p>L'eccesso di potassio, noto come iperpotassiemia, può avere gravi conseguenze per la salute, tra cui aritmie cardiache, debolezza e affaticamento. Le cause includono insufficienza renale, consumo eccessivo di integratori di potassio e alcune condizioni mediche. È fondamentale monitorare i livelli di potassio, soprattutto per le persone con problemi renali o che assumono farmaci che influenzano l'equilibrio elettrolitico.</p>
+  </div>
+
+  <!-- ══ 2 SINERGIA VITALE ══ -->
+  <div class="slide s-subsection" data-label="2 — Sinergia Vitale">
+    <div class="sub-num">2</div>
+    <h3>MAGNESIO E POTASSIO:<br>SINERGIA VITALE</h3>
+  </div>
+
+  <div class="slide s-text" data-label="Sinergia Vitale — 1">
+    <div class="heading">MAGNESIO E POTASSIO: SINERGIA VITALE</div>
+    <p>Il magnesio e il potassio sono minerali essenziali che interagiscono tra loro nel corpo. Un adeguato apporto di potassio è necessario per una corretta funzione muscolare e neurologica, mentre il magnesio aiuta a regolare i livelli di potassio nelle cellule. Una carenza di magnesio può portare a un aumento della perdita di potassio, contribuendo a squilibri elettrolitici. Pertanto, mantenere livelli equilibrati di entrambi i minerali è cruciale.</p>
+  </div>
+
+  <!-- ══ 3 SISTEMA NERVOSO ══ -->
+  <div class="slide s-subsection" data-label="3 — Ruolo nel Sistema Nervoso">
+    <div class="sub-num">3</div>
+    <h3>RUOLO NEL<br>SISTEMA NERVOSO</h3>
+  </div>
+
+  <div class="slide s-text" data-label="Sistema Nervoso — 1">
+    <div class="heading">RUOLO NEL SISTEMA NERVOSO</div>
+    <p>Il magnesio e il potassio sono cruciali per il corretto funzionamento del sistema nervoso. Il magnesio regola la trasmissione degli impulsi nervosi e svolge un ruolo protettivo contro l'eccitabilità eccessiva delle cellule nervose. Il potassio, d'altra parte, è fondamentale per mantenere il potenziale di membrana delle cellule nervose, contribuendo alla conduzione degli impulsi elettrici.</p>
+  </div>
+
+  <!-- ══ SALUTE CARDIOVASCOLARE ══ -->
+  <div class="slide s-section" data-label="Salute Cardiovascolare">
+    <div class="sec-label">Sezione 2</div>
+    <h2>MAGNESIO E POTASSIO:<br>SALUTE CARDIOVASCOLARE</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Cardiovascolare — 1">
+    <div class="heading">MAGNESIO E POTASSIO: SALUTE CARDIOVASCOLARE</div>
+    <p>Magnesio e potassio hanno un ruolo importante nella funzione cardiovascolare, ma non sono una cura autonoma per cuore o pressione. Il magnesio partecipa alla funzione muscolare e nervosa e al normale ritmo cardiaco; un apporto adeguato rientra in uno stile alimentare sano.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cardiovascolare — 2">
+    <div class="heading">MAGNESIO E POTASSIO: SALUTE CARDIOVASCOLARE</div>
+    <p>Il potassio aiuta a mantenere equilibrio elettrolitico e funzione cardiaca. Una dieta ricca di alimenti che contengono potassio puo' aiutare a bilanciare l'eccesso di sodio, ma gli integratori di potassio non sono adatti a tutti e possono essere rischiosi in caso di malattia renale o farmaci che aumentano il potassio.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Cardiovascolare — 3">
+    <div class="heading">MAGNESIO E POTASSIO: SALUTE CARDIOVASCOLARE</div>
+    <p>In sintesi, un'alimentazione ricca di fonti naturali di magnesio e potassio puo' sostenere la salute generale e cardiovascolare. L'integrazione, invece, va scelta in base a fabbisogno, sintomi, farmaci e condizioni personali, evitando il fai-da-te soprattutto con il potassio.</p>
+  </div>
+
+  <!-- FINE -->
+  <div class="slide s-title" data-label="Fine">
+    <div class="tag">I Consigli del Farmacista</div>
+    <h1><span>MAGNESIO</span> E <span>POTASSIO</span></h1>
+    <div class="sub">Fine episodio</div>
+  </div>
+
+</div>
+
+<div id="hint">← → frecce tastiera &nbsp;|&nbsp; SPAZIO avanza &nbsp;|&nbsp; click sui pallini per saltare</div>
+
+<div id="nav">
+  <button id="btn-prev" disabled onclick="prevSlide()">◀ INDIETRO</button>
+  <div id="nav-center">
+    <span id="slide-label"></span>
+    <div id="dots"></div>
+  </div>
+  <button id="btn-next" class="primary" onclick="nextSlide()">AVANTI ▶</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  slides.forEach(slide => {
+    const paragraphs = [...slide.querySelectorAll('p')];
+    const totalLength = paragraphs.reduce((sum, paragraph) => sum + paragraph.textContent.trim().length, 0);
+    if (totalLength > 220) slide.classList.add('is-dense');
+    if (totalLength > 320) slide.classList.add('is-very-dense');
+
+    const items = [...slide.querySelectorAll('li')];
+    if (items.length) {
+      const longest = items.reduce((max, item) => Math.max(max, item.textContent.trim().length), 0);
+      if (items.length >= 4 || longest > 90) slide.classList.add('is-dense-list');
+      if (items.length >= 5 || longest > 120) slide.classList.add('is-very-dense-list');
+    }
+  });
+
+  const dotsEl = document.getElementById('dots');
+  for (let i = 0; i < total; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.onclick = () => showSlide(i);
+    dotsEl.appendChild(d);
+  }
+
+  function showSlide(n) {
+    slides[current].classList.remove('active');
+    document.querySelectorAll('.dot')[current].classList.remove('active');
+    current = Math.max(0, Math.min(n, total - 1));
+    slides[current].classList.add('active');
+    document.querySelectorAll('.dot')[current].classList.add('active');
+    document.getElementById('counter').textContent = `${current + 1} / ${total}`;
+    document.getElementById('progress-bar').style.width = `${((current + 1) / total) * 100}%`;
+    document.getElementById('slide-label').textContent = slides[current].dataset.label || '';
+    document.getElementById('btn-prev').disabled = current === 0;
+    document.getElementById('btn-next').disabled = current === total - 1;
+  }
+
+  function nextSlide() { if (current < total - 1) showSlide(current + 1); }
+  function prevSlide() { if (current > 0) showSlide(current - 1); }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    else if (e.key === 'Home') { e.preventDefault(); showSlide(0); }
+    else if (e.key === 'End') { e.preventDefault(); showSlide(total - 1); }
+  });
+
+  showSlide(0);
+</script>
+</body>
+</html>
