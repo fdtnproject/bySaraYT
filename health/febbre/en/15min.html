@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>FEVER – The Pharmacist's Advice | 15-Minute English Version</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Lato:wght@300;400;700;900&display=swap');
+
+  :root {
+    --green: #1B5E20;
+    --green-light: #2E7D32;
+    --green-mid: #4CAF50;
+    --red: #B71C1C;
+    --red-light: #EF5350;
+    --white: #FAFAFA;
+    --dark: #080f08;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--dark);
+    font-family: 'Lato', sans-serif;
+    height: 100vh;
+    height: 100svh;
+    height: 100dvh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+    overscroll-behavior: none;
+  }
+
+  #progress-bar {
+    height: 5px;
+    background: linear-gradient(90deg, var(--green-mid), var(--red-light));
+    width: 0%;
+    transition: width 0.35s ease;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+  }
+
+  #counter {
+    position: fixed;
+    top: 14px;
+    right: 24px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: rgba(255,255,255,0.28);
+    letter-spacing: 2px;
+    z-index: 100;
+  }
+
+  #slide-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 90px 20px;
+    overflow: hidden;
+  }
+
+  .slide {
+    display: none;
+    width: 100%;
+    max-width: 1500px;
+    animation: fadeIn 0.4s ease;
+  }
+
+  .slide.active { display: flex; flex-direction: column; align-items: center; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .s-title { text-align: center; gap: 14px; }
+  .s-title .tag {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 7px;
+    color: var(--green-mid);
+    margin-bottom: 6px;
+  }
+  .s-title h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(80px, 13vw, 160px);
+    color: var(--white);
+    letter-spacing: 8px;
+    line-height: 1;
+    text-shadow: 0 0 80px rgba(76,175,80,0.3);
+    text-align: center;
+  }
+  .s-title h1 span { color: var(--green-mid); }
+  .s-title .sub {
+    font-size: clamp(18px, 2.2vw, 30px);
+    color: rgba(255,255,255,0.45);
+    font-weight: 300;
+    margin-top: 12px;
+    letter-spacing: 1px;
+  }
+
+  .s-section { text-align: center; gap: 12px; }
+  .s-section .sec-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 8px;
+    color: var(--red-light);
+    margin-bottom: 4px;
+  }
+  .s-section h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(50px, 8vw, 110px);
+    color: var(--white);
+    letter-spacing: 4px;
+    line-height: 1.05;
+    text-align: center;
+  }
+
+  .s-text { gap: 20px; width: 100%; }
+  .s-text .heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(16px, 2vw, 28px);
+    color: var(--green-mid);
+    letter-spacing: 3px;
+    border-left: 5px solid var(--red);
+    padding-left: 16px;
+    margin-bottom: 4px;
+  }
+  .s-text .heading.alt {
+    color: var(--red-light);
+    border-left-color: var(--green-mid);
+  }
+  .s-text p {
+    font-size: clamp(26px, 3.3vw, 50px);
+    color: var(--white);
+    line-height: 1.52;
+    font-weight: 400;
+    max-width: 1450px;
+  }
+
+  .s-list { gap: 14px; width: 100%; }
+  .s-list .heading {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(16px, 2vw, 26px);
+    color: var(--green-mid);
+    letter-spacing: 3px;
+    margin-bottom: 8px;
+  }
+  .s-list ul { list-style: none; display: flex; flex-direction: column; gap: 10px; width: 100%; }
+  .s-list ul li {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    font-size: clamp(20px, 2.6vw, 38px);
+    color: var(--white);
+    line-height: 1.38;
+  }
+  .s-list ul li .num {
+    background: var(--red);
+    color: white;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 19px;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 4px;
+  }
+
+  #nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 36px 20px;
+    background: rgba(0,0,0,0.55);
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  #nav button {
+    background: none;
+    border: 2px solid rgba(255,255,255,0.18);
+    color: white;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 19px;
+    letter-spacing: 3px;
+    padding: 12px 36px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.2s;
+  }
+  #nav button:hover { background: rgba(255,255,255,0.07); border-color: var(--green-mid); }
+  #nav button:disabled { opacity: 0.15; cursor: default; }
+  #nav button.primary {
+    background: var(--green-light);
+    border-color: var(--green-light);
+    padding: 12px 56px;
+    font-size: 21px;
+  }
+  #nav button.primary:hover { background: var(--green-mid); border-color: var(--green-mid); }
+
+  #nav-center { display: flex; flex-direction: column; align-items: center; gap: 5px; flex: 1; }
+  #slide-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14px;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.22);
+  }
+  #dots { display: flex; gap: 5px; flex-wrap: wrap; justify-content: center; max-width: 700px; }
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    transition: background 0.3s;
+    cursor: pointer;
+  }
+  .dot.active { background: var(--green-mid); }
+  .dot:hover { background: rgba(76,175,80,0.5); }
+
+  body::before {
+    content: '';
+    position: fixed;
+    bottom: -200px;
+    right: -200px;
+    width: 700px;
+    height: 700px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(46,125,50,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  #hint {
+    position: fixed;
+    bottom: 86px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    color: rgba(255,255,255,0.12);
+    letter-spacing: 2px;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .s-text p,
+  .s-list ul li {
+    text-wrap: pretty;
+  }
+
+  @media (max-width: 900px) {
+    #counter, #hint { display: none; }
+
+    #slide-container {
+      justify-content: flex-start;
+      padding:
+        max(18px, env(safe-area-inset-top))
+        16px
+        calc(10px + env(safe-area-inset-bottom));
+    }
+
+    .slide {
+      max-width: 100%;
+      min-height: calc(100dvh - 86px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      justify-content: center;
+    }
+
+    .slide.active {
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding-right: 4px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.18) transparent;
+    }
+
+    .slide.active::-webkit-scrollbar { width: 6px; }
+    .slide.active::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.18); border-radius: 999px; }
+
+    .s-title { gap: 10px; }
+    .s-title .tag { font-size: 11px; letter-spacing: 3px; margin-bottom: 2px; }
+    .s-title h1 {
+      font-size: clamp(44px, 12vw, 72px);
+      letter-spacing: 2px;
+      text-shadow: 0 0 36px rgba(76,175,80,0.25);
+    }
+    .s-title .sub { font-size: clamp(14px, 3.8vw, 19px); margin-top: 8px; }
+
+    .s-section { gap: 10px; }
+    .s-section .sec-label { font-size: 10px; letter-spacing: 4px; }
+    .s-section h2 { font-size: clamp(30px, 9vw, 54px); letter-spacing: 1px; line-height: 1.02; }
+
+    .s-text { gap: 12px; }
+    .s-text .heading {
+      font-size: 14px;
+      letter-spacing: 2px;
+      border-left-width: 3px;
+      padding-left: 10px;
+      width: 100%;
+    }
+    .s-text p {
+      font-size: clamp(18px, 4.9vw, 28px);
+      line-height: 1.34;
+      max-width: 100%;
+    }
+    .slide.is-dense.s-text p { font-size: clamp(16px, 4.3vw, 24px); line-height: 1.26; }
+    .slide.is-very-dense.s-text p { font-size: clamp(15px, 3.9vw, 22px); line-height: 1.2; }
+
+    .s-list { gap: 10px; }
+    .s-list .heading { font-size: 14px; letter-spacing: 2px; }
+    .s-list ul { gap: 8px; }
+    .s-list ul li { gap: 10px; font-size: clamp(16px, 4.2vw, 24px); line-height: 1.28; }
+    .slide.is-dense-list.s-list ul li { font-size: clamp(15px, 3.9vw, 22px); line-height: 1.22; }
+    .slide.is-very-dense-list.s-list ul li { font-size: clamp(14px, 3.6vw, 20px); line-height: 1.18; }
+    .s-list ul li .num { width: 28px; height: 28px; min-width: 28px; font-size: 14px; margin-top: 2px; }
+
+    #nav { gap: 10px; padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); }
+    #nav button { font-size: 14px; letter-spacing: 1px; padding: 10px 14px; }
+    #nav button.primary { padding: 10px 18px; font-size: 15px; }
+    #nav-center { min-width: 0; }
+    #slide-label { font-size: 11px; letter-spacing: 1px; text-align: center; }
+    #dots { display: none; }
+  }
+
+  @media (max-width: 932px) and (orientation: landscape) {
+    #counter { display: block; top: 10px; right: 14px; font-size: 15px; }
+
+    #slide-container {
+      padding:
+        max(16px, env(safe-area-inset-top))
+        24px
+        calc(8px + env(safe-area-inset-bottom));
+    }
+
+    .slide { min-height: calc(100dvh - 72px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); }
+    .s-title h1 { font-size: clamp(48px, 8.5vw, 88px); }
+    .s-section h2 { font-size: clamp(32px, 5.8vw, 58px); }
+    .s-text p { font-size: clamp(17px, 3.1vw, 24px); line-height: 1.28; }
+    .slide.is-dense.s-text p { font-size: clamp(15px, 2.9vw, 21px); line-height: 1.2; }
+    .slide.is-very-dense.s-text p { font-size: clamp(14px, 2.7vw, 19px); line-height: 1.14; }
+    .s-list ul li { font-size: clamp(15px, 3vw, 21px); }
+    .slide.is-dense-list.s-list ul li { font-size: clamp(14px, 2.7vw, 19px); line-height: 1.14; }
+    .slide.is-very-dense-list.s-list ul li { font-size: clamp(13px, 2.45vw, 18px); line-height: 1.1; }
+    #nav { padding: 8px 14px calc(8px + env(safe-area-inset-bottom)); }
+    #nav button { padding: 8px 16px; font-size: 13px; }
+    #nav button.primary { padding: 8px 20px; font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div id="counter"></div>
+
+<div id="slide-container">
+
+  <div class="slide s-title active" data-label="Title">
+    <div class="tag">The Pharmacist's Advice</div>
+    <h1><span>FEVER</span></h1>
+    <div class="sub">15-minute English version</div>
+  </div>
+
+  <div class="slide s-section" data-label="Introduction">
+    <div class="sec-label">Opening</div>
+    <h2>LET'S TALK ABOUT<br>FEVER</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Introduction - 1">
+    <div class="heading">INTRODUCTION</div>
+    <p>When fever appears, the first instinct is often to panic and look for the fastest possible way to bring the temperature down. But fever is not a disease in itself.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Introduction - 2">
+    <div class="heading">INTRODUCTION</div>
+    <p>In most cases, fever is a sign that the body is reacting to something, very often an infection, and that the immune system has been activated.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Introduction - 3">
+    <div class="heading">INTRODUCTION</div>
+    <p>The key is not to ignore fever and not to overreact either. It needs to be measured properly, interpreted in context and managed with good sense.</p>
+  </div>
+
+  <div class="slide s-section" data-label="What is fever">
+    <div class="sec-label">Section 1</div>
+    <h2>WHAT IS<br>FEVER?</h2>
+  </div>
+
+  <div class="slide s-text" data-label="What is fever - 1">
+    <div class="heading">WHAT IS FEVER?</div>
+    <p>Fever means that body temperature is higher than usual. In everyday practice, many adults are considered to have a fever when a thermometer reads 38 C or more, although normal temperature can vary.</p>
+  </div>
+
+  <div class="slide s-text" data-label="What is fever - 2">
+    <div class="heading">WHAT IS FEVER?</div>
+    <p>This is why one isolated number does not tell the whole story. Temperature can change during the day and can be influenced by the environment, clothing, physical effort and the method used for measurement.</p>
+  </div>
+
+  <div class="slide s-text" data-label="What is fever - 3">
+    <div class="heading">WHAT IS FEVER?</div>
+    <p>Fever is usually a regulated response. The internal thermostat in the brain is reset to a higher level, often because immune signals are telling the body to react.</p>
+  </div>
+
+  <div class="slide s-text" data-label="What is fever - 4">
+    <div class="heading">WHAT IS FEVER?</div>
+    <p>That is why people may feel cold and shivery at the beginning of a fever even though their temperature is rising. The body is trying to produce and conserve more heat.</p>
+  </div>
+
+  <div class="slide s-text" data-label="What is fever - 5">
+    <div class="heading">WHAT IS FEVER?</div>
+    <p>Fever alone does not always tell us the exact cause of the problem. It tells us that the body is responding to something and must be interpreted together with the other symptoms.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Why it happens">
+    <div class="sec-label">Section 2</div>
+    <h2>WHY DOES<br>FEVER HAPPEN?</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Why it happens - 1">
+    <div class="heading">WHAT CAUSES FEVER?</div>
+    <p>Most fevers are caused by infections. Viruses are very common, especially in seasonal illnesses involving the nose, throat and airways, but bacteria can also be responsible.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Why it happens - 2">
+    <div class="heading">WHAT CAUSES FEVER?</div>
+    <p>Fever can also happen with inflammatory conditions, some autoimmune diseases, certain medicines and sometimes after vaccinations. Much more rarely, persistent fever can point to more complex medical problems.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Why it happens - 3">
+    <div class="heading">WHAT CAUSES FEVER?</div>
+    <p>During illness, the body releases chemical messengers that act on the temperature-regulating center in the brain and push the set point upward.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Why it happens - 4">
+    <div class="heading">WHAT CAUSES FEVER?</div>
+    <p>Once that happens, the body behaves as if its normal temperature were suddenly too low. This explains chills, shaking, cold hands and the drive to warm up.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Why it happens - 5">
+    <div class="heading">WHAT CAUSES FEVER?</div>
+    <p>Later, when the set point starts coming down again, sweating becomes more common and the person often feels hot, drained and uncomfortable.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Why it happens - 6">
+    <div class="heading">WHAT CAUSES FEVER?</div>
+    <p>Fever can be part of the immune response. It may make conditions less favorable for some germs and can support certain defense mechanisms of the body.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Why it happens - 7">
+    <div class="heading">WHAT CAUSES FEVER?</div>
+    <p>At the same time, fever can make people feel miserable. Headache, muscle aches, weakness, sweating and poor appetite are common, so comfort still matters.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Measuring fever">
+    <div class="sec-label">Section 3</div>
+    <h2>HOW TO MEASURE<br>FEVER CORRECTLY</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Measuring fever - 1">
+    <div class="heading">HOW TO MEASURE FEVER</div>
+    <p>If you want to manage fever well, you first need to measure it properly. A warm forehead can be a warning sign, but it is not enough for an accurate assessment.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Measuring fever - 2">
+    <div class="heading">HOW TO MEASURE FEVER</div>
+    <p>A digital thermometer is usually the most practical option. The important part is following the device instructions carefully and using the same method consistently when you compare readings.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Measuring fever - 3">
+    <div class="heading">HOW TO MEASURE FEVER</div>
+    <p>The result may vary slightly depending on where the temperature is taken. That is why consistency matters more than obsessing over tiny changes from one method to another.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Measuring fever - 4">
+    <div class="heading">HOW TO MEASURE FEVER</div>
+    <p>Try not to measure immediately after a hot drink, a cold drink, a hot bath, exercise or coming in from an extreme outdoor temperature. Waiting a few minutes can improve accuracy.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Measuring fever - 5">
+    <div class="heading">HOW TO MEASURE FEVER</div>
+    <p>And remember: the number on the thermometer should always be interpreted together with the person's alertness, breathing, hydration and overall appearance.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Medicines">
+    <div class="sec-label">Section 4</div>
+    <h2>MEDICINES:<br>WHAT THEY DO AND DON'T DO</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Medicines - 1">
+    <div class="heading">MEDICINES AND FEVER RELIEF</div>
+    <p>Medicines that lower fever, such as acetaminophen or ibuprofen when appropriate, do not treat the cause. They mainly reduce discomfort and help the person rest and drink.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Medicines - 2">
+    <div class="heading">MEDICINES AND FEVER RELIEF</div>
+    <p>This is a crucial point. The goal is not always to force temperature back to perfect normality. The goal is often to improve comfort and function safely.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Medicines - 3">
+    <div class="heading">MEDICINES AND FEVER RELIEF</div>
+    <p>If someone is miserable, in pain, unable to rest or refusing fluids, a fever-reducing medicine may be helpful if it is suitable for that person and used correctly.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Medicines - 4">
+    <div class="heading">MEDICINES AND FEVER RELIEF</div>
+    <p>One common mistake is taking medicines too often, taking the wrong dose or combining several products without noticing they contain the same active ingredient.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Medicines - 5">
+    <div class="heading">MEDICINES AND FEVER RELIEF</div>
+    <p>Aspirin should not be given to children with fever unless a doctor has specifically advised it. In children, dosing always needs to match age, weight and the product instructions.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Medicines - 6">
+    <div class="heading">MEDICINES AND FEVER RELIEF</div>
+    <p>Pregnant women, older adults, and people with kidney disease, liver disease, ulcers, heart problems or regular medicines should be especially careful and should ask for advice before self-medicating.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Medicines - 7">
+    <div class="heading">MEDICINES AND FEVER RELIEF</div>
+    <p>Before alternating fever medicines or giving more than one treatment, it is always worth asking a pharmacist or doctor. The real danger is very often incorrect use, not lack of medicines.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Home care">
+    <div class="sec-label">Section 5</div>
+    <h2>WHAT TO DO<br>AT HOME</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Home care - 1">
+    <div class="heading">WHAT TO DO AT HOME</div>
+    <p>In many everyday cases, fever can be managed at home with observation, comfort measures and medicines when appropriate. Rest matters because it allows the body to focus its energy on recovery.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Home care - 2">
+    <div class="heading">WHAT TO DO AT HOME</div>
+    <p>Hydration matters as well. Fever and sweating can increase fluid loss, and dehydration can make a person feel much worse. Encourage regular fluids, especially in children and older adults.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Home care - 3">
+    <div class="heading">WHAT TO DO AT HOME</div>
+    <p>Simple warning signs of dehydration include dry mouth, dark or infrequent urine, dizziness, unusual sleepiness and poor fluid intake. In babies, fewer wet diapers and fewer tears are important clues.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Home care - 4">
+    <div class="heading">WHAT TO DO AT HOME</div>
+    <p>Do not over-wrap someone with fever to try to sweat it out. Light clothing and a comfortably cool room are usually better. Ice baths, alcohol rubs and harsh cooling methods are not routine solutions.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Home care - 5">
+    <div class="heading">WHAT TO DO AT HOME</div>
+    <p>Food can stay simple. There is no need to force large meals if appetite is low, but fluids and light, tolerated foods are useful. If vomiting or diarrhea are present, hydration becomes an even bigger priority.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Medical help">
+    <div class="sec-label">Section 6</div>
+    <h2>WHEN TO GET<br>MEDICAL HELP</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Medical help - 1">
+    <div class="heading alt">WHEN TO GET MEDICAL HELP</div>
+    <p>A baby under 3 months old with a fever needs urgent medical assessment. This is one of the most important fever rules to remember.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Medical help - 2">
+    <div class="heading alt">WHEN TO GET MEDICAL HELP</div>
+    <p>Medical help is also needed if fever comes with trouble breathing, severe headache, stiff neck, confusion, seizures, a new unusual rash, repeated vomiting or clear signs of severe dehydration.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Medical help - 3">
+    <div class="heading alt">WHEN TO GET MEDICAL HELP</div>
+    <p>Extra caution is needed for older adults, people with major chronic diseases, those receiving chemotherapy, and anyone whose immune system is weakened.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Medical help - 4">
+    <div class="heading alt">WHEN TO GET MEDICAL HELP</div>
+    <p>Even without major warning signs, it is reasonable to contact a doctor if fever lasts more than two or three days, keeps coming back, or the person is not improving as expected.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Medical help - 5">
+    <div class="heading alt">WHEN TO GET MEDICAL HELP</div>
+    <p>And always remember that context matters. A moderate fever in a confused or dehydrated person may deserve more concern than a higher fever in someone who is still alert and drinking well.</p>
+  </div>
+
+  <div class="slide s-section" data-label="Medicine rules">
+    <div class="sec-label">Section 7</div>
+    <h2>TEN SIMPLE RULES<br>FOR FEVER MEDICINES</h2>
+  </div>
+
+  <div class="slide s-list" data-label="Medicine rules - 1">
+    <div class="heading">SAFE USE OF MEDICINES</div>
+    <ul>
+      <li><span class="num">1</span>Follow the recommended dose, timing and method of use.</li>
+      <li><span class="num">2</span>Do not combine medicines without checking for overlap.</li>
+      <li><span class="num">3</span>Do not change prescribed treatment on your own.</li>
+      <li><span class="num">4</span>Always check the expiry date before use.</li>
+    </ul>
+  </div>
+
+  <div class="slide s-list" data-label="Medicine rules - 2">
+    <div class="heading">SAFE USE OF MEDICINES</div>
+    <ul>
+      <li><span class="num">5</span>Remember that some opened products expire sooner than the pack suggests.</li>
+      <li><span class="num">6</span>Ask a pharmacist or doctor if you are unsure.</li>
+      <li><span class="num">7</span>Keep the original box and leaflet whenever possible.</li>
+      <li><span class="num">8</span>Store medicines as directed, usually in a cool dry place.</li>
+    </ul>
+  </div>
+
+  <div class="slide s-list" data-label="Medicine rules - 3">
+    <div class="heading">SAFE USE OF MEDICINES</div>
+    <ul>
+      <li><span class="num">9</span>Keep all medicines out of the reach of children.</li>
+      <li><span class="num">10</span>Dispose of unused or expired medicines appropriately.</li>
+    </ul>
+  </div>
+
+  <div class="slide s-section" data-label="Conclusion">
+    <div class="sec-label">Closing</div>
+    <h2>IN SUMMARY</h2>
+  </div>
+
+  <div class="slide s-text" data-label="Conclusion - 1">
+    <div class="heading">CONCLUSION</div>
+    <p>Fever should be observed, measured properly, interpreted in context and managed with balance. It should not automatically trigger panic, but it should not be brushed off either.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Conclusion - 2">
+    <div class="heading">CONCLUSION</div>
+    <p>A pharmacist can help you choose the right thermometer, use medicines safely and recognize when home care is still reasonable and when it is time to contact a doctor.</p>
+  </div>
+
+  <div class="slide s-text" data-label="Conclusion - 3">
+    <div class="heading">CONCLUSION</div>
+    <p>So the final message is simple: do not let panic guide you, but do not improvise either. Measure carefully, hydrate well, use medicines properly and ask for help in the right situations.</p>
+  </div>
+
+  <div class="slide s-title" data-label="End">
+    <div class="tag">The Pharmacist's Advice</div>
+    <h1><span>FEVER</span></h1>
+    <div class="sub">End of episode</div>
+  </div>
+
+</div>
+
+<div id="hint">← → arrow keys &nbsp;|&nbsp; SPACE to advance &nbsp;|&nbsp; click the dots to jump</div>
+
+<div id="nav">
+  <button id="btn-prev" disabled onclick="prevSlide()">◀ PREV</button>
+  <div id="nav-center">
+    <span id="slide-label"></span>
+    <div id="dots"></div>
+  </div>
+  <button id="btn-next" class="primary" onclick="nextSlide()">NEXT ▶</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  slides.forEach(slide => {
+    const paragraphs = [...slide.querySelectorAll('p')];
+    const totalLength = paragraphs.reduce((sum, paragraph) => sum + paragraph.textContent.trim().length, 0);
+    if (totalLength > 220) slide.classList.add('is-dense');
+    if (totalLength > 320) slide.classList.add('is-very-dense');
+
+    const items = [...slide.querySelectorAll('li')];
+    if (items.length) {
+      const longest = items.reduce((max, item) => Math.max(max, item.textContent.trim().length), 0);
+      if (items.length >= 4 || longest > 90) slide.classList.add('is-dense-list');
+      if (items.length >= 5 || longest > 120) slide.classList.add('is-very-dense-list');
+    }
+  });
+
+  const dotsEl = document.getElementById('dots');
+  for (let i = 0; i < total; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot';
+    d.onclick = () => showSlide(i);
+    dotsEl.appendChild(d);
+  }
+
+  function showSlide(n) {
+    slides[current].classList.remove('active');
+    document.querySelectorAll('.dot')[current].classList.remove('active');
+    current = Math.max(0, Math.min(n, total - 1));
+    slides[current].classList.add('active');
+    document.querySelectorAll('.dot')[current].classList.add('active');
+    document.getElementById('counter').textContent = `${current + 1} / ${total}`;
+    document.getElementById('progress-bar').style.width = `${((current + 1) / total) * 100}%`;
+    document.getElementById('slide-label').textContent = slides[current].dataset.label || '';
+    document.getElementById('btn-prev').disabled = current === 0;
+    document.getElementById('btn-next').disabled = current === total - 1;
+  }
+
+  function nextSlide() { if (current < total - 1) showSlide(current + 1); }
+  function prevSlide() { if (current > 0) showSlide(current - 1); }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    else if (e.key === 'Home') { e.preventDefault(); showSlide(0); }
+    else if (e.key === 'End') { e.preventDefault(); showSlide(total - 1); }
+  });
+
+  showSlide(0);
+</script>
+</body>
+</html>
