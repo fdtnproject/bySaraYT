@@ -336,8 +336,5 @@ Come sempre, questo è contenuto informativo e non sostituisce una valutazione i
 
 Se ti interessano salute, prevenzione, skincare e vuoi capire cosa c'è davvero dietro al marketing del benessere, **iscriviti a BySaraOfficial**.
 
-Io sono Sara, sono farmacista…  
-e qui guardiamo cosa c'è davvero dietro l'etichetta…  
-e cosa merita la nostra fiducia.
-
-Ci vediamo nel prossimo video!
+Io sono Sara, sono farmacista.  
+Se anche tu preferisci **capire prima di credere**, ci vediamo nel prossimo video.
