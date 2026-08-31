@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Teleprompter | 7 Integratori Che Da Farmacista Non Prenderei — BySaraOfficial</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg: #060b08;
+      --bg-surface: #0c1510;
+      --panel: rgba(18, 30, 24, 0.75);
+      --panel-border: rgba(94, 234, 150, 0.16);
+      --panel-hover: rgba(94, 234, 150, 0.24);
+      --text: #f0fdf4;
+      --text-dim: rgba(240, 253, 244, 0.72);
+      --text-muted: rgba(240, 253, 244, 0.45);
+      --accent: #4ade80;
+      --accent-bright: #86efac;
+      --accent-glow: rgba(74, 222, 128, 0.28);
+      --cue-bg: rgba(56, 189, 248, 0.12);
+      --cue-border: rgba(56, 189, 248, 0.35);
+      --cue-text: #7dd3fc;
+      --broll-bg: rgba(251, 191, 36, 0.12);
+      --broll-border: rgba(251, 191, 36, 0.38);
+      --broll-text: #fcd34d;
+      --pause-bg: rgba(248, 113, 113, 0.12);
+      --pause-border: rgba(248, 113, 113, 0.4);
+      --pause-text: #fca5a5;
+      --screen-box-bg: rgba(16, 185, 129, 0.14);
+      --screen-box-border: rgba(52, 211, 153, 0.45);
+      --screen-box-text: #a7f3d0;
+      
+      --font-size: 42px;
+      --line-height: 1.48;
+      --measure: 880px;
+      --eyeline-top: 38%;
+    }
+
+    body.theme-pitch {
+      --bg: #000000;
+      --bg-surface: #050505;
+      --panel: rgba(18, 18, 18, 0.9);
+      --panel-border: rgba(255, 255, 255, 0.18);
+      --text: #ffffff;
+      --text-dim: #d1d5db;
+      --text-muted: #6b7280;
+      --accent: #4ade80;
+      --accent-bright: #86efac;
+    }
+
+    body.theme-warm {
+      --bg: #0d0c0b;
+      --bg-surface: #171513;
+      --panel: rgba(30, 27, 24, 0.85);
+      --panel-border: rgba(245, 158, 11, 0.2);
+      --text: #fdfaf6;
+      --text-dim: rgba(253, 250, 246, 0.75);
+      --text-muted: rgba(253, 250, 246, 0.48);
+      --accent: #fbbf24;
+      --accent-bright: #fde68a;
+      --accent-glow: rgba(251, 191, 36, 0.25);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      scroll-behavior: auto;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      background: radial-gradient(circle at 50% 0%, rgba(74, 222, 128, 0.08), transparent 35%), var(--bg);
+      overflow-x: hidden;
+      transition: background 0.3s ease;
+    }
+
+    /* Mirror Modes */
+    body.mirror-x #teleprompter-stage {
+      transform: scaleX(-1);
+    }
+    body.mirror-y #teleprompter-stage {
+      transform: scaleY(-1);
+    }
+    body.mirror-xy #teleprompter-stage {
+      transform: scale(-1, -1);
+    }
+
+    /* Progress bar */
+    #progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      width: 0%;
+      background: linear-gradient(90deg, #10b981, #4ade80, #86efac);
+      box-shadow: 0 0 12px var(--accent);
+      z-index: 1000;
+      transition: width 0.1s linear;
+    }
+
+    /* Eyeline Guide */
+    #eyeline-guide {
+      position: fixed;
+      top: var(--eyeline-top);
+      left: 0;
+      right: 0;
+      height: calc(var(--font-size) * var(--line-height) + 16px);
+      transform: translateY(-50%);
+      background: linear-gradient(180deg, rgba(74, 222, 128, 0.04) 0%, rgba(74, 222, 128, 0.11) 50%, rgba(74, 222, 128, 0.04) 100%);
+      border-top: 1px dashed rgba(74, 222, 128, 0.35);
+      border-bottom: 1px dashed rgba(74, 222, 128, 0.35);
+      pointer-events: none;
+      z-index: 40;
+      display: none;
+    }
+    body.show-eyeline #eyeline-guide {
+      display: block;
+    }
+
+    #eyeline-guide::before,
+    #eyeline-guide::after {
+      content: '▶';
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--accent);
+      font-size: 16px;
+      opacity: 0.8;
+      text-shadow: 0 0 8px var(--accent);
+    }
+    #eyeline-guide::before { left: 16px; }
+    #eyeline-guide::after { right: 16px; transform: translateY(-50%) rotate(180deg); }
+
+    /* Sticky Toolbar */
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 14px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      background: var(--panel);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--panel-border);
+    }
+
+    .toolbar-left, .toolbar-right {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px 12px;
+    }
+
+    .brand-title {
+      display: flex;
+      flex-direction: column;
+      margin-right: 6px;
+    }
+    .brand-title strong {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 17px;
+      letter-spacing: 0.04em;
+      color: var(--accent-bright);
+    }
+    .brand-title span {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* Control Groups */
+    .btn-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--panel-border);
+    }
+
+    .ctrl-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin: 0 4px;
+    }
+
+    button {
+      appearance: none;
+      -webkit-appearance: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 36px;
+      padding: 0 14px;
+      border-radius: 999px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    button.primary {
+      background: linear-gradient(135deg, #10b981, #4ade80);
+      color: #04210f;
+      box-shadow: 0 2px 10px var(--accent-glow);
+    }
+    button.primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px var(--accent-glow);
+      filter: brightness(1.08);
+    }
+    button.primary.is-playing {
+      background: linear-gradient(135deg, #f59e0b, #fbbf24);
+      color: #291500;
+    }
+
+    button.secondary {
+      background: rgba(255, 255, 255, 0.07);
+      color: var(--text);
+      border-color: var(--panel-border);
+    }
+    button.secondary:hover {
+      background: rgba(255, 255, 255, 0.13);
+      border-color: var(--panel-hover);
+    }
+    button.secondary.active {
+      background: var(--accent-glow);
+      border-color: var(--accent);
+      color: var(--accent-bright);
+    }
+
+    button.icon-btn {
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      border-radius: 50%;
+    }
+
+    select {
+      min-height: 34px;
+      padding: 0 12px;
+      border-radius: 999px;
+      border: 1px solid var(--panel-border);
+      color: var(--text);
+      background: rgba(0, 0, 0, 0.4);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      outline: none;
+    }
+    select:hover, select:focus {
+      border-color: var(--accent);
+    }
+    select option {
+      background: #0f1a14;
+      color: #ffffff;
+    }
+
+    input[type="range"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 86px;
+      height: 5px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.16);
+      outline: none;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      appearance: none;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      box-shadow: 0 0 6px var(--accent);
+      transition: transform 0.1s ease;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+    }
+
+    .badge-stat {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent-bright);
+      background: rgba(74, 222, 128, 0.1);
+      padding: 3px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(74, 222, 128, 0.2);
+    }
+
+    /* Main Stage */
+    #teleprompter-stage {
+      width: min(var(--measure), calc(100% - 36px));
+      margin: 0 auto;
+      padding: 40px 0 320px;
+      transition: width 0.2s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-origin: center center;
+    }
+
+    /* Header Hero */
+    .hero-box {
+      margin-bottom: 32px;
+      padding: 28px 32px;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(74, 222, 128, 0.08), rgba(18, 30, 24, 0.6));
+      border: 1px solid var(--panel-border);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+    .hero-kicker {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+    .hero-box h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(32px, 4.5vw, 54px);
+      line-height: 1.1;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 14px;
+      color: var(--text-dim);
+    }
+    .hero-meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Teleprompter Section Cards */
+    .tele-section {
+      margin-bottom: 32px;
+      padding: 30px 32px 36px;
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--panel-border);
+      scroll-margin-top: 80px;
+    }
+
+    .tele-section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      margin-bottom: 24px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .section-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      font-weight: 800;
+      color: #04210f;
+      background: var(--accent);
+      padding: 4px 10px;
+      border-radius: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .tele-section h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(26px, 3.2vw, 38px);
+      line-height: 1.2;
+      color: var(--text);
+    }
+
+    /* Paragraphs and typography */
+    .tele-p {
+      font-size: var(--font-size);
+      line-height: var(--line-height);
+      color: var(--text);
+      margin-bottom: calc(var(--font-size) * 0.65);
+      letter-spacing: -0.01em;
+      word-spacing: 0.02em;
+    }
+
+    .tele-p:last-child {
+      margin-bottom: 0;
+    }
+
+    .tele-p em {
+      font-style: italic;
+      color: var(--accent-bright);
+    }
+
+    .tele-p strong {
+      font-weight: 800;
+      color: #ffffff;
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    }
+
+    .tele-list {
+      list-style: none;
+      margin: 16px 0 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .tele-list li {
+      font-size: var(--font-size);
+      line-height: var(--line-height);
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+    .tele-list li::before {
+      content: "•";
+      color: var(--accent);
+      font-weight: 900;
+    }
+
+    /* Special Cues & Badges */
+    .cue-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 12px;
+      font-size: calc(var(--font-size) * 0.42);
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin: 18px 0 14px;
+      user-select: none;
+    }
+    .cue-direction {
+      background: var(--cue-bg);
+      border: 1px solid var(--cue-border);
+      color: var(--cue-text);
+    }
+    .cue-broll {
+      background: var(--broll-bg);
+      border: 1px solid var(--broll-border);
+      color: var(--broll-text);
+    }
+    .cue-pause {
+      background: var(--pause-bg);
+      border: 1px solid var(--pause-border);
+      color: var(--pause-text);
+    }
+
+    /* Screen Text Callout */
+    .screen-callout {
+      margin: 22px 0 26px;
+      padding: 18px 24px;
+      border-radius: 18px;
+      background: var(--screen-box-bg);
+      border: 1px solid var(--screen-box-border);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .screen-callout-tag {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .screen-callout-text {
+      font-size: calc(var(--font-size) * 0.72);
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: 0.04em;
+    }
+
+    /* Scientific Study Banner for Collagen climax */
+    .study-highlight-box {
+      margin: 24px 0 28px;
+      padding: 22px 26px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.12), rgba(16, 185, 129, 0.12));
+      border: 1px solid rgba(56, 189, 248, 0.4);
+    }
+    .study-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      color: #7dd3fc;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+    }
+    .study-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 10px;
+    }
+    .study-card {
+      padding: 12px 16px;
+      border-radius: 14px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .study-card strong {
+      display: block;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 4px;
+    }
+    .study-card.benefit strong { color: #fcd34d; }
+    .study-card.no-benefit strong { color: #4ade80; }
+    .study-card span {
+      font-size: 16px;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    /* Floating Quick Bar (Bottom Right) */
+    .floating-shortcuts {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      display: flex;
+      gap: 8px;
+      z-index: 90;
+    }
+    .floating-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(12, 21, 16, 0.85);
+      border: 1px solid var(--panel-border);
+      backdrop-filter: blur(10px);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .floating-pill:hover {
+      background: rgba(24, 42, 32, 0.95);
+      border-color: var(--accent);
+    }
+
+    /* Help Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(12px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      padding: 20px;
+    }
+    .modal-overlay.open {
+      display: flex;
+    }
+    .modal-card {
+      width: min(640px, 100%);
+      background: #0d1712;
+      border: 1px solid var(--panel-border);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+    }
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .modal-head h3 {
+      font-size: 20px;
+      color: var(--accent-bright);
+    }
+    .shortcut-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .shortcut-table tr {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .shortcut-table td {
+      padding: 10px 6px;
+    }
+    .shortcut-table kbd {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 6px;
+      padding: 2px 7px;
+      color: #fff;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .toolbar {
+        padding: 10px 14px;
+      }
+      .brand-title {
+        display: none;
+      }
+      :root {
+        --font-size: 34px;
+      }
+      .study-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Progress Bar -->
+  <div id="progress-bar"></div>
+
+  <!-- Eyeline Reading Guide -->
+  <div id="eyeline-guide"></div>
+
+  <!-- Sticky Top Control Toolbar -->
+  <header class="toolbar">
+    <div class="toolbar-left">
+      <div class="brand-title">
+        <strong>BySaraOfficial</strong>
+        <span>Teleprompter Studio</span>
+      </div>
+
+      <div class="btn-group">
+        <button id="play-btn" class="primary" title="Avvia o Ferma lo scorrimento (Spazio / K)">
+          <span id="play-icon">▶</span> <span id="play-text">Play</span>
+        </button>
+        <button id="top-btn" class="secondary" title="Torna all'inizio (T / Home)">Top</button>
+      </div>
+
+      <div class="btn-group">
+        <span class="ctrl-label">Velocità</span>
+        <select id="speed-select" title="Regola velocità di lettura">
+          <option value="0">0 - Pausa</option>
+          <option value="1">1 - Molto Lento</option>
+          <option value="2">2 - Lento</option>
+          <option value="3" selected>3 - Comodo (Ideale)</option>
+          <option value="4">4 - Vivace</option>
+          <option value="5">5 - Rapido</option>
+          <option value="6">6 - Molto Rapido</option>
+        </select>
+        <span class="badge-stat" id="speed-badge">v: 3</span>
+      </div>
+
+      <div class="btn-group">
+        <span class="ctrl-label">Sezione</span>
+        <select id="section-select" title="Salta direttamente a un punto del video">
+          <option value="sec-apertura">Apertura (Hook)</option>
+          <option value="sec-7">#7 Multivitaminici Mega Dose</option>
+          <option value="sec-6">#6 Vitamina C & Raffreddore</option>
+          <option value="sec-5">#5 BCAA in Palestra</option>
+          <option value="sec-4">#4 Probiotici a Caso</option>
+          <option value="sec-3">#3 Biotina & Capelli</option>
+          <option value="sec-2">#2 Detox & Cleanse</option>
+          <option value="sec-1">#1 Collagene (Climax Scientifico)</option>
+          <option value="sec-conclusione">Conclusione & Domanda Community</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="toolbar-right">
+      <div class="btn-group">
+        <span class="ctrl-label">Font</span>
+        <input id="font-slider" type="range" min="26" max="64" step="2" value="42" title="Dimensione testo (- / +)">
+        <span class="badge-stat" id="font-badge">42px</span>
+      </div>
+
+      <div class="btn-group">
+        <span class="ctrl-label">Larghezza</span>
+        <input id="width-slider" type="range" min="680" max="1150" step="20" value="880" title="Larghezza colonna di lettura">
+      </div>
+
+      <div class="btn-group">
+        <button id="mirror-x-btn" class="secondary" title="Specchia Orizzontale per vetro teleprompter (M)">Mirror X</button>
+        <button id="guide-btn" class="secondary" title="Guida linea occhi telecamera (G)">Guida</button>
+        <button id="theme-btn" class="secondary" title="Cambia tema colore">Tema</button>
+        <button id="fullscreen-btn" class="secondary" title="Schermo intero (F)">⛶</button>
+        <button id="help-btn" class="secondary" title="Scorciatoie tastiera (?)">?</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Teleprompter Main Reading Stage -->
+  <main id="teleprompter-stage">
+
+    <!-- Hero Card -->
+    <div class="hero-box">
+      <span class="hero-kicker">Master Script • Teleprompter Format</span>
+      <h1>7 Integratori Che Da Farmacista Non Prenderei</h1>
+      <div class="hero-meta">
+        <span>⏱️ Durata prevista: <strong>~15 minuti</strong></span>
+        <span>📝 Parole totali: <strong>1.840 parole</strong></span>
+        <span>🎯 Voce: <strong>Sara (Gnavi + Idriss style)</strong></span>
+      </div>
+    </div>
+
+    <!-- SEZIONE APERTURA -->
+    <section class="tele-section" id="sec-apertura">
+      <div class="tele-section-header">
+        <span class="section-num">Intro</span>
+        <h2>Apertura</h2>
+      </div>
+
+      <div class="cue-badge cue-direction">[APERTURA — PRIMO PIANO, NESSUNA SIGLA]</div>
+
+      <p class="tele-p">Ci sono integratori che possono essere utili.</p>
+      <p class="tele-p">Ci sono integratori che, in determinate situazioni, possono avere assolutamente senso.</p>
+      <p class="tele-p">E poi ci sono integratori sui quali… personalmente, da farmacista, prima di spendere i miei soldi mi farei qualche domanda in più.</p>
+      <p class="tele-p">Perché “integratore” non significa automaticamente “mi fa bene”.</p>
+      <p class="tele-p">E soprattutto, se una vitamina fa bene, non significa che prenderne tantissima faccia ancora meglio.</p>
+      <p class="tele-p">Oggi quindi vediamo <strong>7 integratori che io personalmente non prenderei così, alla cieca</strong>, e ti spiego perché.</p>
+      <p class="tele-p">E attenzione: non sto dicendo che questi sette prodotti siano sempre inutili, né che nessuno debba mai assumerli.</p>
+      <p class="tele-p">Anzi, in alcuni casi possono esserci indicazioni perfettamente sensate.</p>
+      <p class="tele-p">Il punto di questo video è un altro:</p>
+      <p class="tele-p"><em>ha davvero senso prenderli senza sapere se ne abbiamo bisogno, soltanto perché sono diventati popolari o perché il marketing ci promette qualcosa?</em></p>
+      <p class="tele-p">E rimani fino al numero uno perché probabilmente sarà il più controverso.</p>
+      <p class="tele-p">È uno degli integratori beauty più famosi in assoluto.</p>
+      <p class="tele-p">E sulle prove scientifiche c'è una cosa che secondo me dovresti conoscere prima di ricomprarlo.</p>
+      <p class="tele-p"><strong>Partiamo.</strong></p>
+    </section>
+
+    <!-- SEZIONE 7: MULTIVITAMINICI -->
+    <section class="tele-section" id="sec-7">
+      <div class="tele-section-header">
+        <span class="section-num">#07</span>
+        <h2>I Multivitaminici “Mega Dose”</h2>
+      </div>
+
+      <p class="tele-p">Partiamo da un'abitudine che sembra assolutamente innocua.</p>
+      <p class="tele-p">Il classico multivitaminico.</p>
+      
+      <ul class="tele-list">
+        <li>Vitamina A.</li>
+        <li>Vitamine del gruppo B.</li>
+        <li>Vitamina C.</li>
+        <li>Vitamina D.</li>
+        <li>Vitamina E.</li>
+        <li>Minerali.</li>
+      </ul>
+
+      <p class="tele-p">Tutto insieme.</p>
+      <p class="tele-p">E fin qui, niente di necessariamente assurdo.</p>
+      <p class="tele-p">Il problema nasce quando sulla confezione cominciamo a vedere <strong>percentuali enormi</strong> rispetto ai valori nutritivi di riferimento.</p>
+      <p class="tele-p">E qui entra in gioco un ragionamento molto comune:</p>
+      <p class="tele-p"><em>“Se il 100% va bene, il 500% sarà ancora meglio.”</em></p>
+      <p class="tele-p"><strong>No.</strong></p>
+      <p class="tele-p">Il nostro organismo non funziona come il serbatoio della macchina in cui più ne metti e più lontano vai.</p>
+      <p class="tele-p">Per alcune vitamine e alcuni minerali esistono dei limiti superiori di assunzione, e bisogna anche ricordare che l'integratore non arriva nel vuoto.</p>
+      <p class="tele-p">Ci sono gli alimenti.</p>
+      <p class="tele-p">Ci possono essere alimenti fortificati.</p>
+      <p class="tele-p">Ci possono essere altri integratori.</p>
+      <p class="tele-p">Magari al mattino prendi il multivitaminico.<br>Poi un prodotto per i capelli.<br>Poi il magnesio.<br>Poi un prodotto per le difese immunitarie.</p>
+      <p class="tele-p">E improvvisamente alcuni nutrienti compaiono in tre o quattro prodotti diversi.</p>
+      <p class="tele-p">Quindi, personalmente, non sceglierei un multivitaminico con dosaggi enormi semplicemente con l'idea:</p>
+      <p class="tele-p"><em>“Così almeno sono coperta.”</em></p>
+      <p class="tele-p">Preferisco chiedermi:</p>
+      <p class="tele-p">cosa mi serve realmente? Com'è la mia alimentazione? Ci sono carenze documentate? Ci sono condizioni particolari? Mi è stato consigliato qualcosa di specifico?</p>
+      <p class="tele-p">Perché integrare in maniera mirata è una cosa.</p>
+      <p class="tele-p">Prendere un cocktail di micronutrienti ad altissimo dosaggio “per sicurezza” è un'altra.</p>
+
+      <div class="screen-callout">
+        <span class="screen-callout-tag">[TESTO A SCHERMO]</span>
+        <div class="screen-callout-text">PIÙ ≠ MEGLIO</div>
+      </div>
+
+      <p class="tele-p">E questa è una frase che tornerà diverse volte in questo video.</p>
+    </section>
+
+    <!-- SEZIONE 6: VITAMINA C -->
+    <section class="tele-section" id="sec-6">
+      <div class="tele-section-header">
+        <span class="section-num">#06</span>
+        <h2>Vitamina C ad Alte Dosi</h2>
+      </div>
+
+      <p class="tele-p">Alzi la mano chi, appena sente quel leggerissimo pizzicore alla gola, pensa:</p>
+      <p class="tele-p"><em>“Vitamina C. Subito.”</em></p>
+      <p class="tele-p">E magari non una normale quantità.</p>
+      <p class="tele-p">Mille milligrammi. Due mila.</p>
+      <p class="tele-p">Perché dobbiamo “bloccare” il raffreddore.</p>
+      <p class="tele-p">La vitamina C è essenziale per il nostro organismo. Questo non è in discussione.</p>
+      <p class="tele-p">Ma una cosa è dire che abbiamo bisogno della vitamina C.</p>
+      <p class="tele-p">Un'altra è dire che prendere grandi dosi appena sentiamo arrivare un raffreddore lo farà magicamente sparire.</p>
+      <p class="tele-p">Nella popolazione generale, <strong>assumere regolarmente vitamina C non sembra ridurre in maniera significativa la probabilità di prendere un raffreddore</strong>.</p>
+      <p class="tele-p">In alcuni studi si osserva una modesta riduzione della durata o della severità dei sintomi con un'assunzione regolare.</p>
+      <p class="tele-p">Ma iniziare a prenderla quando il raffreddore è già cominciato non sembra essere quella specie di pulsante STOP che spesso immaginiamo.</p>
+      <p class="tele-p">Quindi no: io non comprerei vitamina C ad altissimo dosaggio con l'aspettativa:</p>
+      <p class="tele-p"><em>“Questa mi群impedirà di ammalarmi.”</em></p>
+      <p class="tele-p">E anche qui: più vitamina C non significa automaticamente sistema immunitario più potente.</p>
+
+      <div class="cue-badge cue-pause">[PAUSA DI RIFLESSIONE]</div>
+
+      <p class="tele-p">Il sistema immunitario è leggermente più complicato di una spremuta d'arancia.</p>
+
+      <div class="cue-badge cue-broll">[B-ROLL: ARANCIA / COMPRESSA EFFERVESCENTE CHE FRIZZA]</div>
+
+      <p class="tele-p">E questa secondo me è una delle prime grandi differenze tra nutrizione e marketing della nutrizione.</p>
+    </section>
+
+    <!-- SEZIONE 5: BCAA -->
+    <section class="tele-section" id="sec-5">
+      <div class="tele-section-header">
+        <span class="section-num">#05</span>
+        <h2>BCAA (Aminoacidi Ramificati)</h2>
+      </div>
+
+      <p class="tele-p">Adesso andiamo in palestra.</p>
+      <p class="tele-p">Leucina. Isoleucina. Valina. I famosissimi <strong>BCAA</strong>.</p>
+      <p class="tele-p">Se frequenti palestre da un po' li hai sicuramente visti.</p>
+      <p class="tele-p">E per anni il messaggio è stato più o meno:</p>
+      <p class="tele-p"><em>allenamento + BCAA = recupero, muscoli e performance.</em></p>
+      <p class="tele-p">Ma le evidenze sono molto meno spettacolari della confezione.</p>
+      <p class="tele-p">Le revisioni disponibili suggeriscono che i BCAA possano avere qualche effetto sul dolore muscolare dopo l'esercizio in determinati contesti.</p>
+      <p class="tele-p">Ma quando parliamo di miglioramenti significativi di forza, endurance, performance o composizione corporea, i risultati sono decisamente meno convincenti e spesso inconsistenti.</p>
+      <p class="tele-p">E c'è un'altra domanda che secondo me viene prima di qualsiasi barattolo di BCAA:</p>
+      <p class="tele-p"><strong>quante proteine assumi complessivamente durante la giornata?</strong></p>
+      <p class="tele-p">Perché se la tua alimentazione contiene già proteine adeguate e aminoacidi essenziali, personalmente i BCAA isolati non sarebbero in cima alla mia lista della spesa.</p>
+      <p class="tele-p">Questo non significa: “I BCAA non fanno assolutamente nulla.”</p>
+      <p class="tele-p">Significa: <em>prima sistemerei le fondamenta</em>.</p>
+      
+      <ul class="tele-list">
+        <li>Alimentazione.</li>
+        <li>Apporto proteico complessivo.</li>
+        <li>Allenamento.</li>
+        <li>Recupero.</li>
+        <li>Sonno.</li>
+      </ul>
+
+      <p class="tele-p">E solo dopo discuterei del dettaglio.</p>
+      <p class="tele-p">Perché a volte nel mondo degli integratori succede una cosa abbastanza divertente:</p>
+      <p class="tele-p"><strong>Ottimizziamo l'ultimo 2% quando manca ancora il primo 80%.</strong></p>
+    </section>
+
+    <!-- SEZIONE 4: PROBIOTICI -->
+    <section class="tele-section" id="sec-4">
+      <div class="tele-section-header">
+        <span class="section-num">#04</span>
+        <h2>Il Probiotico Scelto a Caso</h2>
+      </div>
+
+      <p class="tele-p">Questo mi interessa particolarmente perché secondo me sui probiotici c'è una confusione enorme.</p>
+      <p class="tele-p">Entriamo in farmacia. Vediamo:</p>
+      <p class="tele-p"><em>10 miliardi. 20 miliardi. 50 miliardi. 15 ceppi. “Ultra”. “Max”. “Advanced”.</em></p>
+      <p class="tele-p">E istintivamente pensiamo: 50 miliardi? Meglio di 10. Quindici ceppi? Meglio di tre.</p>
+      <p class="tele-p"><strong>Non funziona necessariamente così.</strong></p>
+      <p class="tele-p">La parola probiotico comprende microrganismi differenti. Specie differenti. Ceppi differenti.</p>
+      <p class="tele-p">E gli effetti osservati per un determinato ceppo in una determinata condizione non possono essere automaticamente attribuiti a qualsiasi prodotto che abbia scritto “probiotico” sulla confezione.</p>
+      <p class="tele-p">Questa è probabilmente una delle cose più importanti da portarti a casa da questo video.</p>
+      <p class="tele-p">Non comprerei un probiotico soltanto contando quanti miliardi ci sono sulla scatola.</p>
+      <p class="tele-p">Mi interessa sapere:</p>
+      <p class="tele-p"><em>quale microrganismo? Quale ceppo? Per quale obiettivo? A quale dose? Per quanto tempo? Esistono dati proprio per quella situazione?</em></p>
+      <p class="tele-p">Perché sì, esistono contesti nei quali alcuni probiotici hanno mostrato risultati interessanti.</p>
+      <p class="tele-p">Ma persino per condizioni molto studiate spesso rimangono domande su quale formulazione sia migliore, a quale dose e in quali persone.</p>
+      <p class="tele-p">Quindi quando qualcuno dice: “Prendi UN probiotico.”</p>
+      <p class="tele-p">La mia domanda è: <strong>quale?</strong></p>
+      <p class="tele-p">È un po' come dire: “Prendi un farmaco.” Okay. Quale? Per cosa?</p>
+
+      <div class="cue-badge cue-pause">[PAUSA ENFATICA]</div>
+
+      <p class="tele-p">Quindi i probiotici non entrano nella mia lista perché penso che siano inutili.</p>
+      <p class="tele-p">Entrano perché <strong>non prenderei mai il primo probiotico a caso</strong> soltanto perché ha il numero più grande stampato davanti.</p>
+      <p class="tele-p">E questa differenza è fondamentale.</p>
+    </section>
+
+    <!-- SEZIONE 3: BIOTINA -->
+    <section class="tele-section" id="sec-3">
+      <div class="tele-section-header">
+        <span class="section-num">#03</span>
+        <h2>Biotina per i Capelli</h2>
+      </div>
+
+      <p class="tele-p">Qui probabilmente qualcuno comincerà ad arrabbiarsi.</p>
+      <p class="tele-p">Biotina. Capelli più belli. Unghie più forti. Pelle migliore.</p>
+      <p class="tele-p">È diventata praticamente una delle vitamine simbolo del mondo beauty.</p>
+      <p class="tele-p">Ma facciamo una distinzione importantissima.</p>
+      <p class="tele-p">Una carenza di biotina può avere conseguenze.</p>
+      <p class="tele-p">Questo non significa automaticamente che dare biotina in più a una persona che non ne è carente faccia crescere capelli meravigliosi.</p>
+      <p class="tele-p">Sono due affermazioni completamente diverse.</p>
+      <p class="tele-p">Le prove a sostegno dell'utilizzo indiscriminato di biotina per migliorare capelli, pelle e unghie nelle persone senza carenza sono molto più limitate di quanto il marketing possa far pensare.</p>
+      <p class="tele-p">E c'è un altro dettaglio che trovo molto più interessante:</p>
+      <p class="tele-p"><strong>Dosi elevate di biotina possono interferire con alcuni esami di laboratorio e produrre risultati falsati.</strong></p>
+      <p class="tele-p">Quindi questo è uno di quei casi in cui “è soltanto una vitamina” rischia di farci abbassare troppo la guardia.</p>
+      <p class="tele-p">Se ho una caduta importante dei capelli, personalmente la mia prima domanda non sarebbe:</p>
+      <p class="tele-p"><em>“Quale gummy alla biotina compro?”</em></p>
+      <p class="tele-p">Sarebbe: <strong>perché mi stanno cadendo i capelli?</strong></p>
+      
+      <ul class="tele-list">
+        <li>Carenza di ferro?</li>
+        <li>Problemi tiroidei?</li>
+        <li>Stress?</li>
+        <li>Telogen effluvium?</li>
+        <li>Cause ormonali?</li>
+        <li>Alimentazione?</li>
+        <li>Farmaci?</li>
+        <li>Problemi dermatologici?</li>
+      </ul>
+
+      <p class="tele-p">Ci sono moltissime possibilità.</p>
+      <p class="tele-p">E comprare un integratore beauty senza capire la causa può significare semplicemente perdere tempo.</p>
+      <p class="tele-p">Quindi: biotina? Può avere senso quando c'è un motivo.</p>
+      <p class="tele-p">Biotina automaticamente per qualsiasi persona che perde capelli? Io non ragionerei così.</p>
+
+      <div class="screen-callout">
+        <span class="screen-callout-tag">[TESTO A SCHERMO]</span>
+        <div class="screen-callout-text">PRIMA LA CAUSA. POI L'INTEGRATORE.</div>
+      </div>
+    </section>
+
+    <!-- SEZIONE 2: DETOX -->
+    <section class="tele-section" id="sec-2">
+      <div class="tele-section-header">
+        <span class="section-num">#02</span>
+        <h2>Detox & Cleanse</h2>
+      </div>
+
+      <p class="tele-p">Okay. Questa è probabilmente quella sulla quale sarò meno diplomatica.</p>
+      <p class="tele-p">Detox. Detox tea. Detox liver. Detox 7 giorni. Detox dopo Natale. Detox prima dell'estate.</p>
+      <p class="tele-p">Ogni volta che vedo la parola “detox” enorme sulla parte anteriore di un integratore, la prima cosa che voglio fare è…</p>
+      <p class="tele-p"><strong>girare la confezione.</strong></p>
+
+      <div class="cue-badge cue-broll">[B-ROLL: SARA GIRA LENTAMENTE UNA CONFEZIONE VERSO LA CAMERA]</div>
+
+      <p class="tele-p">Perché voglio sapere: cosa c'è dentro?</p>
+      <p class="tele-p">E soprattutto:</p>
+      <p class="tele-p"><em>quale sarebbe esattamente la tossina che questo prodotto dovrebbe eliminare? Come viene eliminata? In quale quantità? E attraverso quale evidenza clinica sappiamo che lo fa?</em></p>
+      <p class="tele-p">Il nostro organismo possiede già sistemi estremamente sofisticati per metabolizzare ed eliminare sostanze:</p>
+
+      <ul class="tele-list">
+        <li>Fegato.</li>
+        <li>Reni.</li>
+        <li>Polmoni.</li>
+        <li>Intestino.</li>
+        <li>Pelle, in alcuni processi.</li>
+      </ul>
+
+      <p class="tele-p">Il concetto commerciale di “detox” è spesso molto più vago.</p>
+      <p class="tele-p">Le prove sui programmi detox e cleanse sono limitate, gli studi disponibili presentano diversi problemi metodologici e non abbiamo prove convincenti che queste strategie commerciali “eliminino tossine” dall'organismo nel modo in cui viene spesso suggerito.</p>
+      <p class="tele-p">E attenzione: questo non significa che mangiare meglio dopo una settimana in cui abbiamo esagerato non faccia bene. Certo che può fare bene.</p>
+      <p class="tele-p">Dormire meglio. Ridurre l'alcol. Mangiare frutta e verdura. Bere normalmente. Fare attività fisica. Tornare a un'alimentazione equilibrata. Perfetto.</p>
+      <p class="tele-p">Ma quello non significa che una tisana o una capsula stiano aspirando misteriose tossine dal tuo corpo.</p>
+      <p class="tele-p">E se qualcuno usa la parola detox, io voglio sempre fare una domanda semplicissima:</p>
+      <p class="tele-p"><strong>detox da cosa, esattamente?</strong></p>
+      <p class="tele-p">Se non sappiamo rispondere, abbiamo già un problema.</p>
+    </section>
+
+    <!-- SEZIONE 1: COLLAGENE (CLIMAX) -->
+    <section class="tele-section" id="sec-1">
+      <div class="tele-section-header">
+        <span class="section-num">#01</span>
+        <h2>Collagene (Il Più Controverso)</h2>
+      </div>
+
+      <p class="tele-p">E arriviamo al numero uno.</p>
+      <p class="tele-p"><strong>Il collagene.</strong></p>
+      <p class="tele-p">Probabilmente qualcuno nei commenti sta già scrivendo:</p>
+      <p class="tele-p"><em>“NO SARA, IL COLLAGENE NO.”</em></p>
+      <p class="tele-p">Aspetta. Perché questa è precisamente la ragione per cui l'ho lasciato alla fine.</p>
+      <p class="tele-p">Non ti sto per dire che il collagene orale è sicuramente inutile.</p>
+      <p class="tele-p">La storia scientifica è molto più interessante.</p>
+      <p class="tele-p">Negli ultimi anni sono usciti numerosi studi e diverse revisioni sull'integrazione di collagene e parametri come:</p>
+      
+      <ul class="tele-list">
+        <li>Idratazione della pelle,</li>
+        <li>Elasticità,</li>
+        <li>Rughe.</li>
+      </ul>
+
+      <p class="tele-p">E alcune meta-analisi hanno riportato risultati positivi.</p>
+      <p class="tele-p">Quindi se qualcuno ti dice: <em>“Non esiste assolutamente nessuno studio sul collagene”</em>, non è corretto. Gli studi esistono.</p>
+      <p class="tele-p">Ma nel <strong>2025 è stata pubblicata una meta-analisi particolarmente interessante</strong>.</p>
+      <p class="tele-p">Gli autori hanno analizzato <strong>23 trial randomizzati, per un totale di quasi 1.500 partecipanti</strong>.</p>
+
+      <div class="study-highlight-box">
+        <div class="study-tag">📊 Meta-Analisi 2025 (23 RCT • 1.474 Partecipanti)</div>
+        <div class="study-grid">
+          <div class="study-card benefit">
+            <strong>Tutti gli Studi Inclusi</strong>
+            <span>Miglioramento di idratazione, elasticità e rughe</span>
+          </div>
+          <div class="study-card no-benefit">
+            <strong>Alta Qualità / Senza Finanziamento Industria</strong>
+            <span>Nessun beneficio clinico statisticamente significativo</span>
+          </div>
+        </div>
+      </div>
+
+      <p class="tele-p">Considerando complessivamente tutti gli studi, sembrava esserci un miglioramento di idratazione, elasticità e rughe.</p>
+      <p class="tele-p">Fine della storia? Non proprio.</p>
+      <p class="tele-p">Perché gli autori hanno poi separato gli studi anche sulla base della <strong>qualità</strong> e della <strong>fonte di finanziamento</strong>.</p>
+      <p class="tele-p">E qui arriva la parte interessante.</p>
+      <p class="tele-p"><strong>Negli studi senza finanziamento dell'industria non emergeva un beneficio significativo sugli outcome analizzati.</strong></p>
+      <p class="tele-p">E anche negli studi considerati di qualità più alta non emergeva un effetto significativo.</p>
+      <p class="tele-p">Gli autori di quella meta-analisi hanno quindi concluso che, allo stato delle evidenze da loro analizzate, <strong>non c'erano prove cliniche sufficienti per sostenere il collagene nella prevenzione o nel trattamento dell'invecchiamento cutaneo</strong>.</p>
+      <p class="tele-p">Ma — ed è un MA importante — esistono altre revisioni che hanno trovato risultati più favorevoli.</p>
+      <p class="tele-p">Ed è proprio qui che secondo me bisogna comportarsi da consumatori intelligenti.</p>
+      <p class="tele-p">La scienza non è: <em>“Ho trovato uno studio che conferma quello che penso, quindi ho ragione.”</em></p>
+      <p class="tele-p">Bisogna guardare:</p>
+      <p class="tele-p">quanti studi? Quanto sono grandi? Come sono stati condotti? Chi li ha finanziati? Quanto è importante l'effetto? E soprattutto: <strong>gli studi migliori confermano il risultato?</strong></p>
+      <p class="tele-p">Quindi io personalmente non comprerei collagene pensando: <em>“Prendo questa polvere e fermerò l'invecchiamento della pelle.”</em></p>
+      <p class="tele-p">Quella promessa è molto più forte di quello che possiamo concludere oggi.</p>
+      <p class="tele-p">Se una persona vuole comunque utilizzarlo, è un'altra conversazione.</p>
+      <p class="tele-p">Ma tra: <em>“Potrebbe esserci un effetto in alcuni studi”</em> e <em>“DEVI prendere collagene dopo i 30 anni”</em> c'è un oceano.</p>
+      <p class="tele-p">E sui social quell'oceano spesso scompare.</p>
+    </section>
+
+    <!-- CONCLUSIONE & CTA -->
+    <section class="tele-section" id="sec-conclusione">
+      <div class="tele-section-header">
+        <span class="section-num">Outro</span>
+        <h2>Conclusione & Domanda Community</h2>
+      </div>
+
+      <p class="tele-p">Quindi ricapitoliamo.</p>
+      <p class="tele-p">Non prenderei alla cieca:</p>
+
+      <ul class="tele-list">
+        <li>Multivitaminici mega-dose,</li>
+        <li>Vitamina C ad alte dosi pensando di bloccare il raffreddore,</li>
+        <li>BCAA senza aver prima valutato alimentazione e proteine,</li>
+        <li>Un probiotico scelto soltanto perché contiene un numero enorme di miliardi,</li>
+        <li>Biotina automaticamente per qualsiasi caduta di capelli,</li>
+        <li>Prodotti venduti con vaghe promesse detox,</li>
+        <li>E collagene pensando che sia una terapia anti-aging miracolosa.</li>
+      </ul>
+
+      <p class="tele-p">Ma se hai ascoltato bene il video, avrai notato una cosa.</p>
+      <p class="tele-p">Non ti ho detto: “Gli integratori non servono.” Perché sarebbe falso.</p>
+      <p class="tele-p">E non ti ho detto: “Questi sette non devono essere presi da nessuno.” Perché sarebbe altrettanto sbagliato.</p>
+      <p class="tele-p">Il messaggio è molto più semplice:</p>
+      <p class="tele-p"><strong>Un integratore dovrebbe avere un motivo.</strong></p>
+      <p class="tele-p">Non una moda. Non un influencer. Non una confezione bellissima. Non la paura di essere carenti di qualcosa.</p>
+      <p class="tele-p"><em>Un motivo.</em></p>
+      <p class="tele-p">E da farmacista è questo il modo in cui preferisco guardare l'integrazione:</p>
+      <p class="tele-p"><strong>prima capisco cosa voglio ottenere, poi guardo le evidenze, e soltanto alla fine scelgo il prodotto.</strong></p>
+      <p class="tele-p">Non il contrario.</p>
+
+      <div class="cue-badge cue-direction">[CAMBIO INQUADRATURA — PIÙ VICINO / PUNCH-IN]</div>
+
+      <p class="tele-p">Adesso però voglio sapere una cosa da te.</p>
+      <p class="tele-p"><strong>Quale di questi sette stai prendendo?</strong></p>
+      <p class="tele-p">E soprattutto: ce n'è uno sul quale vuoi che faccia un video completo analizzando studi, dosaggi, benefici, limiti e marketing?</p>
+      <p class="tele-p">Scrivimelo nei commenti.</p>
+      <p class="tele-p">Perché se vedo che uno di questi scatena una guerra civile…</p>
+
+      <div class="cue-badge cue-pause">[MEZZO SORRISO]</div>
+
+      <p class="tele-p">…nel prossimo video lo analizziamo fino all'ultima capsula.</p>
+      <p class="tele-p">Se ti interessano salute, integratori, skincare e tutto quello che ci viene venduto come “benessere”, ma vuoi capire cosa c'è davvero dietro, <strong>iscriviti a BySaraOfficial</strong>.</p>
+      <p class="tele-p">Io sono Sara, sono farmacista…<br>e qui cerchiamo di spendere meglio sia i nostri soldi…<br>sia la nostra fiducia.</p>
+      <p class="tele-p"><strong>Ci vediamo nel prossimo video.</strong></p>
+    </section>
+
+  </main>
+
+  <!-- Quick Floating Action Pills -->
+  <div class="floating-shortcuts">
+    <button class="floating-pill" id="quick-play-pill">⏯ Play/Pausa [Spazio]</button>
+    <a class="floating-pill" href="./scripts/7_Integratori_Farmacista_Master_Script.md" target="_blank">📄 Markdown</a>
+    <button class="floating-pill" id="quick-help-pill">⌨️ Comandi [?]</button>
+  </div>
+
+  <!-- Keyboard Shortcuts Modal -->
+  <div class="modal-overlay" id="help-modal">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3>Telecomando & Scorciatoie da Tastiera</h3>
+        <button class="secondary icon-btn" id="close-modal-btn">✕</button>
+      </div>
+      <table class="shortcut-table">
+        <tr>
+          <td><kbd>Spazio</kbd> o <kbd>K</kbd></td>
+          <td>Avvia / Metti in Pausa lo scorrimento automatico</td>
+        </tr>
+        <tr>
+          <td><kbd>[</kbd> / <kbd>]</kbd> o <kbd>↓</kbd> / <kbd>↑</kbd></td>
+          <td>Rallenta / Accelera la velocità di scorrimento</td>
+        </tr>
+        <tr>
+          <td><kbd>-</kbd> / <kbd>+</kbd></td>
+          <td>Riduci / Ingrandisci dimensione testo font</td>
+        </tr>
+        <tr>
+          <td><kbd>M</kbd></td>
+          <td>Specchia Orizzontalmente (Mirror per vetro Teleprompter)</td>
+        </tr>
+        <tr>
+          <td><kbd>V</kbd></td>
+          <td>Specchia Verticalmente (Flip Y)</td>
+        </tr>
+        <tr>
+          <td><kbd>G</kbd></td>
+          <td>Attiva / Disattiva Guida linea occhi telecamera</td>
+        </tr>
+        <tr>
+          <td><kbd>F</kbd></td>
+          <td>Attiva / Disattiva Schermo Intero (Fullscreen)</td>
+        </tr>
+        <tr>
+          <td><kbd>T</kbd> o <kbd>Home</kbd></td>
+          <td>Torna in cima (Top)</td>
+        </tr>
+        <tr>
+          <td><kbd>0</kbd> – <kbd>8</kbd></td>
+          <td>Salto rapido sezioni (0=Intro, 1-7=Integratori, 8=Outro)</td>
+        </tr>
+        <tr>
+          <td><kbd>R</kbd></td>
+          <td>Resetta impostazioni di default</td>
+        </tr>
+        <tr>
+          <td><kbd>?</kbd> o <kbd>H</kbd></td>
+          <td>Apri / Chiudi questo pannello d'aiuto</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Teleprompter Engine Logic -->
+  <script>
+    // State
+    const state = {
+      playing: false,
+      speed: 3,
+      fontSize: 42,
+      measure: 880,
+      mirrorX: false,
+      mirrorY: false,
+      eyeline: false,
+      themeIndex: 0, // 0: Emerald, 1: Pitch Black, 2: Warm Studio
+      lastTimestamp: 0,
+      scrollRemainder: 0
+    };
+
+    // DOM References
+    const playBtn = document.getElementById('play-btn');
+    const playIcon = document.getElementById('play-icon');
+    const playText = document.getElementById('play-text');
+    const topBtn = document.getElementById('top-btn');
+    const speedSelect = document.getElementById('speed-select');
+    const speedBadge = document.getElementById('speed-badge');
+    const sectionSelect = document.getElementById('section-select');
+    const fontSlider = document.getElementById('font-slider');
+    const fontBadge = document.getElementById('font-badge');
+    const widthSlider = document.getElementById('width-slider');
+    const mirrorXBtn = document.getElementById('mirror-x-btn');
+    const guideBtn = document.getElementById('guide-btn');
+    const themeBtn = document.getElementById('theme-btn');
+    const fullscreenBtn = document.getElementById('fullscreen-btn');
+    const helpBtn = document.getElementById('help-btn');
+    const helpModal = document.getElementById('help-modal');
+    const closeModalBtn = document.getElementById('close-modal-btn');
+    const quickPlayPill = document.getElementById('quick-play-pill');
+    const quickHelpPill = document.getElementById('quick-help-pill');
+    const progressBar = document.getElementById('progress-bar');
+
+    // Base speed pace factors (pixels per second for speed 1-6)
+    const SPEED_MAP = {
+      0: 0,
+      1: 18,
+      2: 28,
+      3: 40,
+      4: 56,
+      5: 75,
+      6: 98
+    };
+
+    const THEMES = ['', 'theme-pitch', 'theme-warm'];
+    const THEME_NAMES = ['Smeraldo', 'Nero Puro', 'Caldo'];
+
+    // Update Styles
+    function updateStyles() {
+      document.documentElement.style.setProperty('--font-size', `${state.fontSize}px`);
+      document.documentElement.style.setProperty('--measure', `${state.measure}px`);
+      fontBadge.textContent = `${state.fontSize}px`;
+      speedBadge.textContent = `v: ${state.speed}`;
+      
+      // Mirror classes
+      document.body.classList.toggle('mirror-x', state.mirrorX && !state.mirrorY);
+      document.body.classList.toggle('mirror-y', !state.mirrorX && state.mirrorY);
+      document.body.classList.toggle('mirror-xy', state.mirrorX && state.mirrorY);
+      mirrorXBtn.classList.toggle('active', state.mirrorX);
+
+      // Eyeline guide
+      document.body.classList.toggle('show-eyeline', state.eyeline);
+      guideBtn.classList.toggle('active', state.eyeline);
+
+      // Theme
+      document.body.className = document.body.className
+        .replace(/theme-\w+/g, '')
+        .trim();
+      if (THEMES[state.themeIndex]) {
+        document.body.classList.add(THEMES[state.themeIndex]);
+      }
+      themeBtn.textContent = `Tema: ${THEME_NAMES[state.themeIndex]}`;
+
+      // Play button UI
+      if (state.playing) {
+        playBtn.classList.add('is-playing');
+        playIcon.textContent = '⏸';
+        playText.textContent = 'Pausa';
+      } else {
+        playBtn.classList.remove('is-playing');
+        playIcon.textContent = '▶';
+        playText.textContent = 'Play';
+      }
+    }
+
+    // Scroll Loop with requestAnimationFrame
+    function scrollStep(timestamp) {
+      if (!state.playing) {
+        state.lastTimestamp = 0;
+        return;
+      }
+
+      if (!state.lastTimestamp) {
+        state.lastTimestamp = timestamp;
+      }
+
+      const delta = (timestamp - state.lastTimestamp) / 1000;
+      state.lastTimestamp = timestamp;
+
+      const pixelsPerSec = SPEED_MAP[state.speed] || (state.speed * 14);
+      const toScroll = state.scrollRemainder + (pixelsPerSec * delta);
+      const wholePixels = Math.floor(toScroll);
+      state.scrollRemainder = toScroll - wholePixels;
+
+      if (wholePixels > 0) {
+        window.scrollBy(0, wholePixels);
+      }
+
+      // Check if reached bottom
+      const atBottom = (window.innerHeight + window.scrollY) >= (document.documentElement.scrollHeight - 10);
+      if (atBottom) {
+        togglePlay(false);
+        return;
+      }
+
+      updateProgressBar();
+      window.requestAnimationFrame(scrollStep);
+    }
+
+    function togglePlay(forceState) {
+      if (typeof forceState === 'boolean') {
+        state.playing = forceState;
+      } else {
+        state.playing = !state.playing;
+      }
+
+      if (state.playing) {
+        if (state.speed === 0) {
+          setSpeed(3);
+        }
+        state.lastTimestamp = 0;
+        state.scrollRemainder = 0;
+        window.requestAnimationFrame(scrollStep);
+      } else {
+        state.lastTimestamp = 0;
+      }
+      updateStyles();
+    }
+
+    function setSpeed(spd) {
+      state.speed = Math.max(0, Math.min(6, spd));
+      speedSelect.value = String(state.speed);
+      if (state.speed === 0 && state.playing) {
+        togglePlay(false);
+      }
+      updateStyles();
+    }
+
+    function updateProgressBar() {
+      const scrollTotal = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = scrollTotal > 0 ? (window.scrollY / scrollTotal) * 100 : 0;
+      progressBar.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+    }
+
+    function jumpToSection(sectionId) {
+      const el = document.getElementById(sectionId);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    // Section number shortcuts
+    const SECTION_KEYS = {
+      '0': 'sec-apertura',
+      '1': 'sec-7',
+      '2': 'sec-6',
+      '3': 'sec-5',
+      '4': 'sec-4',
+      '5': 'sec-3',
+      '6': 'sec-2',
+      '7': 'sec-1',
+      '8': 'sec-conclusione'
+    };
+
+    // Event Listeners
+    playBtn.addEventListener('click', () => togglePlay());
+    quickPlayPill.addEventListener('click', () => togglePlay());
+
+    topBtn.addEventListener('click', () => {
+      togglePlay(false);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    speedSelect.addEventListener('change', (e) => {
+      setSpeed(Number(e.target.value));
+    });
+
+    sectionSelect.addEventListener('change', (e) => {
+      jumpToSection(e.target.value);
+    });
+
+    fontSlider.addEventListener('input', (e) => {
+      state.fontSize = Number(e.target.value);
+      updateStyles();
+    });
+
+    widthSlider.addEventListener('input', (e) => {
+      state.measure = Number(e.target.value);
+      updateStyles();
+    });
+
+    mirrorXBtn.addEventListener('click', () => {
+      state.mirrorX = !state.mirrorX;
+      updateStyles();
+    });
+
+    guideBtn.addEventListener('click', () => {
+      state.eyeline = !state.eyeline;
+      updateStyles();
+    });
+
+    themeBtn.addEventListener('click', () => {
+      state.themeIndex = (state.themeIndex + 1) % THEMES.length;
+      updateStyles();
+    });
+
+    fullscreenBtn.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    });
+
+    helpBtn.addEventListener('click', () => helpModal.classList.add('open'));
+    quickHelpPill.addEventListener('click', () => helpModal.classList.add('open'));
+    closeModalBtn.addEventListener('click', () => helpModal.classList.remove('open'));
+    helpModal.addEventListener('click', (e) => {
+      if (e.target === helpModal) helpModal.classList.remove('open');
+    });
+
+    window.addEventListener('scroll', updateProgressBar, { passive: true });
+
+    // Keyboard Remote Control Handler
+    window.addEventListener('keydown', (e) => {
+      if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
+
+      if (e.code === 'Space' || e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        togglePlay();
+      } else if (e.key === ']' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        setSpeed(state.speed + 1);
+      } else if (e.key === '[' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        setSpeed(state.speed - 1);
+      } else if (e.key === '+' || e.key === '=') {
+        e.preventDefault();
+        state.fontSize = Math.min(64, state.fontSize + 2);
+        fontSlider.value = state.fontSize;
+        updateStyles();
+      } else if (e.key === '-' || e.key === '_') {
+        e.preventDefault();
+        state.fontSize = Math.max(26, state.fontSize - 2);
+        fontSlider.value = state.fontSize;
+        updateStyles();
+      } else if (e.key.toLowerCase() === 'm') {
+        e.preventDefault();
+        state.mirrorX = !state.mirrorX;
+        updateStyles();
+      } else if (e.key.toLowerCase() === 'v') {
+        e.preventDefault();
+        state.mirrorY = !state.mirrorY;
+        updateStyles();
+      } else if (e.key.toLowerCase() === 'g') {
+        e.preventDefault();
+        state.eyeline = !state.eyeline;
+        updateStyles();
+      } else if (e.key.toLowerCase() === 'f') {
+        e.preventDefault();
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(() => {});
+        } else {
+          document.exitFullscreen().catch(() => {});
+        }
+      } else if (e.key.toLowerCase() === 't' || e.key === 'Home') {
+        e.preventDefault();
+        togglePlay(false);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (e.key.toLowerCase() === 'r') {
+        e.preventDefault();
+        togglePlay(false);
+        state.speed = 3;
+        state.fontSize = 42;
+        state.measure = 880;
+        state.mirrorX = false;
+        state.mirrorY = false;
+        state.eyeline = false;
+        state.themeIndex = 0;
+        speedSelect.value = "3";
+        fontSlider.value = 42;
+        widthSlider.value = 880;
+        updateStyles();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (e.key === '?' || e.key.toLowerCase() === 'h') {
+        e.preventDefault();
+        helpModal.classList.toggle('open');
+      } else if (e.key === 'Escape') {
+        helpModal.classList.remove('open');
+      } else if (SECTION_KEYS[e.key]) {
+        e.preventDefault();
+        const targetId = SECTION_KEYS[e.key];
+        sectionSelect.value = targetId;
+        jumpToSection(targetId);
+      }
+    });
+
+    // Initial setup
+    updateStyles();
+    updateProgressBar();
+  </script>
+</body>
+</html>
