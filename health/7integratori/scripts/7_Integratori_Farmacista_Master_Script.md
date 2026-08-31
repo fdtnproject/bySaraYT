@@ -91,7 +91,7 @@ Il sistema immunitario è una rete biologica straordinaria e complessa… non si
 
 [B-ROLL: Arancia fresca / compressa effervescente che si scioglie]
 
-Questa è la prima vera differenza tra fisiologia e marketing della nutrizione.
+Qui, per me, il marketing corre molto più veloce delle evidenze.
 
 ---
 
@@ -111,7 +111,7 @@ I BCAA possono ridurre modestamente l'indolenzimento e alcuni marker di danno mu
 E soprattutto c'è una domanda a monte che devi farti prima di comprare quel barattolo:  
 *quante proteine nobili stai assumendo con la tua alimentazione quotidiana?*
 
-Perché se già assumi abbastanza proteine di buona qualità, per me i BCAA diventano una priorità molto bassa su cui spendere soldi.
+Perché se già assumi abbastanza proteine di buona qualità… se devo scegliere dove mettere i miei soldi, questo viene molto dopo.
 
 Non sto dicendo che non facciano nulla.  
 Sto dicendo: prima costruiamo le fondamenta.
@@ -150,10 +150,12 @@ A quale dosaggio preciso?
 Per quante settimane?  
 Ci sono trial clinici solidi proprio su quel ceppo?
 
-Dire semplicemente *“prendi un probiotico”* senza specificare quale, per quale obiettivo e con quali evidenze è un consiglio troppo generico.
+*“Prendi un probiotico”*, senza dirti quale e per cosa, per me non è un consiglio.
 
 La mia domanda è sempre:  
 *“Quale probiotico? Per fare cosa?”*
+
+Questa è la domanda che farei prima di tirare fuori la carta.
 
 [PAUSA ENFATICA]
 
@@ -192,7 +194,7 @@ Fattori ormonali?
 Dieta restrittiva?  
 Problemi del cuoio capelluto?
 
-Prendere un integratore beauty alla cieca significa solo ritardare la diagnosi corretta.
+Io un integratore beauty alla cieca non lo comprerei: rischia solo di farti perdere tempo prima della diagnosi giusta.
 
 [TESTO A SCHERMO: PRIMA LA CAUSA. POI L'INTEGRATORE.]
 
@@ -275,7 +277,7 @@ E per correttezza devo dirti anche un'altra cosa: questa meta-analisi ha ricevut
 Questo non dimostra che il collagene non possa avere alcun effetto. Significa che le prove più robuste e indipendenti sono molto meno convincenti del messaggio che normalmente passa sui social.
 
 Esistono altri studi con risultati più favorevoli? Sì.  
-Ma da consumatori consapevoli dobbiamo chiederci:  
+Ma io, prima di crederci, mi faccio sempre queste domande:  
 *quanti studi? Come sono stati condotti? Chi li ha finanziati? E gli studi di qualità più alta confermano i risultati?*
 
 Quindi io, oggi, non compro polveri di collagene da 60 euro al mese pensando che siano una bacchetta magica contro l'invecchiamento.
@@ -298,12 +300,11 @@ non prenderei alla cieca:
 - Prodotti venduti con la promessa vaga di “Detox”,
 - E collagene idrolizzato trattato come terapia anti-aging miracolosa.
 
-Se hai ascoltato con attenzione, avrai capito il messaggio di fondo:  
-non ti sto dicendo che gli integratori siano inutili.  
+Non ti sto dicendo che gli integratori siano inutili.  
 E non ti sto dicendo che nessuno debba mai assumerli.
 
-Il principio da portare a casa è solo uno:  
-**un integratore deve avere un motivo.**
+Il punto non è prendere meno integratori.  
+È sapere **perché** stai prendendo proprio quello.
 
 Non una moda di TikTok.  
 Non il consiglio di un influencer sponsorizzato.  
@@ -312,8 +313,9 @@ Non la paura astratta di essere carenti.
 
 Un motivo clinico reale.
 
-Da farmacista, il mio metodo è sempre questo:  
-prima definisco l'obiettivo reale, poi analizzo le evidenze scientifiche indipendenti, e solo alla fine scelgo se e quale prodotto acquistare.
+Perché se non c'è un motivo, se non ci sono evidenze e se stai comprando soprattutto una promessa… io quei soldi li terrei volentieri in borsa.
+
+**Prima il motivo. Poi le evidenze. E solo alla fine il prodotto.**
 
 Mai il contrario.
 
@@ -321,7 +323,7 @@ Mai il contrario.
 
 Adesso però tocca a te:  
 stai assumendo o hai assunto uno di questi 7 integratori?  
-E su quale di questi vorresti un video monografico completo con dosaggi, studi, marche ed etichette a confronto?
+E su quale di questi vorresti un video tutto suo, con dosaggi, studi, marche ed etichette a confronto?
 
 Scrivimelo qui sotto nei commenti.  
 Se vedo che uno di questi argomenti scatena una guerra civile…
@@ -335,7 +337,7 @@ Come sempre, questo è contenuto informativo e non sostituisce una valutazione i
 Se ti interessano salute, prevenzione, skincare e vuoi capire cosa c'è davvero dietro al marketing del benessere, **iscriviti a BySaraOfficial**.
 
 Io sono Sara, sono farmacista…  
-e qui cerchiamo di spendere meglio i nostri soldi…  
-e soprattutto la nostra fiducia.
+e qui guardiamo cosa c'è davvero dietro l'etichetta…  
+e cosa merita la nostra fiducia.
 
 Ci vediamo nel prossimo video!
