@@ -22,6 +22,8 @@ Disclaimer rapidissimo: non sto dicendo che siano tutti inutili o dannosi per ch
 Il punto è un altro:  
 ha davvero senso comprarli senza sapere se ne abbiamo bisogno, soltanto perché sono diventati virali o perché il marketing ci promette un miracolo?
 
+E tra poco vi racconto anche di un integratore per capelli che può interferire con alcuni esami del sangue. Questo, secondo me, dovrebbero saperlo molte più persone.
+
 E rimani fino al numero uno, perché smonteremo uno dei miti beauty più intoccabili del web con una meta-analisi recente che quasi nessuno ti racconta.
 
 Partiamo.
@@ -85,7 +87,7 @@ Quindi no: non spenderei soldi in mega-dosi di vitamina C con l'aspettativa di i
 
 [PAUSA]
 
-Il sistema immunitario è una rete biologica straordinaria e complessa… non si potenzia con una pastiglia effervescente al sapore di arancia chimica.
+Il sistema immunitario è una rete biologica straordinaria e complessa… non si potenzia con una pastiglia effervescente al sapore di arancia.
 
 [B-ROLL: Arancia fresca / compressa effervescente che si scioglie]
 
@@ -266,9 +268,11 @@ ALTA QUALITÀ & SENZA FONDI INDUSTRIA → Nessun Beneficio Significativo]
 
 Quando si guardano separatamente gli studi di alta qualità, l'effetto non risulta statisticamente significativo. E la stessa cosa succede negli studi che non hanno ricevuto finanziamenti dall'industria.
 
-Questo non dimostra che il collagene non possa avere alcun effetto. Significa che le prove più robuste e indipendenti sono molto meno convincenti del messaggio che normalmente passa sui social.
-
 Gli autori della meta-analisi hanno concluso che, allo stato attuale delle evidenze, non c'erano prove cliniche sufficienti per raccomandare il collagene nella prevenzione o nel trattamento dell'invecchiamento cutaneo.
+
+E per correttezza devo dirvi anche un'altra cosa: questa meta-analisi ha ricevuto delle critiche metodologiche, pubblicate successivamente sulla stessa rivista. Quindi neppure questo studio va trattato come una sentenza definitiva. Ed è proprio questo il punto: sul collagene abbiamo risultati contrastanti e una qualità delle evidenze che non giustifica, secondo me, le promesse miracolose che spesso vediamo nel marketing.
+
+Questo non dimostra che il collagene non possa avere alcun effetto. Significa che le prove più robuste e indipendenti sono molto meno convincenti del messaggio che normalmente passa sui social.
 
 Esistono altri studi con risultati più favorevoli? Sì.  
 Ma da consumatori consapevoli dobbiamo chiederci:  
@@ -325,6 +329,8 @@ Se vedo che uno di questi argomenti scatena una guerra civile…
 [MEZZO SORRISO]
 
 …il prossimo video sarà dedicato proprio a quello, smontato capsula per capsula.
+
+Come sempre, questo è contenuto informativo e non sostituisce una valutazione individuale del medico o del farmacista.
 
 Se ti interessano salute, prevenzione, skincare e vuoi capire cosa c'è davvero dietro al marketing del benessere, **iscriviti a BySaraOfficial**.
 
