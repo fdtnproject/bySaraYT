@@ -22,7 +22,7 @@ Disclaimer rapidissimo: non sto dicendo che siano tutti inutili o dannosi per ch
 Il punto è un altro:  
 ha davvero senso comprarli senza sapere se ne abbiamo bisogno, soltanto perché sono diventati virali o perché il marketing ci promette un miracolo?
 
-E tra poco vi racconto anche di un integratore per capelli che può interferire con alcuni esami del sangue. Questo, secondo me, dovrebbero saperlo molte più persone.
+E tra poco ti racconto anche di un integratore per capelli che può interferire con alcuni esami del sangue. Questo, secondo me, dovrebbero saperlo molte più persone.
 
 E rimani fino al numero uno, perché smonteremo uno dei miti beauty più intoccabili del web con una meta-analisi recente che quasi nessuno ti racconta.
 
@@ -270,7 +270,7 @@ Quando si guardano separatamente gli studi di alta qualità, l'effetto non risul
 
 Gli autori della meta-analisi hanno concluso che, allo stato attuale delle evidenze, non c'erano prove cliniche sufficienti per raccomandare il collagene nella prevenzione o nel trattamento dell'invecchiamento cutaneo.
 
-E per correttezza devo dirvi anche un'altra cosa: questa meta-analisi ha ricevuto delle critiche metodologiche, pubblicate successivamente sulla stessa rivista. Quindi neppure questo studio va trattato come una sentenza definitiva. Ed è proprio questo il punto: sul collagene abbiamo risultati contrastanti e una qualità delle evidenze che non giustifica, secondo me, le promesse miracolose che spesso vediamo nel marketing.
+E per correttezza devo dirti anche un'altra cosa: questa meta-analisi ha ricevuto delle critiche metodologiche, pubblicate successivamente sulla stessa rivista. Quindi neppure questo studio va trattato come una sentenza definitiva. Ed è proprio questo il punto: sul collagene abbiamo risultati contrastanti e una qualità delle evidenze che non giustifica, secondo me, le promesse miracolose che spesso vediamo nel marketing.
 
 Questo non dimostra che il collagene non possa avere alcun effetto. Significa che le prove più robuste e indipendenti sono molto meno convincenti del messaggio che normalmente passa sui social.
 
